@@ -1,0 +1,4 @@
+SKUVault Project
+
+Local Database: No
+UI
