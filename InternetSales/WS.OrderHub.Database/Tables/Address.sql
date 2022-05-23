@@ -15,6 +15,6 @@
     [Phone] NVARCHAR(25) NULL, 
     [Fax] NVARCHAR(25) NULL, 
     [Email] NVARCHAR(100) NULL, 
-    [DateCreated] DATETIME NOT NULL, 
+    [DateCreated] DATETIME NOT NULL,
     [DateModified] DATETIME NULL
 )

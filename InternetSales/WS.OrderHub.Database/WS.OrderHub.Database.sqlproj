@@ -60,13 +60,27 @@
     <Folder Include="StoredProcedures" />
     <Folder Include="Functions" />
     <Folder Include="PostDeployment" />
+    <Folder Include="PostDeployment\DefaultData" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Country.sql" />
     <Build Include="Tables\State.sql" />
     <Build Include="Tables\Charge.sql" />
     <Build Include="Tables\Address.sql" />
-    <Build Include="Tables\Connection.sql" />
-    <Build Include="Tables\Company.sql" />
+    <Build Include="Tables\Configuration.sql" />
+    <Build Include="Tables\Node.sql" />
+    <None Include="PostDeployment\DefaultData\Addresses.sql" />
+    <Build Include="Tables\Order.sql" />
+    <Build Include="Tables\Market_1.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PostDeployment\DefaultData\Configurations.sql" />
+    <None Include="PostDeployment\DefaultData\Nodes.sql" />
+    <None Include="testdb.publish.publish.xml" />
+    <None Include="PostDeployment\DefaultData\Countries.sql" />
+    <None Include="PostDeployment\DefaultData\States.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="PostDeployment\Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>
