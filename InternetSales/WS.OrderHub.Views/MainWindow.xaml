@@ -70,10 +70,60 @@
             </materialDesign:PopupBox>
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
-    <!--Menu Groups-->
-    <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
-        <materialDesign:DrawerHost.LeftDrawerContent>
-            <control:MenuControl Width="300"/>
-        </materialDesign:DrawerHost.LeftDrawerContent>
-    </materialDesign:DrawerHost>
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--Main ProgressBar-->
+
+        <Grid>
+            <ProgressBar Value="100" />
+        </Grid>
+
+        <!--Banner-->
+
+        <materialDesign:DialogHost Grid.Row="1"
+                                   Identifier="RootDialog"
+                                   IsOpen="False"
+                                   DialogTheme="Inherit">
+
+            <materialDesign:DialogHost.DialogContent>
+                <TextBox Text="Root Dialog" />
+            </materialDesign:DialogHost.DialogContent>
+
+
+            <materialDesign:DialogHost IsOpen="False"
+                                       Identifier="ControlDialog"
+                                       DialogTheme="Inherit">
+
+                <materialDesign:DialogHost.DialogContent>
+                    <TextBox Text="Control Dialog" />
+                </materialDesign:DialogHost.DialogContent>
+
+                <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+
+                    <materialDesign:DrawerHost.LeftDrawerContent>
+                        <control:MenuControl Width="300" />
+                    </materialDesign:DrawerHost.LeftDrawerContent>
+
+                </materialDesign:DrawerHost>
+
+
+                <!--Page-->
+
+
+            </materialDesign:DialogHost>
+
+        </materialDesign:DialogHost>
+
+
+        <!--Control Dialog - Custom Dialog Window-->
+
+
+
+    </Grid>
 </mah:MetroWindow>
