@@ -6,6 +6,6 @@ CREATE TABLE [dbo].[Configuration]
 	[Value] VARCHAR(MAX) NULL,
 	[Description] VARCHAR(255) NULL,
 	[FullDescription] VARCHAR(MAX) NULL,
-	[ModifierNodeId] UNIQUEIDENTIFIER NULL,
-	[DateModified] DATETIME NULL
+	[DateModified] DATETIME NULL,
+	[ModifiedByNodeId] UNIQUEIDENTIFIER NULL FOREIGN KEY REFERENCES [dbo].[Node](Id)
 )

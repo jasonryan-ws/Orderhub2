@@ -71,7 +71,22 @@
     <Build Include="Tables\Node.sql" />
     <None Include="PostDeployment\DefaultData\Addresses.sql" />
     <Build Include="Tables\Order.sql" />
-    <Build Include="Tables\Market_1.sql" />
+    <Build Include="Tables\Channel.sql" />
+    <Build Include="Tables\Picklist.sql" />
+    <Build Include="Tables\PicklistItem.sql" />
+    <Build Include="Tables\Product.sql" />
+    <Build Include="Tables\Bin.sql" />
+    <Build Include="Tables\OrderCharge.sql" />
+    <Build Include="Tables\OrderItem.sql" />
+    <Build Include="Tables\ProductBin.sql" />
+    <Build Include="Tables\PurchaseOrder.sql" />
+    <Build Include="Tables\Supplier.sql" />
+    <Build Include="Tables\SupplierItem.sql" />
+    <Build Include="Tables\PurchaseOrderItem.sql" />
+    <Build Include="Tables\Status.sql" />
+    <Build Include="StoredProcedures\spAddress_Create.sql" />
+    <Build Include="StoredProcedures\spAddress_Update.sql" />
+    <Build Include="StoredProcedures\spAddress_DeleteUnused.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PostDeployment\DefaultData\Configurations.sql" />

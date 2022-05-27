@@ -1,0 +1,14 @@
+﻿CREATE TABLE [dbo].[Channel]
+(
+	[Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+    [Name] NVARCHAR(25) NOT NULL UNIQUE, 
+    [Code] VARCHAR(5) NOT NULL, 
+    [ColorCode] INT NULL, 
+	[CreatedByNodeId] UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES [dbo].[Node](Id),
+    [DateCreated] DATETIME NOT NULL, 
+	[ModifiedByNodeId] UNIQUEIDENTIFIER NULL FOREIGN KEY REFERENCES [dbo].[Node](Id),
+    [DateModified] DATETIME NULL,
+    [IsDeleted] BIT NOT NULL DEFAULT 0,
+    [DateDeleted] DATETIME NULL,
+    [DeletedByNodeId] UNIQUEIDENTIFIER NULL FOREIGN KEY REFERENCES [dbo].[Node](Id)
+)

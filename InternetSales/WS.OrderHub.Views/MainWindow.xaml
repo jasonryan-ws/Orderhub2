@@ -105,11 +105,9 @@
                 </materialDesign:DialogHost.DialogContent>
 
                 <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
-
                     <materialDesign:DrawerHost.LeftDrawerContent>
                         <control:MenuControl Width="300" />
                     </materialDesign:DrawerHost.LeftDrawerContent>
-
                 </materialDesign:DrawerHost>
 
 

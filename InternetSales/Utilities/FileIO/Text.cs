@@ -76,7 +76,7 @@ namespace Utilities.FileIO
                 throw;
             }
         }
-        public static string GetValueTextFile(string path, string property, string separator = "=")
+        public static string GetValueFromTextFile(string path, string property, string separator = "=")
         {
             try
             {
@@ -97,7 +97,6 @@ namespace Utilities.FileIO
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

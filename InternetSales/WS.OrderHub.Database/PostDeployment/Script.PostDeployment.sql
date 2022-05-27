@@ -9,8 +9,8 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+:r .\DefaultData\Nodes.sql
 :r .\DefaultData\Countries.sql
 :r .\DefaultData\States.sql
 :r .\DefaultData\Addresses.sql
-:r .\DefaultData\Nodes.sql
 :r .\DefaultData\Configurations.sql

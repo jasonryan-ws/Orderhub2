@@ -8,13 +8,47 @@ namespace Data
     public class SQL
     {
         public string ConnectionString { get; set; }
-
-
         public SQL(string connectionString)
         {
             ConnectionString = connectionString;
         }
+        public SQL(string server, string initialCatalog, string userId, string password)
+        {
+            ConnectionString =
+                $"Data Source={server};" +
+                $"TrustServerCertificate=True;" +
+                $"Initial Catalog={initialCatalog};" +
+                $"User ID={userId};" +
+                $"Password={password}";
+        }
 
+        public SQL(string server, string initialCatalog)
+        {
+            ConnectionString =
+                $"Server={server};" +
+                $"TrustServerCertificate=True;" +
+                $"Database={initialCatalog};" +
+                $"Integrated Security=True;";
+        }
+
+        public SQL(string server, string userId, string password)
+        {
+            ConnectionString =
+                $"Server={server};" +
+                $"TrustServerCertificate=True;" +
+                $"UID={userId};" +
+                $"Pwd={password}";
+        }
+
+        public SQL(string server, bool isIntegrated)
+        {
+            ConnectionString =
+                $"Data Source={server};" +
+                $"Integrated Security={isIntegrated};";
+        }
+
+
+        // For non SELECT statements (DELETE, UPDATE, INSERT, etc...)
         public int ExecuteNonQuery(SqlCommand command, bool rollback = false)
         {
             try
@@ -41,6 +75,7 @@ namespace Data
 
         }
 
+        // For SELECT statements
         public DataTable ExecuteQuery(SqlCommand command)
         {
             try
@@ -62,12 +97,11 @@ namespace Data
 
         }
 
-        public static List<string> GetDatabases(string connectionString)
+        public static List<string> GetDatabases(SQL sql)
         {
             try
             {
                 var names = new List<string>();
-                var sql = new SQL(connectionString);
                 var command = new SqlCommand();
                 command.CommandText = "sp_databases";
                 var table = sql.ExecuteQuery(command);
@@ -77,6 +111,20 @@ namespace Data
                     names.Add(r["DATABASE_NAME"].ToString());
                 }
                 return names;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // Get databases by connection string
+        public static List<string> GetDatabases(string connectionString)
+        {
+            try
+            {
+                var sql = new SQL(connectionString);
+                return GetDatabases(sql);
             }
             catch (Exception)
             {

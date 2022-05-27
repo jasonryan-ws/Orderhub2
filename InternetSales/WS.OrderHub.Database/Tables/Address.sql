@@ -16,5 +16,7 @@
     [Fax] NVARCHAR(25) NULL, 
     [Email] NVARCHAR(100) NULL, 
     [DateCreated] DATETIME NOT NULL,
-    [DateModified] DATETIME NULL
+    [CreatedByNodeId] UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES [dbo].[Node](Id),
+    [DateModified] DATETIME NULL,
+    [ModifiedByNodeId] UNIQUEIDENTIFIER NULL FOREIGN KEY REFERENCES [dbo].[Node](Id)
 )

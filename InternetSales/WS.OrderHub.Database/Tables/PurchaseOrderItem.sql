@@ -1,0 +1,12 @@
+﻿CREATE TABLE [dbo].[PurchaseOrderItem]
+(
+	[Id] UNIQUEIDENTIFIER PRIMARY KEY,
+	[PurchaseOrderId] UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES [dbo].[PurchaseOrder](Id) ON DELETE CASCADE,
+	[ProductId] UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES [dbo].[Product]([Id]),
+	[Cost] MONEY NOT NULL DEFAULT 0,
+	[Quantity] INT NOT NULL,
+	[ReceivedQty] INT NOT NULL DEFAULT 0,
+	[LastDateReceived] DATETIME NULL,
+	[DateModified] DATETIME NOT NULL
+	UNIQUE ([PurchaseOrderId], [ProductId])
+)
