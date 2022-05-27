@@ -16,8 +16,9 @@
     @Email NVARCHAR(100),
     @ModifiedByNodeId UNIQUEIDENTIFIER
 AS
-BEGIN TRAN tAddress_Update
+
 BEGIN TRY
+    BEGIN TRAN UpdateAddress
     UPDATE [Address]
     SET
         FirstName = @FirstName, 
@@ -42,7 +43,7 @@ BEGIN TRY
     RETURN @@ROWCOUNT;
 END TRY
 BEGIN CATCH
-    IF @@ROWCOUNT > 0
+    IF @@TRANCOUNT > 0
         ROLLBACK TRAN;
     THROW;
 END CATCH

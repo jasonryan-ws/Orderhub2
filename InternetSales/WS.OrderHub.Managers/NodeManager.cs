@@ -13,6 +13,41 @@ namespace WS.OrderHub.Managers
     {
         static readonly SQL client = LocalConfigurationManager.SQLClient();
 
+        public static async Task<int> CreateAsync(NodeModel model, bool rollback = false)
+        {
+            try
+            {
+                var result = 0;
+                await Task.Run(() =>
+                {
+                    using (var command = new SqlCommand())
+                    {
+                        command.CommandText =
+                        @"EXEC spNode_Create
+                        @Id OUTPUT,
+                        @Name,
+                        @Description";
+
+                        var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                        id.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(id);
+                        command.Parameters.AddWithValue("@Name", model.Name);
+                        command.Parameters.AddWithValue("@Description", model.Description);
+                        result = client.ExecuteNonQuery(command, rollback);
+                        model.Id = (Guid)id.Value;
+                    }
+                });
+
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
         public static async Task<NodeModel> GetAsync(Guid Id)
         {
             try
@@ -59,7 +94,7 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@Name", name);
                         var table = client.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
-                        { 
+                        {
                             model = new NodeModel();
                             Fill(model, row);
                         }
@@ -100,6 +135,39 @@ namespace WS.OrderHub.Managers
                 });
 
                 return models;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+        public static async Task<int> DeleteAsync(NodeModel model, bool rollback = false)
+        {
+            try
+            {
+                var result = 0;
+                await Task.Run(() =>
+                {
+                    using (var command = new SqlCommand())
+                    {
+                        command.CommandText =
+                        @"EXEC spNode_DeleteUndelete
+                        @Id,
+                        @IsDeleted,
+                        @DateDeleted,
+                        @DeletedByNodeId";
+                        command.Parameters.AddWithValue("@Id", model.Id);
+                        command.Parameters.AddWithValue("@IsDeleted", model.IsDeleted);
+                        command.Parameters.AddWithValue("@DateDeleted", model.DateDeleted);
+                        command.Parameters.AddWithValue("@DeletedByNodeId", model.DeletedByNodeId);
+
+                        result = client.ExecuteNonQuery(command, rollback);
+                    }
+                });
+                return result;
             }
             catch (Exception)
             {

@@ -8,7 +8,7 @@
     [CreatedByNodeId] UNIQUEIDENTIFIER FOREIGN KEY REFERENCES [dbo].[Node](Id),
     [DateModified] DATETIME NULL,
     [ModifiedByNodeId] UNIQUEIDENTIFIER FOREIGN KEY REFERENCES [dbo].[Node](Id),
-    [IsDeleted] BIT NOT NULL DEFAULT 0,
-    [DateDeleted] DATETIME NULL,
-    [DeletedByNodeId] UNIQUEIDENTIFIER NULL FOREIGN KEY REFERENCES [dbo].[Node](Id)
+    --[IsDeleted] BIT NOT NULL DEFAULT 0,
+    --[DateDeleted] DATETIME NULL,
+    --[DeletedByNodeId] UNIQUEIDENTIFIER NULL FOREIGN KEY REFERENCES [dbo].[Node](Id)
 )

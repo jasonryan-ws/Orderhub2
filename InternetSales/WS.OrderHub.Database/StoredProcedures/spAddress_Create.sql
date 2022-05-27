@@ -16,8 +16,9 @@
     @Email NVARCHAR(100),
     @CreatedByNodeId UNIQUEIDENTIFIER
 AS
-BEGIN TRAN
+
 BEGIN TRY
+    BEGIN TRAN CreateAddress
     SET @Id = NEWID();
     INSERT INTO [Address]
         (Id, FirstName, MiddleName, LastName, Company, Street1, Street2, Street3, City, State, PostalCode, CountryCode, Phone, Fax, Email, DateCreated, CreatedByNodeId)
@@ -26,10 +27,9 @@ BEGIN TRY
 		
 	COMMIT TRAN;
 	RETURN @@ROWCOUNT;
-
 END TRY
 BEGIN CATCH
-    IF @@ROWCOUNT > 0
+    IF @@TRANCOUNT > 0
         ROLLBACK TRAN;
     THROW;
 END CATCH

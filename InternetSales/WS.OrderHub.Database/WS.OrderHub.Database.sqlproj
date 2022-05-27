@@ -87,6 +87,10 @@
     <Build Include="StoredProcedures\spAddress_Create.sql" />
     <Build Include="StoredProcedures\spAddress_Update.sql" />
     <Build Include="StoredProcedures\spAddress_DeleteUnused.sql" />
+    <Build Include="StoredProcedures\spBin_Create.sql" />
+    <Build Include="StoredProcedures\spBin_Update.sql" />
+    <Build Include="StoredProcedures\spNode_Create.sql" />
+    <Build Include="StoredProcedures\spNode_DeleteUndelete.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PostDeployment\DefaultData\Configurations.sql" />
