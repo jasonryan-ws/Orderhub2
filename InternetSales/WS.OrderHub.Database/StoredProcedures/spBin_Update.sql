@@ -31,7 +31,7 @@ BEGIN TRY
         RETURN @@ROWCOUNT;
     END
     ELSE IF @TargetId IS NOT NULL
-        THROW 50001, 'Bin NAME is already in use', 1;
+        THROW 50001, 'Bin name is already in use', 1;
 END TRY
 BEGIN CATCH
     IF @@TRANCOUNT > 0

@@ -17,10 +17,10 @@ namespace WS.OrderHub.Managers
         /// Inserts a new bin into the database
         /// </summary>
         /// <param name="model">BinModel</param>
-        /// <param name="forceUpdate">If true, perform an update if bin name is already in use</param>
+        /// <param name="forceUpdate">If name exists and forceUpdate is null - throws error, false - hide error, true - perform update)</param>
         /// <param name="rollback">If true, changes will not be committed. For UnitTesting only.</param>
         /// <returns></returns>
-        public static async Task<int> CreateAsync(BinModel model, bool forceUpdate = false, bool rollback = false)
+        public static async Task<int> CreateAsync(BinModel model, bool? forceUpdate = null, bool rollback = false)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@IsReserved", model.IsReserved);
                         command.Parameters.AddWithValue("@IsDefault", model.IsDefault);
                         command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
-                        command.Parameters.AddWithValue("@ForceUpdate", forceUpdate);
+                        command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
                         result = sql.ExecuteNonQuery(command, rollback);
                         model.Id = (Guid)id.Value;
 
@@ -95,7 +95,7 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static async Task<BinModel> Get(Guid id)
+        public static async Task<BinModel> GetAsync(Guid id)
         {
             try
             {
@@ -129,7 +129,7 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static async Task<BinModel> Get(string name)
+        public static async Task<BinModel> GetAsync(string name)
         {
             try
             {
@@ -161,7 +161,7 @@ namespace WS.OrderHub.Managers
         /// Get all bin locations
         /// </summary>
         /// <returns></returns>
-        public static async Task<List<BinModel>> Get()
+        public static async Task<List<BinModel>> GetAsync()
         {
             try
             {

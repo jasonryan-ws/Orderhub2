@@ -13,7 +13,7 @@ BEGIN TRY
 			(Id, [Name], [Description], DateCreated)
 		VALUES
 			(@Id, @Name, @Description, GETDATE())
-		COMMIT TRAN;
+		COMMIT TRAN CreateNode;
 		RETURN @@ROWCOUNT;
 	END
 -- Doesn't do anything if the name is already in use.

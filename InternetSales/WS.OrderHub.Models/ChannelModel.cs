@@ -11,7 +11,7 @@ namespace WS.OrderHub.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
-        public string ColorCode { get; set; }
+        public int? ColorCode { get; set; }
         public Guid CreatedByNodeId { get; set; }
         public DateTime DateCreated { get; set; }
         public Guid? ModifiedByNodeId { get; set; }

@@ -16,3 +16,4 @@ Post-Deployment Script Template
 :r .\DefaultData\Configurations.sql
 :r .\DefaultData\Bins.sql
 :r .\DefaultData\Channels.sql
+:r .\DefaultData\Charges.sql

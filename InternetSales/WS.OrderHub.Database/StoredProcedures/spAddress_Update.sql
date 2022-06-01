@@ -39,7 +39,7 @@ BEGIN TRY
         ModifiedByNodeId = @ModifiedByNodeId
     WHERE
         Id = @Id;
-    COMMIT TRAN;
+    COMMIT TRAN UpdateAddress;
     RETURN @@ROWCOUNT;
 END TRY
 BEGIN CATCH

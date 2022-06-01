@@ -18,7 +18,7 @@ BEGIN TRY
         DeletedByNodeId = @DeletedByNodeId
     WHERE
         Id = @Id;
-    COMMIT TRAN;
+    COMMIT TRAN DeleteUndeleteNode;
     RETURN @@ROWCOUNT;
 END TRY
 BEGIN CATCH

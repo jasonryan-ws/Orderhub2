@@ -9,7 +9,7 @@ BEGIN TRY
 		Id NOT IN (SELECT BillAddressId FROM [Order]) AND
 		Id NOT IN (SELECT ShipAddressId FROM [Order]) AND
 		Id NOT IN (SELECT [Value] FROM Configuration WHERE Name = 'StoreAddressId');
-	COMMIT TRAN;
+	COMMIT TRAN DeleteUnusedAddresses;
 	RETURN @@ROWCOUNT;
 END TRY
 BEGIN CATCH

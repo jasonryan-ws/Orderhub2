@@ -19,7 +19,7 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>ChannelModel</returns>
-        public static async Task<ChannelModel> Get(Guid id)
+        public static async Task<ChannelModel> GetAsync(Guid id)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="name"></param>
         /// <returns>ChannelModel</returns>
-        public static async Task<ChannelModel> Get(string name)
+        public static async Task<ChannelModel> GetAsync(string name)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace WS.OrderHub.Managers
         /// Get all channels
         /// </summary>
         /// <returns>List of ChannelModels</returns>
-        public static async Task<List<ChannelModel>> Get()
+        public static async Task<List<ChannelModel>> GetAsync()
         {
             try
             {
@@ -110,15 +110,91 @@ namespace WS.OrderHub.Managers
                 throw;
             }
         }
+        /// <summary>
+        /// Create a new channel
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="rollback"></param>
+        /// <returns></returns>
+        public static async Task<int> CreateAsync(ChannelModel model, bool rollback = false)
+        {
+            try
+            {
+                var result = 0;
+                await Task.Run(() =>
+                {
+                    using (var command = new SqlCommand())
+                    {
+                        command.CommandText =
+                        @"EXEC spChannel_Create
+                        @Id OUTPUT,
+                        @Name,
+                        @Code,
+                        @ColorCode,
+                        @CreatedByNodeId";
+                        var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                        id.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(id);
+                        command.Parameters.AddWithValue("Name", model.Name);
+                        command.Parameters.AddWithValue("Code", model.Code);
+                        command.Parameters.AddWithValue("ColorCode", model.ColorCode);
+                        command.Parameters.AddWithValue("CreatedByNodeId", model.CreatedByNodeId);
+                        result = sql.ExecuteNonQuery(command, rollback);
+                        model.Id = (Guid)id.Value;
+                    }
+                });
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
-
+        /// <summary>
+        /// Update channel
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="rollback"></param>
+        /// <returns></returns>
+        public static async Task<int> UpdateAsync(ChannelModel model, bool rollback = false)
+        {
+            try
+            {
+                var result = 0;
+                await Task.Run(() =>
+                {
+                    using (var command = new SqlCommand())
+                    {
+                        command.CommandText =
+                        @"EXEC spChannel_Update
+                        @Id,
+                        @Name,
+                        @Code,
+                        @ColorCode,
+                        @ModifiedByNodeId";
+                        command.Parameters.AddWithValue("Id", model.Id);
+                        command.Parameters.AddWithValue("Name", model.Name);
+                        command.Parameters.AddWithValue("Code", model.Code);
+                        command.Parameters.AddWithValue("ColorCode", model.ColorCode != null ? model.ColorCode : DBNull.Value);
+                        command.Parameters.AddWithValue("ModifiedByNodeId", model.ModifiedByNodeId);
+                        result = sql.ExecuteNonQuery(command, rollback);
+                    }
+                });
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         private static void Fill(ChannelModel model, DataRow row)
         {
             model.Id = Guid.Parse(Convert.ToString(row["Id"]));
             model.Name = Convert.ToString(row["Name"]);
             model.Code = Convert.ToString(row["Code"]);
-            model.ColorCode = Convert.ToString(row["ColorCode"]);
+            model.ColorCode = row["ColorCode"] != DBNull.Value ? Convert.ToInt32(row["ColorCode"]) : null;
             model.DateCreated = Convert.ToDateTime(row["DateCreated"]);
             model.CreatedByNodeId = Guid.Parse(Convert.ToString(row["CreatedByNodeId"]));
             model.DateModified = row["DateModified"] != DBNull.Value ? Convert.ToDateTime(row["DateModified"]) : null;

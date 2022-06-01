@@ -25,7 +25,7 @@ BEGIN TRY
 	VALUES
 		(@Id, @FirstName, @MiddleName, @LastName, @Company, @Street1, @Street2, @Street3, @City, @State, @PostalCode, @CountryCode, @Phone, @Fax, @Email, GETDATE(), @CreatedByNodeId);
 		
-	COMMIT TRAN;
+	COMMIT TRAN CreateAddress;
 	RETURN @@ROWCOUNT;
 END TRY
 BEGIN CATCH

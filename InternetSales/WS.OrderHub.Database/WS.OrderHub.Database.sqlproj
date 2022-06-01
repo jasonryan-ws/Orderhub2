@@ -91,6 +91,10 @@
     <Build Include="StoredProcedures\spBin_Update.sql" />
     <Build Include="StoredProcedures\spNode_Create.sql" />
     <Build Include="StoredProcedures\spNode_DeleteUndelete.sql" />
+    <Build Include="StoredProcedures\spChannel_Update.sql" />
+    <Build Include="StoredProcedures\spChannel_Create.sql" />
+    <Build Include="StoredProcedures\spCharge_Create.sql" />
+    <Build Include="StoredProcedures\spCharge_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PostDeployment\DefaultData\Configurations.sql" />
@@ -100,6 +104,7 @@
     <None Include="PostDeployment\DefaultData\States.sql" />
     <None Include="PostDeployment\DefaultData\Bins.sql" />
     <None Include="PostDeployment\DefaultData\Channels.sql" />
+    <None Include="PostDeployment\DefaultData\Charges.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\Script.PostDeployment.sql" />
