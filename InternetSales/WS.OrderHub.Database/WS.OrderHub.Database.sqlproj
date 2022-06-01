@@ -98,6 +98,8 @@
     <None Include="testdb.publish.publish.xml" />
     <None Include="PostDeployment\DefaultData\Countries.sql" />
     <None Include="PostDeployment\DefaultData\States.sql" />
+    <None Include="PostDeployment\DefaultData\Bins.sql" />
+    <None Include="PostDeployment\DefaultData\Channels.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\Script.PostDeployment.sql" />

@@ -14,3 +14,5 @@ Post-Deployment Script Template
 :r .\DefaultData\States.sql
 :r .\DefaultData\Addresses.sql
 :r .\DefaultData\Configurations.sql
+:r .\DefaultData\Bins.sql
+:r .\DefaultData\Channels.sql

@@ -6,7 +6,7 @@ namespace WS.OrderHub.Managers
 {
     public static class AddressManager
     {
-        static readonly SQL client = LocalConfigurationManager.SQLClient();
+        static readonly SQL sql = LocalConfigurationManager.SQLClient();
         public static async Task<List<AddressModel>> GetAsync()
         {
             try
@@ -17,7 +17,7 @@ namespace WS.OrderHub.Managers
                     using (var command = new SqlCommand())
                     {
                         command.CommandText = "SELECT * FROM Address";
-                        var table = client.ExecuteQuery(command);
+                        var table = sql.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             var model = new AddressModel();
@@ -87,7 +87,7 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@Fax", model.Fax);
                         command.Parameters.AddWithValue("@Email", model.Email);
                         command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
-                        result = client.ExecuteNonQuery(command, rollback);
+                        result = sql.ExecuteNonQuery(command, rollback);
                         model.Id = (Guid)id.Value;
                     }
 
@@ -152,7 +152,7 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@Fax", model.Fax);
                         command.Parameters.AddWithValue("@Email", model.Email);
                         command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
-                        result = client.ExecuteNonQuery(command, rollback);
+                        result = sql.ExecuteNonQuery(command, rollback);
 
                     }
                 });
@@ -182,7 +182,7 @@ namespace WS.OrderHub.Managers
                     using (var command = new SqlCommand())
                     {
                         command.CommandText = "EXEC spAddress_DeleteUnused";
-                        result = client.ExecuteNonQuery(command, rollback);
+                        result = sql.ExecuteNonQuery(command, rollback);
 
                     }
                 });

@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 
 namespace WS.OrderHub.Models
 {
-    public class BinModel
+    public class ChannelModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-
-        // Reserved bin will not appear on picklist by default
-        public bool IsReserved { get; set; }
-        // Default receiving location. Only single bin can be set as default
-        public bool IsDefault { get; set; }
-        public DateTime DateCreated { get; set; }
+        public string Code { get; set; }
+        public string ColorCode { get; set; }
         public Guid CreatedByNodeId { get; set; }
-        public DateTime? DateModified { get; set; }
+        public DateTime DateCreated { get; set; }
         public Guid? ModifiedByNodeId { get; set; }
+        public DateTime? DateModified { get; set; }
         public bool IsDeleted { get; set; }
+        public DateTime? DateDeleted { get; set; }
+        public Guid? DeletedByNodeId { get; set; }
     }
 }

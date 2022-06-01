@@ -9,10 +9,15 @@
     --@DeletedByNodeId UNIQUEIDENTIFIER,
 AS
 BEGIN TRY
-    -- Check if this name already exist
-    IF (SELECT Id FROM Bin WHERE [Name] = @Name AND Id <> @Id) IS NULL
+    DECLARE @TargetId UNIQUEIDENTIFIER = (SELECT Id FROM Bin WHERE [Name] = @Name)
+    IF (@TargetId IS NULL OR @TargetId = @Id)
     BEGIN
         BEGIN TRAN UpdateBin
+        IF @IsDefault = 1
+        BEGIN
+            UPDATE Bin
+            SET IsDefault = 0
+        END
         UPDATE Bin
         SET
             [Name] = @Name,
@@ -25,7 +30,7 @@ BEGIN TRY
         COMMIT TRAN;
         RETURN @@ROWCOUNT;
     END
-    ELSE
+    ELSE IF @TargetId IS NOT NULL
         THROW 50001, 'Bin NAME is already in use', 1;
 END TRY
 BEGIN CATCH

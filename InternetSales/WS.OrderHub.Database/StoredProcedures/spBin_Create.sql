@@ -3,7 +3,8 @@
     @Name NVARCHAR(50),
     @IsReserved BIT,
     @IsDefault BIT,
-    @CreatedByNodeId UNIQUEIDENTIFIER
+    @CreatedByNodeId UNIQUEIDENTIFIER,
+    @ForceUpdate BIT -- If true, perform an update if the bin name is already in use
 AS
 BEGIN TRY
     -- Checks if this name already exist
@@ -11,6 +12,11 @@ BEGIN TRY
     IF @Id IS NULL
     BEGIN
         BEGIN TRAN CreateBin
+        IF @IsDefault = 1
+        BEGIN
+            UPDATE Bin
+            SET IsDefault = 0
+        END
         SET @Id = NEWID();
         INSERT INTO Bin
             (Id, [Name], IsReserved, IsDefault, DateCreated, CreatedByNodeId)
@@ -19,10 +25,10 @@ BEGIN TRY
         COMMIT TRAN;
         RETURN @@ROWCOUNT;
     END
-    -- Doesn't do anything if name is already in use.
-
-    --ELSE
-    --    THROW 50001, 'Bin NAME is already in use', 1;
+    IF @ForceUpdate = 1
+        EXEC spBin_Update @Id, @Name, @IsReserved, @IsDefault, @CreatedByNodeId
+    ELSE
+        THROW 50001, 'Bin NAME is already in use', 1;
 END TRY
 BEGIN CATCH
     IF @@TRANCOUNT > 0
