@@ -95,6 +95,7 @@
     <Build Include="StoredProcedures\spChannel_Create.sql" />
     <Build Include="StoredProcedures\spCharge_Create.sql" />
     <Build Include="StoredProcedures\spCharge_Update.sql" />
+    <Build Include="StoredProcedures\spConfiguration_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PostDeployment\DefaultData\Configurations.sql" />

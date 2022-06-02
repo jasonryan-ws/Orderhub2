@@ -130,6 +130,8 @@ namespace WS.OrderHub.Managers
                         command.Parameters.Add(id);
                         command.Parameters.AddWithValue("@Name", model.Name);
                         command.Parameters.AddWithValue("@Description", model.Description);
+                        if (model.CreatedByNodeId == Guid.Empty)
+                            model.CreatedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
                         command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
                         result = sql.ExecuteNonQuery(command, rollback);

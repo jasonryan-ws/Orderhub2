@@ -86,6 +86,8 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@Phone", model.Phone);
                         command.Parameters.AddWithValue("@Fax", model.Fax);
                         command.Parameters.AddWithValue("@Email", model.Email);
+                        if (model.CreatedByNodeId == Guid.Empty)
+                            model.CreatedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
                         result = sql.ExecuteNonQuery(command, rollback);
                         model.Id = (Guid)id.Value;
@@ -151,6 +153,8 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@Phone", model.Phone);
                         command.Parameters.AddWithValue("@Fax", model.Fax);
                         command.Parameters.AddWithValue("@Email", model.Email);
+                        if (model.ModifiedByNodeId == null)
+                            model.ModifiedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
                         result = sql.ExecuteNonQuery(command, rollback);
 

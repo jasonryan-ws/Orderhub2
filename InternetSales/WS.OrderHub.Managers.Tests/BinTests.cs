@@ -18,7 +18,7 @@ namespace WS.OrderHub.Managers.Tests
             model.Name = "TestBin-01";
             model.IsReserved = false;
             model.IsDefault = true;
-            model.CreatedByNodeId = NodeManager.GetAsync("IS-JASON").Result.Id;
+            //model.CreatedByNodeId = NodeManager.GetAsync("IS-JASON").Result.Id;
             var result = BinManager.CreateAsync(model, false, true).Result;
             Assert.AreNotEqual(model.Id, Guid.Empty);
         }
@@ -30,7 +30,7 @@ namespace WS.OrderHub.Managers.Tests
             model.Name = "TestBin-T";
             model.IsReserved = true;
             model.IsDefault = true;
-            model.CreatedByNodeId = NodeManager.GetAsync("IS-SERVER").Result.Id;
+            //model.CreatedByNodeId = NodeManager.GetAsync("IS-SERVER").Result.Id;
             var result = BinManager.CreateAsync(model, true).Result;
             Assert.AreNotEqual(model.Id, Guid.Empty);
         }
@@ -41,7 +41,7 @@ namespace WS.OrderHub.Managers.Tests
             var model = BinManager.GetAsync("TestBin-T").Result;
             model.IsReserved = true;
             model.IsDefault = true;
-            model.ModifiedByNodeId = NodeManager.GetAsync("IS-SERVER").Result.Id;
+            //model.ModifiedByNodeId = NodeManager.GetAsync("IS-SERVER").Result.Id;
             var result = BinManager.UpdateAsync(model, true).Result;
             Assert.IsTrue(result > 0);
         }
@@ -53,7 +53,7 @@ namespace WS.OrderHub.Managers.Tests
             model.Name = "TestBin-T_Renamed";
             model.IsReserved = true;
             model.IsDefault = true;
-            model.ModifiedByNodeId = NodeManager.GetAsync("IS-SERVER").Result.Id;
+            //model.ModifiedByNodeId = NodeManager.GetAsync("IS-SERVER").Result.Id;
             var result = BinManager.UpdateAsync(model, true).Result;
             Assert.IsTrue(result > 0);
         }

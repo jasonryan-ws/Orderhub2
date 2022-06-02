@@ -51,9 +51,15 @@ namespace WS.OrderHub.Managers.Tests
             var model = NodeManager.GetAsync("IS-JASON").Result;
             model.IsDeleted = true;
             model.DateDeleted = DateTime.Now;
-            model.DeletedByNodeId = NodeManager.GetAsync("DT-JASON").Result.Id;
+            //model.DeletedByNodeId = NodeManager.GetAsync("DT-JASON").Result.Id;
             var result = NodeManager.DeleteAsync(model).Result;
             Assert.IsTrue(result > 0);
+        }
+
+        [TestMethod]
+        public void GetCurrentNodeId()
+        {
+            Assert.AreNotEqual(Guid.Empty, NodeManager.NodeId);
         }
     }
 }

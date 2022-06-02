@@ -32,8 +32,8 @@ namespace WS.OrderHub.Managers.Tests
             var model = new ChargeModel();
             model.Name = "Reimbursement";
             model.Description = "Reimbursement charge";
-            model.CreatedByNodeId = NodeManager.GetAsync("IS-SERVER").Result.Id;
-            var result = ChargeManager.CreateAsync(model, null, false).Result;
+            //model.CreatedByNodeId = NodeManager.GetAsync("IS-SERVER").Result.Id;
+            var result = ChargeManager.CreateAsync(model, null, true).Result;
             Assert.AreNotEqual(Guid.Empty, model.Id);
         }
     }

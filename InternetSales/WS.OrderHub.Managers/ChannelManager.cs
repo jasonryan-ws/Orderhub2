@@ -138,7 +138,9 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("Name", model.Name);
                         command.Parameters.AddWithValue("Code", model.Code);
                         command.Parameters.AddWithValue("ColorCode", model.ColorCode);
-                        command.Parameters.AddWithValue("CreatedByNodeId", model.CreatedByNodeId);
+                        if (model.CreatedByNodeId == Guid.Empty)
+                            model.CreatedByNodeId = NodeManager.NodeId;
+                        command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
                         result = sql.ExecuteNonQuery(command, rollback);
                         model.Id = (Guid)id.Value;
                     }
@@ -177,7 +179,7 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("Name", model.Name);
                         command.Parameters.AddWithValue("Code", model.Code);
                         command.Parameters.AddWithValue("ColorCode", model.ColorCode != null ? model.ColorCode : DBNull.Value);
-                        command.Parameters.AddWithValue("ModifiedByNodeId", model.ModifiedByNodeId);
+                        command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId != null ? model.ModifiedByNodeId : NodeManager.NodeId);
                         result = sql.ExecuteNonQuery(command, rollback);
                     }
                 });

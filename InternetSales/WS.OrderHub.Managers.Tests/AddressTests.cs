@@ -36,7 +36,7 @@ namespace WS.OrderHub.Managers.Tests
             model.Phone = "920-710-2660";
             model.Fax = "";
             model.Email = "aldrin.ybas@gmail.com";
-            model.CreatedByNodeId = NodeManager.GetAsync("IS-JASON").Result.Id;
+            //model.CreatedByNodeId = NodeManager.GetAsync("IS-JASON").Result.Id;
 
             var result = AddressManager.CreateAsync(model, true).Result;
             Assert.AreNotEqual(model.Id, Guid.Empty);
@@ -47,7 +47,7 @@ namespace WS.OrderHub.Managers.Tests
         {
             var model = AddressManager.GetAsync().Result.FirstOrDefault(a => a.LastName == "Ryan");
             model.LastName = "Ybas";
-            model.ModifiedByNodeId = NodeManager.GetAsync("IS-JASON").Result.Id;
+            //model.ModifiedByNodeId = NodeManager.GetAsync("IS-JASON").Result.Id;
 
             var result = AddressManager.UpdateAsync(model, true).Result;
             Assert.IsTrue(result > 0);

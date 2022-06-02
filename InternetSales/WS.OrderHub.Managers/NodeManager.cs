@@ -12,7 +12,10 @@ namespace WS.OrderHub.Managers
     public static class NodeManager
     {
         static readonly SQL sql = LocalConfigurationManager.SQLClient();
-
+        /// <summary>
+        /// The Node ID of the machine that is currently running this app.
+        /// </summary>
+        public static readonly Guid NodeId = Get(Environment.MachineName).Id;
         public static async Task<int> CreateAsync(NodeModel model, bool rollback = false)
         {
             try
@@ -27,7 +30,6 @@ namespace WS.OrderHub.Managers
                         @Id OUTPUT,
                         @Name,
                         @Description";
-
                         var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
                         id.Direction = ParameterDirection.Output;
                         command.Parameters.Add(id);
@@ -37,17 +39,13 @@ namespace WS.OrderHub.Managers
                         model.Id = (Guid)id.Value;
                     }
                 });
-
                 return result;
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
-
-
         public static async Task<NodeModel> GetAsync(Guid Id)
         {
             try
@@ -67,12 +65,10 @@ namespace WS.OrderHub.Managers
                         }
                     }
                 });
-
                 return model;
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -88,28 +84,43 @@ namespace WS.OrderHub.Managers
                 NodeModel model = null;
                 await Task.Run(() =>
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText = "SELECT * FROM [Node] WHERE Name = @Name";
-                        command.Parameters.AddWithValue("@Name", name);
-                        var table = sql.ExecuteQuery(command);
-                        foreach (DataRow row in table.Rows)
-                        {
-                            model = new NodeModel();
-                            Fill(model, row);
-                        }
-                    }
+                    model = Get(name);
                 });
-
                 return model;
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
-
+        /// <summary>
+        /// Get Node by name synchronously
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static NodeModel Get(string name)
+        {
+            try
+            {
+                NodeModel model = null;
+                using (var command = new SqlCommand())
+                {
+                    command.CommandText = "SELECT * FROM [Node] WHERE Name = @Name";
+                    command.Parameters.AddWithValue("@Name", name);
+                    var table = sql.ExecuteQuery(command);
+                    foreach (DataRow row in table.Rows)
+                    {
+                        model = new NodeModel();
+                        Fill(model, row);
+                    }
+                }
+                return model;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         /// <summary>
         /// Get all existing Nodes
         /// </summary>
@@ -133,17 +144,13 @@ namespace WS.OrderHub.Managers
                         }
                     }
                 });
-
                 return models;
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
-
-
         public static async Task<int> DeleteAsync(NodeModel model, bool rollback = false)
         {
             try
@@ -162,8 +169,9 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@Id", model.Id);
                         command.Parameters.AddWithValue("@IsDeleted", model.IsDeleted);
                         command.Parameters.AddWithValue("@DateDeleted", model.DateDeleted);
+                        if (model.DeletedByNodeId == null)
+                            model.DeletedByNodeId = NodeId;
                         command.Parameters.AddWithValue("@DeletedByNodeId", model.DeletedByNodeId);
-
                         result = sql.ExecuteNonQuery(command, rollback);
                     }
                 });
@@ -171,11 +179,9 @@ namespace WS.OrderHub.Managers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
-
         private static void Fill(NodeModel model, DataRow row)
         {
             model.Id = Guid.Parse(Convert.ToString(row["Id"]));

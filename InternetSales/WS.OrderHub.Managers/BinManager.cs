@@ -43,6 +43,8 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@Name", model.Name);
                         command.Parameters.AddWithValue("@IsReserved", model.IsReserved);
                         command.Parameters.AddWithValue("@IsDefault", model.IsDefault);
+                        if (model.CreatedByNodeId == Guid.Empty)
+                            model.CreatedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
                         command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
                         result = sql.ExecuteNonQuery(command, rollback);
@@ -79,6 +81,8 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@Name", model.Name);
                         command.Parameters.AddWithValue("@IsReserved", model.IsReserved);
                         command.Parameters.AddWithValue("@IsDefault", model.IsDefault);
+                        if (model.ModifiedByNodeId == null)
+                            model.ModifiedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
                         result = sql.ExecuteNonQuery(command, rollback);
                     }
