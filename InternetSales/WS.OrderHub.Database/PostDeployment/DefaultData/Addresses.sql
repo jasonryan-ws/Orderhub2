@@ -5,4 +5,5 @@ INSERT INTO [Address]
 VALUES
 	(NEWID(), 'Daniel', 'Solie', 'Wheel & Sprocket', '3939 W College Ave', '' , 'Appleton', 'WI', '54914', 'US', '866-995-9918', 'support@wheelandsprocket.com', GETDATE(), @CreatedByNodeId),
 	(NEWID(), 'Jason', 'Ryan', 'Wheel & Sprocket', '3939 W College Ave', 'Internet Sales', 'Appleton', 'WI', '54914', 'US', '866-995-9918', 'jason.ryan@wheelandsprocket.com', GETDATE(), @CreatedByNodeId),
-	(NEWID(), 'DJ', 'Brooks', 'Wheel & Sprocket', '3939 W College Ave', 'Internet Sales', 'Appleton', 'WI', '54914', 'US', '866-995-9918', 'dj.brooks@wheelandsprocket.com', GETDATE(), @CreatedByNodeId)
+	(NEWID(), 'DJ', 'Brooks', 'Wheel & Sprocket', '3939 W College Ave', 'Internet Sales', 'Appleton', 'WI', '54914', 'US', '866-995-9918', 'dj.brooks@wheelandsprocket.com', GETDATE(), @CreatedByNodeId),
+	(NEWID(), 'John', 'Doe', '', '123 N West St', '', 'Appleton', 'WI', '54914', 'US', '866-995-9918', 'john.doe@email.com', GETDATE(), @CreatedByNodeId)

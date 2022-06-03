@@ -24,7 +24,6 @@ namespace WS.OrderHub.Managers
                             Fill(model, row);
                             models.Add(model);
                         }
-
                     }
                 });
 
@@ -165,7 +164,6 @@ namespace WS.OrderHub.Managers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

@@ -18,7 +18,7 @@
     [ShipMethod] NVARCHAR(100) NULL, 
     [IsShipped] BIT NOT NULL DEFAULT 0, 
     [DateShipped] DATETIME NULL,
-    [ShipCost] MONEY NOT NULL, 
+    [ShipCost] MONEY NULL, 
     [IsCancelled] BIT NOT NULL DEFAULT 0,
     [DateCancelled] DATETIME NULL,
     [CancelledByNodeId] UNIQUEIDENTIFIER NULL FOREIGN KEY REFERENCES [dbo].[Node](Id),

@@ -11,7 +11,7 @@ namespace WS.OrderHub.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        // Reserved bin will not appear on picklist by default
+        // Reserved bins will not appear on your picklist by default
         public bool IsReserved { get; set; }
         // Default receiving location. Only single bin can be set as default
         public bool IsDefault { get; set; }
@@ -20,5 +20,9 @@ namespace WS.OrderHub.Models
         public DateTime? DateModified { get; set; }
         public Guid? ModifiedByNodeId { get; set; }
         public bool IsDeleted { get; set; }
+
+
+        // Many-to-Many
+        public List<ProductModel> Products { get; set; }
     }
 }

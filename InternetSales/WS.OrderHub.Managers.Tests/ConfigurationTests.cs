@@ -47,8 +47,5 @@ namespace WS.OrderHub.Managers.Tests
             var value = ConfigurationManager.GetValue("SWIntegrated").Result;
             Assert.AreEqual("False", value);
         }
-
-
-
     }
 }

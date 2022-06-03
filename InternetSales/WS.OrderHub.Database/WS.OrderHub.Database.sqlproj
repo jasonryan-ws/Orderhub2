@@ -96,6 +96,13 @@
     <Build Include="StoredProcedures\spCharge_Create.sql" />
     <Build Include="StoredProcedures\spCharge_Update.sql" />
     <Build Include="StoredProcedures\spConfiguration_Update.sql" />
+    <Build Include="StoredProcedures\spOrder_GetById.sql" />
+    <Build Include="StoredProcedures\spProduct_Create.sql" />
+    <Build Include="StoredProcedures\spProduct_Update.sql" />
+    <Build Include="StoredProcedures\spOrder_GetByChannelOrderNumber.sql" />
+    <Build Include="StoredProcedures\spOrderItem_Create.sql" />
+    <Build Include="StoredProcedures\spOrderItem_Update.sql" />
+    <Build Include="StoredProcedures\spOrderItem_UpdateByIds.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PostDeployment\DefaultData\Configurations.sql" />
@@ -106,6 +113,9 @@
     <None Include="PostDeployment\DefaultData\Bins.sql" />
     <None Include="PostDeployment\DefaultData\Channels.sql" />
     <None Include="PostDeployment\DefaultData\Charges.sql" />
+    <None Include="PostDeployment\DefaultData\Orders.sql" />
+    <None Include="PostDeployment\DefaultData\Products.sql" />
+    <None Include="PostDeployment\DefaultData\OrderItems.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\Script.PostDeployment.sql" />

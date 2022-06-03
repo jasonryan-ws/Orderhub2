@@ -4,6 +4,6 @@
     [OrderId] UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES [dbo].[Order](Id) ON DELETE CASCADE, 
     [ProductId] UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES [dbo].Product(Id), 
     [Quantity] INT NOT NULL DEFAULT 0, 
-    [Amount] MONEY NOT NULL,
+    [UnitPrice] MONEY NOT NULL,
     UNIQUE([OrderId], [ProductId])
 )
