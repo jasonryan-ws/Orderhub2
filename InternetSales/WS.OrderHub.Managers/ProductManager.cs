@@ -19,23 +19,31 @@ namespace WS.OrderHub.Managers
         /// <returns></returns>
         public static async Task<ProductModel> GetAsync(Guid id)
         {
-            ProductModel model = null;
-            await Task.Run(() =>
+            try
             {
-                using (var command = new SqlCommand())
+                ProductModel model = null;
+                await Task.Run(() =>
                 {
-                    command.CommandText = @"SELECT * FROM Product WHERE Id = @Id";
-                    command.Parameters.AddWithValue("@Id", id);
-                    var table= App.SQLClient.ExecuteQuery(command);
-                    foreach (DataRow row in table.Rows)
+                    using (var command = new SqlCommand())
                     {
-                        model = new ProductModel();
-                        Fill(model, row);
+                        command.CommandText = @"SELECT * FROM Product WHERE Id = @Id";
+                        command.Parameters.AddWithValue("@Id", id);
+                        var table = App.SQLClient.ExecuteQuery(command);
+                        foreach (DataRow row in table.Rows)
+                        {
+                            model = new ProductModel();
+                            Fill(model, row);
+                        }
                     }
-                }
-            });
+                });
 
-            return model;
+                return model;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         /// <summary>
@@ -45,23 +53,72 @@ namespace WS.OrderHub.Managers
         /// <returns></returns>
         public static async Task<ProductModel> GetAsync(string identifier)
         {
-            ProductModel model = null;
-            await Task.Run(() =>
+            try
             {
-                using (var command = new SqlCommand())
+                ProductModel model = null;
+                await Task.Run(() =>
                 {
-                    command.CommandText = @"SELECT * FROM Product WHERE SKU = @Identifier OR UPC = @Identifier";
-                    command.Parameters.AddWithValue("@Identifier", identifier);
-                    var table= App.SQLClient.ExecuteQuery(command);
-                    foreach (DataRow row in table.Rows)
+                    using (var command = new SqlCommand())
                     {
-                        model = new ProductModel();
-                        Fill(model, row);
+                        command.CommandText = @"SELECT * FROM Product WHERE SKU = @Identifier OR UPC = @Identifier";
+                        command.Parameters.AddWithValue("@Identifier", identifier);
+                        var table = App.SQLClient.ExecuteQuery(command);
+                        foreach (DataRow row in table.Rows)
+                        {
+                            model = new ProductModel();
+                            Fill(model, row);
+                        }
                     }
-                }
-            });
+                });
 
-            return model;
+                return model;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Search products by keyword (SKU, UPC or Name)
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <param name="keywordMinCharacters">Mininum number of characters of keyword. Set to zero to ignore.</param>
+        /// <returns></returns>
+        public static async Task<List<ProductModel>> SearchAsync(string keyword, int keywordMinCharacters = 3)
+        {
+            try
+            {
+                if (keyword.Length >= keywordMinCharacters || keywordMinCharacters == 0)
+                {
+                    var models = new List<ProductModel>();
+                    await Task.Run(() =>
+                    {
+                        using (var command = new SqlCommand())
+                        {
+                            command.CommandText = @"EXEC spProduct_Search @Keyword";
+                            command.Parameters.AddWithValue("@Keyword", keyword);
+                            var table = App.SQLClient.ExecuteQuery(command);
+                            foreach (DataRow row in table.Rows)
+                            {
+                                var model = new ProductModel();
+                                Fill(model, row);
+                                models.Add(model);
+                            }
+                        }
+                    });
+
+                    return models;
+                }
+                throw new Exception($"Search keyword must contain at least {keywordMinCharacters} characters");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         /// <summary>
@@ -71,30 +128,38 @@ namespace WS.OrderHub.Managers
         /// <returns></returns>
         public static async Task<List<ProductModel>> GetAsync(int limit = 0)
         {
-            var models = new List<ProductModel>();
-            await Task.Run(() =>
+            try
             {
-                using (var command = new SqlCommand())
+                var models = new List<ProductModel>();
+                await Task.Run(() =>
                 {
-                    var top = string.Empty;
-                    if (limit > 0)
+                    using (var command = new SqlCommand())
                     {
-                        top = "TOP (@Limit)";
-                        command.Parameters.AddWithValue("@Limit", limit);
-                    }
+                        var top = string.Empty;
+                        if (limit > 0)
+                        {
+                            top = "TOP (@Limit)";
+                            command.Parameters.AddWithValue("@Limit", limit);
+                        }
 
-                    command.CommandText = $@"SELECT {top} * FROM Product";
-                    var table= App.SQLClient.ExecuteQuery(command);
-                    foreach (DataRow row in table.Rows)
-                    {
-                        var model = new ProductModel();
-                        Fill(model, row);
-                        models.Add(model);
+                        command.CommandText = $@"SELECT {top} * FROM Product";
+                        var table = App.SQLClient.ExecuteQuery(command);
+                        foreach (DataRow row in table.Rows)
+                        {
+                            var model = new ProductModel();
+                            Fill(model, row);
+                            models.Add(model);
+                        }
                     }
-                }
-            });
+                });
 
-            return models;
+                return models;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
 

@@ -52,5 +52,12 @@ namespace WS.OrderHub.Managers.Tests
             var result = ProductManager.UpdateAsync(model, true).Result;
             Assert.IsTrue(result > 0);
         }
+
+        [TestMethod]
+        public void SearchTest()
+        {
+            var result = ProductManager.SearchAsync("sh").Result;
+            Assert.AreEqual(2, result.Count);
+        }
     }
 }

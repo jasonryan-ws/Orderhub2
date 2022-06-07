@@ -106,6 +106,7 @@
     <Build Include="StoredProcedures\spProductBin_Create.sql" />
     <Build Include="StoredProcedures\spProductBin_Update.sql" />
     <Build Include="StoredProcedures\spProductBin_Delete.sql" />
+    <Build Include="StoredProcedures\spProduct_Search.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PostDeployment\DefaultData\Configurations.sql" />
