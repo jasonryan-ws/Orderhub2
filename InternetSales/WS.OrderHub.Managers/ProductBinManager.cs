@@ -46,9 +46,9 @@ namespace WS.OrderHub.Managers
                             pb.BinId = @BinId";
                         command.Parameters.AddWithValue("@ProductId", productId);
                         command.Parameters.AddWithValue("@BinId", binId);
-                        var table= App.SQLClient.ExecuteQuery(command);
+                        var table = App.SQLClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
-                        { 
+                        {
                             model = new ProductModel();
                             Fill(model, row);
                         }
@@ -158,6 +158,154 @@ namespace WS.OrderHub.Managers
             }
         }
 
+        public static async Task<Guid?> CreateAsync(Guid productId, Guid binId, int quantity, Guid createdByNodeId, bool? forceUpdate = null, bool rollback = false)
+        {
+            try
+            {
+                Guid? newId = null;
+                await Task.Run(() =>
+                {
+                    using (var command = new SqlCommand())
+                    {
+                        command.CommandText =
+                        @"EXEC spProductBin_Create
+                        @Id OUTPUT,
+                        @ProductId,
+                        @BinId,
+                        @Quantity,
+                        @CreatedByNodeId,
+                        @ForceUpdate";
+                        var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                        id.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(id);
+                        command.Parameters.AddWithValue("@ProductId", productId);
+                        command.Parameters.AddWithValue("@BinId", binId);
+                        command.Parameters.AddWithValue("@Quantity", quantity);
+                        command.Parameters.AddWithValue("@CreatedByNodeId", createdByNodeId);
+                        command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
+                        App.SQLClient.ExecuteNonQuery(command, rollback);
+                        newId = (Guid)id.Value;
+                    }
+                });
+                return newId;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public static async Task<int> UpdateAsync(Guid productId, Guid binId, int quantity, Guid modifiedByNodeId, bool rollback = false)
+        {
+            try
+            {
+                var result = 0;
+                await Task.Run(() =>
+                {
+                    using (var command = new SqlCommand())
+                    {
+                        command.CommandText =
+                        @"
+                        DECLARE @Id UNIQUEIDENTIFIER = (SELECT TOP 1 Id FROM ProductBin WHERE ProductId = @ProductId AND BinId = @BinId);
+                        EXEC spProductBin_Update
+                        @Id,
+                        @Quantity,
+                        @ModifiedByNodeId";
+                        command.Parameters.AddWithValue("@ProductId", productId);
+                        command.Parameters.AddWithValue("@BinId", binId);
+                        command.Parameters.AddWithValue("@Quantity", quantity);
+                        command.Parameters.AddWithValue("@ModifiedByNodeId", modifiedByNodeId);
+                        result = App.SQLClient.ExecuteNonQuery(command, rollback);
+                    }
+                });
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public static async Task<int> UpdateAsync(Guid id, int quantity, Guid modifiedByNodeId, bool rollback = false)
+        {
+            try
+            {
+                var result = 0;
+                await Task.Run(() =>
+                {
+                    using (var command = new SqlCommand())
+                    {
+                        command.CommandText =
+                        @"EXEC spProductBin_Create
+                        @Id,
+                        @Quantity,
+                        @ModifiedByNodeId";
+                        command.Parameters.AddWithValue("@Quantity", quantity);
+                        command.Parameters.AddWithValue("@ModifiedByNodeId", modifiedByNodeId);
+                        result = App.SQLClient.ExecuteNonQuery(command, rollback);
+                    }
+                });
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public static async Task<int> DeleteAsync(Guid productId, Guid binId, bool rollback = false)
+        {
+            try
+            {
+                var result = 0;
+                await Task.Run(() =>
+                {
+                    using (var command = new SqlCommand())
+                    {
+                        command.CommandText =
+                        @"
+                        DECLARE @Id UNIQUEIDENTIFIER = (SELECT TOP 1 Id FROM ProductBin WHERE ProductId = @ProductId AND BinId = @BinId);
+                        EXEC spProductBin_Delete @Id";
+                        command.Parameters.AddWithValue("@ProductId", productId);
+                        command.Parameters.AddWithValue("@BinId", binId);
+                        result = App.SQLClient.ExecuteNonQuery(command, rollback);
+                    }
+                });
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public static async Task<int> DeleteAsync(Guid id, bool rollback = false)
+        {
+            try
+            {
+                var result = 0;
+                await Task.Run(() =>
+                {
+                    using (var command = new SqlCommand())
+                    {
+                        command.CommandText =
+                        @"EXEC spProductBin_Delete @Id";
+                        command.Parameters.AddWithValue("@Id", id);
+                        result = App.SQLClient.ExecuteNonQuery(command, rollback);
+                    }
+                });
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         private static void Fill(ProductModel model, DataRow row)
         {
             model.Id = Guid.Parse(Convert.ToString(row["Id"]));
