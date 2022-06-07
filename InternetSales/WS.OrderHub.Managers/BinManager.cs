@@ -12,7 +12,6 @@ namespace WS.OrderHub.Managers
 {
     public static class BinManager
     {
-        private static SQL sql = LocalConfigurationManager.SQLClient();
         /// <summary>
         /// Inserts a new bin into the database
         /// </summary>
@@ -47,7 +46,7 @@ namespace WS.OrderHub.Managers
                             model.CreatedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
                         command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
-                        result = sql.ExecuteNonQuery(command, rollback);
+                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
                         model.Id = (Guid)id.Value;
 
                     }
@@ -84,7 +83,7 @@ namespace WS.OrderHub.Managers
                         if (model.ModifiedByNodeId == null)
                             model.ModifiedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
-                        result = sql.ExecuteNonQuery(command, rollback);
+                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
                     }
                 });
                 return result;
@@ -110,7 +109,7 @@ namespace WS.OrderHub.Managers
                     {
                         command.CommandText = @"SELECT * FROM Bin WHERE Id = @Id";
                         command.Parameters.AddWithValue("@Id", id);
-                        var table = sql.ExecuteQuery(command);
+                        var table= App.SQLClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             model = new BinModel();
@@ -144,7 +143,7 @@ namespace WS.OrderHub.Managers
                     {
                         command.CommandText = @"SELECT * FROM Bin WHERE Name = @Name";
                         command.Parameters.AddWithValue("@Name", name);
-                        var table = sql.ExecuteQuery(command);
+                        var table= App.SQLClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             model = new BinModel();
@@ -175,7 +174,7 @@ namespace WS.OrderHub.Managers
                     using (var command = new SqlCommand())
                     {
                         command.CommandText = @"SELECT * FROM Bin";
-                        var table = sql.ExecuteQuery(command);
+                        var table= App.SQLClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             var model = new BinModel();

@@ -6,7 +6,6 @@ namespace WS.OrderHub.Managers
 {
     public static class AddressManager
     {
-        static readonly SQL sql = LocalConfigurationManager.SQLClient();
         public static async Task<List<AddressModel>> GetAsync()
         {
             try
@@ -17,7 +16,7 @@ namespace WS.OrderHub.Managers
                     using (var command = new SqlCommand())
                     {
                         command.CommandText = "SELECT * FROM Address";
-                        var table = sql.ExecuteQuery(command);
+                        var table = App.SQLClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             var model = new AddressModel();
@@ -88,7 +87,7 @@ namespace WS.OrderHub.Managers
                         if (model.CreatedByNodeId == Guid.Empty)
                             model.CreatedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
-                        result = sql.ExecuteNonQuery(command, rollback);
+                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
                         model.Id = (Guid)id.Value;
                     }
 
@@ -155,7 +154,7 @@ namespace WS.OrderHub.Managers
                         if (model.ModifiedByNodeId == null)
                             model.ModifiedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
-                        result = sql.ExecuteNonQuery(command, rollback);
+                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
 
                     }
                 });
@@ -184,7 +183,7 @@ namespace WS.OrderHub.Managers
                     using (var command = new SqlCommand())
                     {
                         command.CommandText = "EXEC spAddress_DeleteUnused";
-                        result = sql.ExecuteNonQuery(command, rollback);
+                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
 
                     }
                 });

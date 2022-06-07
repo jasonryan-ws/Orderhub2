@@ -12,8 +12,6 @@ namespace WS.OrderHub.Managers
 {
     public static class OrderItemManager
     {
-
-        private static SQL sql = LocalConfigurationManager.SQLClient();
         /// <summary>
         /// Get order items by order Id
         /// </summary>
@@ -38,7 +36,7 @@ namespace WS.OrderHub.Managers
                         JOIN Product p ON p.Id = i.ProductId
                         WHERE o.Id = @OrderId";
                         command.Parameters.AddWithValue("@OrderId", orderId);
-                        var table = sql.ExecuteQuery(command);
+                        var table= App.SQLClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             var model = new ProductModel();
@@ -89,7 +87,7 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@Quantity", product.Quantity);
                         command.Parameters.AddWithValue("@UnitPrice", product.UnitPrice);
                         command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
-                        sql.ExecuteNonQuery(command, rollback);
+                        App.SQLClient.ExecuteNonQuery(command, rollback);
                         newId = (Guid)id.Value;
 
                     }
@@ -128,7 +126,7 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@Quantity", quantity);
                         command.Parameters.AddWithValue("@UnitPrice", unitPrice);
                         command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
-                        sql.ExecuteNonQuery(command, rollback);
+                        App.SQLClient.ExecuteNonQuery(command, rollback);
                         newId = (Guid)id.Value;
 
                     }
@@ -159,7 +157,7 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@Id", id);
                         command.Parameters.AddWithValue("@Quantity", quantity);
                         command.Parameters.AddWithValue("@UnitPrice", unitPrice);
-                        result = sql.ExecuteNonQuery(command, rollback);
+                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
                     }
                 });
                 return result;
@@ -190,7 +188,7 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@ProductId", productId);
                         command.Parameters.AddWithValue("@Quantity", quantity);
                         command.Parameters.AddWithValue("@UnitPrice", unitPrice);
-                        result = sql.ExecuteNonQuery(command, rollback);
+                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
                     }
                 });
                 return result;

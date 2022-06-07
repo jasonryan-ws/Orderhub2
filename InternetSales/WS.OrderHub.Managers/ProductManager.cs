@@ -12,8 +12,6 @@ namespace WS.OrderHub.Managers
 {
     public static class ProductManager
     {
-        private static SQL sql = LocalConfigurationManager.SQLClient();
-
         /// <summary>
         /// Get product by Id
         /// </summary>
@@ -28,7 +26,7 @@ namespace WS.OrderHub.Managers
                 {
                     command.CommandText = @"SELECT * FROM Product WHERE Id = @Id";
                     command.Parameters.AddWithValue("@Id", id);
-                    var table = sql.ExecuteQuery(command);
+                    var table= App.SQLClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         model = new ProductModel();
@@ -54,7 +52,7 @@ namespace WS.OrderHub.Managers
                 {
                     command.CommandText = @"SELECT * FROM Product WHERE SKU = @Identifier OR UPC = @Identifier";
                     command.Parameters.AddWithValue("@Identifier", identifier);
-                    var table = sql.ExecuteQuery(command);
+                    var table= App.SQLClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         model = new ProductModel();
@@ -86,7 +84,7 @@ namespace WS.OrderHub.Managers
                     }
 
                     command.CommandText = $@"SELECT {top} * FROM Product";
-                    var table = sql.ExecuteQuery(command);
+                    var table= App.SQLClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         var model = new ProductModel();
@@ -129,7 +127,7 @@ namespace WS.OrderHub.Managers
                             model.CreatedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
                         command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
-                        result = sql.ExecuteNonQuery(command, rollback);
+                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
                         model.Id = (Guid)id.Value;
                     }
                 });
@@ -167,7 +165,7 @@ namespace WS.OrderHub.Managers
                         if (model.ModifiedByNodeId == null)
                             model.ModifiedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
-                        result = sql.ExecuteNonQuery(command, rollback);
+                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
                     }
                 });
                 return result;

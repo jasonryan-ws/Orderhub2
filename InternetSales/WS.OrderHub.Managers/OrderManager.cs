@@ -7,7 +7,6 @@ namespace WS.OrderHub.Managers
 {
     public static class OrderManager
     {
-        static readonly SQL sql = LocalConfigurationManager.SQLClient();
         /// <summary>
         /// Get order by Id
         /// </summary>
@@ -24,7 +23,7 @@ namespace WS.OrderHub.Managers
                 {
                     command.CommandText = @"EXEC spOrder_GetById @Id";
                     command.Parameters.AddWithValue("@Id", id);
-                    var table = sql.ExecuteQuery(command);
+                    var table= App.SQLClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         model = new OrderModel();
@@ -50,7 +49,7 @@ namespace WS.OrderHub.Managers
                 {
                     command.CommandText = @"EXEC spOrder_GetByChannelOrderNumber @ChannelOrderNumber";
                     command.Parameters.AddWithValue("@ChannelOrderNumber", channelOrderNumber);
-                    var table = sql.ExecuteQuery(command);
+                    var table= App.SQLClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         model = new OrderModel();
@@ -62,7 +61,7 @@ namespace WS.OrderHub.Managers
         }
 
 
-        
+
         // Get Pending - Unverified, Unshipped, Not Cancelled
         // Get Unpicked - No pick history, unverified, unshipped, not cancelled
         // Get first unverified by Product SKU
@@ -80,7 +79,9 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="model"></param>
         /// <param name="row"></param>
+        /// <param name="row"></param>
         /// <param name="extended">Set to true if you want to fill billing address, shipping address and channel</param>
+        /// /// <param name="includeItems">Set to true if you want include order items</param>
         private static void Fill(OrderModel model, DataRow row, bool extended = false, bool includeItems = false)
         {
             model.Id = Guid.Parse(Convert.ToString(row["Id"]));

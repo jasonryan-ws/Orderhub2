@@ -24,5 +24,8 @@ namespace WS.OrderHub.Models
 
         // Many-to-Many
         public List<ProductModel> Products { get; set; }
+
+        // Extended properties
+        public int Quantity { get; set; }
     }
 }

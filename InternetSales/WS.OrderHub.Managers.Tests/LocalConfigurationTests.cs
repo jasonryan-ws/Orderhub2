@@ -13,8 +13,7 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public  void SQLClientTest()
         {
-            var client = LocalConfigurationManager.SQLClient();
-            Assert.IsNotNull(client);
+            Assert.IsNotNull(App.SQLClient);
         }
     }
 }

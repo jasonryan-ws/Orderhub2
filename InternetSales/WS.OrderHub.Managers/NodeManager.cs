@@ -11,7 +11,6 @@ namespace WS.OrderHub.Managers
 {
     public static class NodeManager
     {
-        static readonly SQL sql = LocalConfigurationManager.SQLClient();
         /// <summary>
         /// The Node ID of the machine that is currently running this app.
         /// </summary>
@@ -35,7 +34,7 @@ namespace WS.OrderHub.Managers
                         command.Parameters.Add(id);
                         command.Parameters.AddWithValue("@Name", model.Name);
                         command.Parameters.AddWithValue("@Description", model.Description);
-                        result = sql.ExecuteNonQuery(command, rollback);
+                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
                         model.Id = (Guid)id.Value;
                     }
                 });
@@ -57,7 +56,7 @@ namespace WS.OrderHub.Managers
                     {
                         command.CommandText = "SELECT * FROM [Node] WHERE Id = @Id";
                         command.Parameters.AddWithValue("@Id", Id);
-                        var table = sql.ExecuteQuery(command);
+                        var table= App.SQLClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             model = new NodeModel();
@@ -107,7 +106,7 @@ namespace WS.OrderHub.Managers
                 {
                     command.CommandText = "SELECT * FROM [Node] WHERE Name = @Name";
                     command.Parameters.AddWithValue("@Name", name);
-                    var table = sql.ExecuteQuery(command);
+                    var table= App.SQLClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         model = new NodeModel();
@@ -135,7 +134,7 @@ namespace WS.OrderHub.Managers
                     using (var command = new SqlCommand())
                     {
                         command.CommandText = "SELECT * FROM [Node]";
-                        var table = sql.ExecuteQuery(command);
+                        var table= App.SQLClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             var model = new NodeModel();
@@ -172,7 +171,7 @@ namespace WS.OrderHub.Managers
                         if (model.DeletedByNodeId == null)
                             model.DeletedByNodeId = NodeId;
                         command.Parameters.AddWithValue("@DeletedByNodeId", model.DeletedByNodeId);
-                        result = sql.ExecuteNonQuery(command, rollback);
+                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
                     }
                 });
                 return result;

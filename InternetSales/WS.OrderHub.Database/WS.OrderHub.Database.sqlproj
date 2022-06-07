@@ -103,6 +103,9 @@
     <Build Include="StoredProcedures\spOrderItem_Create.sql" />
     <Build Include="StoredProcedures\spOrderItem_Update.sql" />
     <Build Include="StoredProcedures\spOrderItem_UpdateByIds.sql" />
+    <Build Include="StoredProcedures\spProductBin_Create.sql" />
+    <Build Include="StoredProcedures\spProductBin_Update.sql" />
+    <Build Include="StoredProcedures\spProductBin_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PostDeployment\DefaultData\Configurations.sql" />
@@ -116,6 +119,7 @@
     <None Include="PostDeployment\DefaultData\Orders.sql" />
     <None Include="PostDeployment\DefaultData\Products.sql" />
     <None Include="PostDeployment\DefaultData\OrderItems.sql" />
+    <None Include="PostDeployment\DefaultData\ProductBins.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\Script.PostDeployment.sql" />

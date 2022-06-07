@@ -15,7 +15,7 @@ namespace WS.OrderHub.Managers.Tests
         public void GetTest()
         {
             var result = AddressManager.GetAsync().Result;
-            Assert.AreEqual(result.Count, 3);
+            Assert.AreEqual(result.Count, 4);
         }
 
         [TestMethod]

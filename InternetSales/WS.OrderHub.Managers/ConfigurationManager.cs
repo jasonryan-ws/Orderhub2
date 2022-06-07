@@ -12,8 +12,6 @@ namespace WS.OrderHub.Managers
 {
     public static class ConfigurationManager
     {
-        private static SQL sql = LocalConfigurationManager.SQLClient();
-
         /// <summary>
         /// Get by Configuration Id
         /// </summary>
@@ -28,7 +26,7 @@ namespace WS.OrderHub.Managers
                 {
                     command.CommandText = "SELECT * FROM Configuration WHERE Id = @Id";
                     command.Parameters.AddWithValue("@Id", id);
-                    var table = sql.ExecuteQuery(command);
+                    var table= App.SQLClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         model = new ConfigurationModel();
@@ -53,7 +51,7 @@ namespace WS.OrderHub.Managers
                 {
                     command.CommandText = "SELECT * FROM Configuration WHERE Name = @Name";
                     command.Parameters.AddWithValue("@Name", name);
-                    var table = sql.ExecuteQuery(command);
+                    var table= App.SQLClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         model = new ConfigurationModel();
@@ -76,7 +74,7 @@ namespace WS.OrderHub.Managers
                 using (var command = new SqlCommand())
                 {
                     command.CommandText = "SELECT * FROM Configuration";
-                    var table = sql.ExecuteQuery(command);
+                    var table= App.SQLClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         var model = new ConfigurationModel();
@@ -129,7 +127,7 @@ namespace WS.OrderHub.Managers
                         if (model.ModifiedByNodeId == null)
                             model.ModifiedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
-                        result = sql.ExecuteNonQuery(command, rollback);
+                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
                     }
                 });
                 return result;

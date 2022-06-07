@@ -8,7 +8,7 @@ using FileIO = Utilities.FileIO;
 using Cypher = Utilities.Cryptography;
 namespace WS.OrderHub.Managers
 {
-    public static class LocalConfigurationManager
+    public static class App
     {
         private static readonly string PublicKey = "0pBa{WTu";
         private static readonly string PrivateKey = "Rd548#/@";
@@ -16,14 +16,9 @@ namespace WS.OrderHub.Managers
         private static readonly string connectionPath = mainPath + "connection.cfg";
         private static readonly string printerPath = Environment.CurrentDirectory + "printer.cfg";
 
-        public static  SQL Client
-        {
-            get
-            {
-                return SQLClient();
-            }
-        }
-        public static SQL SQLClient()
+        public static SQL SQLClient { get => IntializeClient(); }
+
+        private static SQL IntializeClient()
         {
             try
             {

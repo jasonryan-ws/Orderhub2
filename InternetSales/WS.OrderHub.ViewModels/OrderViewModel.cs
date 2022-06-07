@@ -29,7 +29,7 @@ namespace WS.OrderHub.ViewModels
         public ICommand DeleteCommand => new AsyncRelayCommand(DeleteAsync);
         private async Task DeleteAsync()
         {
-            var results = await OrderManager.DeleteAsync(Id);
+            //var results = await OrderManager.DeleteAsync(Id);
         }
 
     }

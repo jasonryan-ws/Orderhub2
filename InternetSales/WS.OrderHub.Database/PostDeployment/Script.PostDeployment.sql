@@ -20,3 +20,4 @@ Post-Deployment Script Template
 :r .\DefaultData\Orders.sql
 :r .\DefaultData\Products.sql
 :r .\DefaultData\OrderItems.sql
+:r .\DefaultData\ProductBins.sql

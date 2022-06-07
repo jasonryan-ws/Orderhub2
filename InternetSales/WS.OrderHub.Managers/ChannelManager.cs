@@ -12,8 +12,6 @@ namespace WS.OrderHub.Managers
 {
     public class ChannelManager
     {
-        private static SQL sql = LocalConfigurationManager.SQLClient();
-
         /// <summary>
         /// Get channel by Id
         /// </summary>
@@ -30,7 +28,7 @@ namespace WS.OrderHub.Managers
                     {
                         command.CommandText = "SELECT * FROM Channel WHERE Id = @Id";
                         command.Parameters.AddWithValue("Id", id);
-                        var table = sql.ExecuteQuery(command);
+                        var table= App.SQLClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             model = new ChannelModel();
@@ -62,7 +60,7 @@ namespace WS.OrderHub.Managers
                     {
                         command.CommandText = "SELECT * FROM Channel WHERE Name = @Name";
                         command.Parameters.AddWithValue("Name", name);
-                        var table = sql.ExecuteQuery(command);
+                        var table= App.SQLClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             model = new ChannelModel();
@@ -93,7 +91,7 @@ namespace WS.OrderHub.Managers
                     using (var command = new SqlCommand())
                     {
                         command.CommandText = "SELECT * FROM Channel";
-                        var table = sql.ExecuteQuery(command);
+                        var table= App.SQLClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             var model = new ChannelModel();
@@ -141,7 +139,7 @@ namespace WS.OrderHub.Managers
                         if (model.CreatedByNodeId == Guid.Empty)
                             model.CreatedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
-                        result = sql.ExecuteNonQuery(command, rollback);
+                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
                         model.Id = (Guid)id.Value;
                     }
                 });
@@ -180,7 +178,7 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("Code", model.Code);
                         command.Parameters.AddWithValue("ColorCode", model.ColorCode != null ? model.ColorCode : DBNull.Value);
                         command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId != null ? model.ModifiedByNodeId : NodeManager.NodeId);
-                        result = sql.ExecuteNonQuery(command, rollback);
+                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
                     }
                 });
                 return result;
