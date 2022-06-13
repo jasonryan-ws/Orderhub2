@@ -1,0 +1,26 @@
+﻿<Window x:Class="UIComponents.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:UIComponents.ViewModels;assembly=UIComponents.ViewModels"
+        xmlns:local="clr-namespace:UIComponents.Views"
+        xmlns:uc="clr-namespace:UIComponents.Views.UserControls"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Button
+            Command="{Binding ActionCommand}"
+            Margin="50"
+            Content="ACTION"/>
+        <!--<ContentControl Margin="5">
+            <ContentControl.Template>
+                <ControlTemplate TargetType="{x:Type ContentControl}">
+                    <ContentPresenter/>
+                </ControlTemplate>
+            </ContentControl.Template>
+            <uc:SnackbarControl/>
+        </ContentControl>-->
+    </Grid>
+</Window>

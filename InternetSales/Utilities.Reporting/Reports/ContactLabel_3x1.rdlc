@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Textbox Name="txtCustomerName">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!txtContactName.Value</Value>
+                    <Style>
+                      <FontFamily>roboto</FontFamily>
+                      <FontSize>12pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.11459in</Top>
+            <Left>0.67986in</Left>
+            <Height>0.25in</Height>
+            <Width>2.19514in</Width>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="txtPhoneNumber">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!txtPhoneNumber.Value</Value>
+                    <Style>
+                      <FontFamily>roboto</FontFamily>
+                      <FontSize>12pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.2882in</Top>
+            <Left>0.67986in</Left>
+            <Height>0.25in</Height>
+            <Width>2.19514in</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="txtEmail">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!txtEmail.Value</Value>
+                    <Style>
+                      <FontFamily>roboto</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.49653in</Top>
+            <Left>0.67986in</Left>
+            <Height>0.33333in</Height>
+            <Width>2.19514in</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Image Name="Image1">
+            <Source>Embedded</Source>
+            <Value>contacticon</Value>
+            <Sizing>FitProportional</Sizing>
+            <Top>0.01042in</Top>
+            <Left>0.05556in</Left>
+            <Height>0.6in</Height>
+            <Width>0.6in</Width>
+            <ZIndex>3</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Image>
+
+          <Textbox Name="txtContactName">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!txtOrderNumber.Value</Value>
+                    <Style>
+                      <FontFamily>roboto</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Left>0.68333in</Left>
+            <Height>0.24653in</Height>
+            <Width>2.19167in</Width>
+            <ZIndex>5</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+        </ReportItems>
+        <Height>1in</Height>
+        <Style />
+      </Body>
+      <Width>3in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="txtContactName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="txtPhoneNumber">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="txtEmail">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="txtOrderNumber">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <ReportParametersLayout>
+    <GridLayoutDefinition>
+      <NumberOfColumns>2</NumberOfColumns>
+      <NumberOfRows>2</NumberOfRows>
+      <CellDefinitions>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>txtContactName</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>txtPhoneNumber</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>1</RowIndex>
+          <ParameterName>txtEmail</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>1</RowIndex>
+          <ParameterName>txtOrderNumber</ParameterName>
+        </CellDefinition>
+      </CellDefinitions>
+    </GridLayoutDefinition>
+  </ReportParametersLayout>
+  <EmbeddedImages>
+    <EmbeddedImage Name="contacticon">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozRTAyODU5MzMyNDgxMUU2OUMyMkJEQ0U3RDI5ODM0MCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozRTAyODU5NDMyNDgxMUU2OUMyMkJEQ0U3RDI5ODM0MCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjNFMDI4NTkxMzI0ODExRTY5QzIyQkRDRTdEMjk4
+MzQwIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjNFMDI4NTkyMzI0ODExRTY5QzIyQkRDRTdEMjk4MzQwIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Xti2qAAADaRJREFUeNrsXQtQFVUfPzx8IFo+QlGRzBfyZY2WJGiJKfkWDeELw8pHWuqYmoHWNKaoZRM0PWZ8j89Rx8/pK1RUxjJNKdMkH1HmJypiSimaoSgo7Hd+p7vMvci9d8/evctZOr+Z/yh3z77Ob/fs+T+Pj6IoRKL2wld2gSRYQhIsIQmWkARLSIIlJMES9vD39AAlJSXuHqB6VHxkV1cLGCHKqJQ7a9CgQYOaIfjEiRMkNTWVfP/99/Y/d6DSi0oklTAqLagEypHCJcE3qVym8j8qh6kcoJKrNmjVqhVJSUkhcXFxOs+gKFxSXl5OFi1aRBo2bKgeAm/oKCq7qdyyXbQU/XKHSjaVV6jcp3ZyUlISKSws5OaLq3FRUREZMWKE/fMRT+WYJMVrcprKBLWzO3XqRA4dOuQdggsKCkhUVJR6ruZUNkkCTJMsKu3R8U2aNCFZWVnGEnzlyhXy2GOPqeR2pXJSdrrpcolKPxCAz+PXX39tDMGlpaVkwIABKrmRtgmB7PCaEcxxhoOIBx54gBw/ftxzgqdPn66S25nKH7KThSA5GoQ88sgj5MaNG/oJ3r17N/H1ZRpOIyrHZecKIxephICYmTNn6iMYQ7Pdd3ex7FThZDuIqVOnDsnJyeEneOnSpSq5PalUyA4VUv4NghISEpzy6NTClJmZqf43VZoahcVcGJpOnz7N72zw9/dXZ839ZD8Ki3AqsTaudHmTxsg+FB5j9boLA6gMkv0nPHrDJ6GH4C5UQmX/CQ9463roIbir7DvLoLsegsNkv1kGnfQQHCz7zTJorofgBt6+Kh8fHxIYGCjp
+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</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>4baa2f73-df66-4312-b40c-217b499798a3</rd:ReportID>
+</Report>

@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="UIComponents.Views.UserControls.SnackbarMessageControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:styles="clr-namespace:UIComponents.ViewModels.Visuals;assembly=UIComponents.ViewModels"
+             mc:Ignorable="d" 
+             d:Height="50"
+             MinWidth="300"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="{DynamicResource MaterialDesignSnackbarBackground}"
+             FontFamily="{DynamicResource MaterialDesignFont}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid
+            Visibility="{Binding SnackbarViewModel.ProgressBarViewModel.Visibility}"
+            Grid.Column="0"
+            Margin="5"
+            Height="40"
+            Width="40"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center">
+            <ProgressBar
+                IsIndeterminate="{Binding SnackbarViewModel.ProgressBarViewModel.IsIndeterminate}"
+                Value="{Binding SnackbarViewModel.ProgressBarViewModel.Value}"
+                Width="40"
+                Height="40"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Style="{StaticResource MaterialDesignCircularProgressBar}"/>
+            <TextBlock
+                Foreground="{DynamicResource MaterialDesignPaper}"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                FontSize="11"
+                Text="{Binding SnackbarViewModel.ProgressBarViewModel.Progress}"/>
+        </Grid>
+        <TextBlock
+            Grid.Column="1"
+            Foreground="{DynamicResource MaterialDesignPaper}"
+            VerticalAlignment="Center"
+            Margin="10"
+            Text="{Binding SnackbarViewModel.Message}"/>
+        <StackPanel
+            HorizontalAlignment="Right"
+            Margin="10"
+            Orientation="Horizontal"
+            Grid.Column="2">
+                <Button
+                    Foreground="{Binding SnackbarViewModel.ColorCode}"
+                    Visibility="{Binding SnackbarViewModel.ConfirmButtonVisibility}"
+                    Command="{Binding SnackbarViewModel.ConfirmCommand}"
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    Content="{Binding SnackbarViewModel.ConfirmButtonText}"/>
+                <Button
+                    Foreground="{Binding SnackbarViewModel.ColorCode}"
+                    Visibility="{Binding SnackbarViewModel.CloseButtonVisibility}"
+                    Command="{Binding SnackbarViewModel.CloseCommand}"
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    Content="{Binding SnackbarViewModel.CloseButtonText}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

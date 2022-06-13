@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utilities.Cryptography;
 using WS.OrderHub.Models;
 
 namespace WS.OrderHub.Managers
@@ -26,7 +27,7 @@ namespace WS.OrderHub.Managers
                 {
                     command.CommandText = "SELECT * FROM Configuration WHERE Id = @Id";
                     command.Parameters.AddWithValue("@Id", id);
-                    var table= App.SQLClient.ExecuteQuery(command);
+                    var table = App.SqlClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         model = new ConfigurationModel();
@@ -51,7 +52,7 @@ namespace WS.OrderHub.Managers
                 {
                     command.CommandText = "SELECT * FROM Configuration WHERE Name = @Name";
                     command.Parameters.AddWithValue("@Name", name);
-                    var table= App.SQLClient.ExecuteQuery(command);
+                    var table = App.SqlClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         model = new ConfigurationModel();
@@ -74,7 +75,7 @@ namespace WS.OrderHub.Managers
                 using (var command = new SqlCommand())
                 {
                     command.CommandText = "SELECT * FROM Configuration";
-                    var table= App.SQLClient.ExecuteQuery(command);
+                    var table = App.SqlClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         var model = new ConfigurationModel();
@@ -127,7 +128,7 @@ namespace WS.OrderHub.Managers
                         if (model.ModifiedByNodeId == null)
                             model.ModifiedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
-                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
+                        result = App.SqlClient.ExecuteNonQuery(command, rollback);
                     }
                 });
                 return result;
@@ -162,6 +163,32 @@ namespace WS.OrderHub.Managers
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+
+        public static async Task<SQL> GetShipWorksSQLClient()
+        {
+            try
+            {
+                SQL client = null;
+                var server = (string)(await GetAsync("SWServer")).Value;
+                var userId = (string)(await GetAsync("SWUserId")).Value;
+                var password = (string)(string)(await GetAsync("SVPassword")).Value;
+                var database = (string)(await GetAsync("SWDatabase")).Value;
+                var isIntegrated = (await GetAsync("SWIntegrated")).Value.ToString().ToUpper() == "TRUE";
+                var storeId = (string)(await GetAsync("SWStoreId")).Value;
+
+                if (isIntegrated)
+                    client = new SQL(server, database);
+                else
+                    client = new SQL(server, database, userId, App.Decrypt(password));
+
+                return client;
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
         }

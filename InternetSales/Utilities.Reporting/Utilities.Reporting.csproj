@@ -1,0 +1,87 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Reports\ContactLabelQRCode_3x1.rdlc" />
+    <None Remove="Reports\ContactLabel_3x1.rdlc" />
+    <None Remove="Reports\Letter.rdlc" />
+    <None Remove="Reports\OrderLabelQRCode_2.25x1.25.rdlc" />
+    <None Remove="Reports\OrderLabelQRCode_2.25x1.rdlc" />
+    <None Remove="Reports\OrderLabelQRCode_3x1.rdlc" />
+    <None Remove="Reports\OrderLabel_3x1.rdlc" />
+    <None Remove="Reports\PickListQRCode_8.5x11.rdlc" />
+    <None Remove="Reports\PickList_8.5x11.rdlc" />
+    <None Remove="Reports\ProductLabel.rdlc" />
+    <None Remove="Reports\ProductLabel_Box_2.25x1.25.rdlc" />
+    <None Remove="Reports\ProductLabel_Box_2.25x1.rdlc" />
+    <None Remove="Reports\ProductLabel_Box_3x1.rdlc" />
+    <None Remove="Reports\ProductLabel_Hybrid_2.25x1.25.rdlc" />
+    <None Remove="Reports\ProductLabel_Hybrid_2.25x1.rdlc" />
+    <None Remove="Reports\ProductLabel_Hybrid_3x1.rdlc" />
+    <None Remove="Reports\ProductLabel_Standard_2.25x1.25.rdlc" />
+    <None Remove="Reports\ProductLabel_Standard_2.25x1.rdlc" />
+    <None Remove="Reports\ProductLabel_Standard_3x1.rdlc" />
+    <None Remove="Reports\Receipt_3xx.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\ContactLabelQRCode_3x1.rdlc" />
+    <EmbeddedResource Include="Reports\ContactLabel_3x1.rdlc" />
+    <EmbeddedResource Include="Reports\Letter.rdlc" />
+    <EmbeddedResource Include="Reports\OrderLabelQRCode_2.25x1.25.rdlc" />
+    <EmbeddedResource Include="Reports\OrderLabelQRCode_2.25x1.rdlc" />
+    <EmbeddedResource Include="Reports\OrderLabelQRCode_3x1.rdlc" />
+    <EmbeddedResource Include="Reports\OrderLabel_3x1.rdlc" />
+    <EmbeddedResource Include="Reports\PickListQRCode_8.5x11.rdlc" />
+    <EmbeddedResource Include="Reports\PickList_8.5x11.rdlc" />
+    <EmbeddedResource Include="Reports\ProductLabel.rdlc" />
+    <EmbeddedResource Include="Reports\ProductLabel_Box_2.25x1.25.rdlc" />
+    <EmbeddedResource Include="Reports\ProductLabel_Box_2.25x1.rdlc" />
+    <EmbeddedResource Include="Reports\ProductLabel_Box_3x1.rdlc" />
+    <EmbeddedResource Include="Reports\ProductLabel_Hybrid_2.25x1.25.rdlc" />
+    <EmbeddedResource Include="Reports\ProductLabel_Hybrid_2.25x1.rdlc" />
+    <EmbeddedResource Include="Reports\ProductLabel_Hybrid_3x1.rdlc" />
+    <EmbeddedResource Include="Reports\ProductLabel_Standard_2.25x1.25.rdlc" />
+    <EmbeddedResource Include="Reports\ProductLabel_Standard_2.25x1.rdlc" />
+    <EmbeddedResource Include="Reports\ProductLabel_Standard_3x1.rdlc" />
+    <EmbeddedResource Include="Reports\Receipt_3xx.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ReportViewerCore.NETCore" Version="15.1.16" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Utilities.Barcodes\Utilities.Barcodes.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="DataSets\PickListDataSet.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PickListDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Update="DataSets\ReceiptDataSet.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ReceiptDataSet.xsd</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DataSets\PickListDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>PickListDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="DataSets\ReceiptDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ReceiptDataSet.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>

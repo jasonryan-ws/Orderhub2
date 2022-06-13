@@ -21,3 +21,5 @@ Post-Deployment Script Template
 :r .\DefaultData\Products.sql
 :r .\DefaultData\OrderItems.sql
 :r .\DefaultData\ProductBins.sql
+:r .\DefaultData\Tasks.sql
+:r .\DefaultData\Jobs.sql

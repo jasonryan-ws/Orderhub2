@@ -56,7 +56,7 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void SearchTest()
         {
-            var result = ProductManager.SearchAsync("sh").Result;
+            var result = ProductManager.SearchAsync("shi").Result;
             Assert.AreEqual(2, result.Count);
         }
     }

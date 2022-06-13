@@ -3,16 +3,16 @@ Alt T N O - Key combination for navigating to Package Manager Console (NuGet)
 VIEWS
 
 Install-Package MahApps.Metro -ProjectName UIComponents.Views
-Install-Package MaterialDesignThemes -Version 4.2.1 -ProjectName UIComponents.Views
+Install-Package MaterialDesignThemes -ProjectName UIComponents.Views
 Install-Package MaterialDesignColors -ProjectName UIComponents.Views
 
 Install-Package MahApps.Metro -ProjectName WS.OrderHub.Views
-Install-Package MaterialDesignThemes -Version 4.2.1 -ProjectName WS.OrderHub.Views
+Install-Package MaterialDesignThemes -ProjectName WS.OrderHub.Views
 Install-Package MaterialDesignColors -ProjectName WS.OrderHub.Views
 
 Install-Package MahApps.Metro -ProjectName UIComponents.Templates.Views
 Install-Package MahApps.Metro.IconPacks -ProjectName UIComponents.Templates.Views
-Install-Package MaterialDesignThemes -Version 4.2.1 -ProjectName UIComponents.Templates.Views
+Install-Package MaterialDesignThemes -Version -ProjectName UIComponents.Templates.Views
 Install-Package MaterialDesignColors -ProjectName UIComponents.Templates.Views
 
 MVVM
@@ -25,21 +25,24 @@ SQL CLIENT
 
 Install-Package Microsoft.Data.SqlClient -ProjectName WS.OrderHub.Managers
 Install-Package Microsoft.Data.SqlClient -ProjectName Data
-Install-Package Microsoft.Data.SqlClient -ProjectName ShipWorks
+Install-Package Microsoft.Data.SqlClient -ProjectName Data
 
 UNIT TESTS
 
 Install-Package MSTest.TestAdapter -ProjectName ShipWorks.Tests
 Install-Package MSTest.TestAdapter -ProjectName SKUVault.Tests
 Install-Package MSTest.TestAdapter -ProjectName WS.OrderHub.Managers.Tests
+Install-Package MSTest.TestAdapter -ProjectName WS.OrderHub.ViewModels.Tests
 
 Install-Package MSTest.TestFramework -ProjectName ShipWorks.Tests
 Install-Package MSTest.TestFramework -ProjectName SKUVault.Tests
 Install-Package MSTest.TestFramework -ProjectName WS.OrderHub.Managers.Tests
+Install-Package MSTest.TestFramework -ProjectName WS.OrderHub.ViewModels.Tests
 
 Install-Package Microsoft.NET.Test.Sdk -ProjectName ShipWorks.Tests
 Install-Package Microsoft.NET.Test.Sdk -ProjectName SKUVault.Tests
 Install-Package Microsoft.NET.Test.Sdk -ProjectName WS.OrderHub.Managers.Tests
+Install-Package Microsoft.NET.Test.Sdk -ProjectName WS.OrderHub.ViewModels.Tests
 
 RestSharp
 

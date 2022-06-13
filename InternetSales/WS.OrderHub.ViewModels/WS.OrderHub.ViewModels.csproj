@@ -11,6 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ShipWorks.Models\ShipWorks.Models.csproj" />
+    <ProjectReference Include="..\ShipWorks\ShipWorks.csproj" />
+    <ProjectReference Include="..\UIComponents.ViewModels\UIComponents.ViewModels.csproj" />
     <ProjectReference Include="..\WS.OrderHub.Managers\WS.OrderHub.Managers.csproj" />
     <ProjectReference Include="..\WS.OrderHub.Models\WS.OrderHub.Models.csproj" />
   </ItemGroup>

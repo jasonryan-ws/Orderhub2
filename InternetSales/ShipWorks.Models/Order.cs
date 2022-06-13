@@ -45,7 +45,7 @@ namespace ShipWorks.Models
             }
         }
 
-        public string SalesChannel
+        public string ChannelName
         {
             get
             {

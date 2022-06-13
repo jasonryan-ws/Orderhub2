@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="UIComponents.Views.UserControls.PageBannerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UIComponents.Views.UserControls"
+             mc:Ignorable="d"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"       
+             d:Background="White"
+             FontFamily="{DynamicResource MaterialDesignFont}"             
+             d:DesignWidth="800">
+    <Border
+        Visibility="{Binding Visibility}"
+        CornerRadius="10"
+            Background="{Binding BackColorCode}">
+        <Grid Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <materialDesign:PackIcon
+                Visibility="{Binding IconVisibility}"
+                Grid.Column="0"
+                Margin="10"
+                Height="40"
+                Width="40"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Foreground="{Binding IconColorCode}"
+                Kind="{Binding IconName}"/>
+            <StackPanel Grid.Column="1">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Margin="10 10 10 2"
+                    FontWeight="Bold"
+                    TextWrapping="Wrap"
+                    Text="{Binding Title}"/>
+                <TextBox
+                    TextDecorations="None"
+                    IsTabStop="False"
+                    BorderThickness="0"
+                    IsReadOnly="True"
+                    materialDesign:TextFieldAssist.DecorationVisibility="Collapsed"
+                    VerticalAlignment="Center"
+                    Margin="10 2 10 0"
+                    TextWrapping="Wrap"
+                    TextAlignment="Left"
+                    Text="{Binding Message}"/>
+            </StackPanel>
+            <!--<TextBlock
+                Grid.Column="1"
+                Foreground="White"
+                VerticalAlignment="Center"
+                Margin="10"
+                TextWrapping="Wrap"
+                Text="{Binding Message}"/>-->
+            <StackPanel
+                Margin="10"
+                Orientation="Horizontal"
+                Grid.Column="2">
+                <Button
+                    Foreground="{Binding ColorCode}"
+                    Visibility="{Binding ConfirmButtonVisibility}"
+                    Command="{Binding ConfirmCommand}"
+                    Content="{materialDesign:PackIcon Kind=Check}"
+                    Style="{StaticResource MaterialDesignIconButton}"/>
+                <Button
+                    Foreground="{Binding ColorCode}"
+                    Visibility="{Binding CloseButtonVisibility}"
+                    Command="{Binding CloseCommand}"
+                    Content="{materialDesign:PackIcon Kind=Close}"
+                    Style="{StaticResource MaterialDesignIconButton}"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

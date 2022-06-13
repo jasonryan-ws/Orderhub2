@@ -5,6 +5,7 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:vm="clr-namespace:WS.OrderHub.ViewModels;assembly=WS.OrderHub.ViewModels"
                  xmlns:control="clr-namespace:WS.OrderHub.Views.UserControls"
+                 xmlns:uix="clr-namespace:UIComponents.Views.UserControls;assembly=UIComponents.Views"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                  xmlns:styles="clr-namespace:WS.OrderHub.ViewModels.Styles;assembly=WS.OrderHub.ViewModels"
@@ -46,7 +47,7 @@
         <mah:WindowCommands>
             <materialDesign:PopupBox>
                 <StackPanel>
-                    <Button>
+                    <Button Command="{Binding UpdateOrders.StartCommand}">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Sync"
                                                      VerticalAlignment="Center"
@@ -75,18 +76,23 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!--Main ProgressBar-->
 
-        <Grid>
-            <ProgressBar Value="100" />
+        <Grid Visibility="{Binding ProgressBar.Visibility}">
+            <ProgressBar Value="{Binding MainProgressBar.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsIndeterminate="{Binding MainProgressBar.IsIndeterminate}"/>
         </Grid>
 
         <!--Banner-->
+        <Grid  Grid.Row="1"
+               Visibility="{Binding MainBanner.Visibility}">
+            <uix:BannerControl DataContext="{Binding MainBanner}"/>
+        </Grid>
 
-        <materialDesign:DialogHost Grid.Row="1"
+        <materialDesign:DialogHost Grid.Row="2"
                                    Identifier="RootDialog"
                                    IsOpen="False"
                                    DialogTheme="Inherit">

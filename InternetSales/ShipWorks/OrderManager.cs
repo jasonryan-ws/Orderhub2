@@ -78,7 +78,7 @@ namespace ShipWorks
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<Order> LoadAsync(int id, bool extended = false)
+        public static async Task<Order> GetAsync(int id, bool extended = false)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace ShipWorks
         /// <param name="orderNumber"></param>
         /// <param name="extended">Set this to false if you only need basic order info to save resources.</param>
         /// <returns></returns>
-        public static async Task<Order> LoadAsync(string orderNumber, bool extended = false)
+        public static async Task<Order> GetAsync(string orderNumber, bool extended = false)
         {
             try
             {
@@ -157,7 +157,7 @@ namespace ShipWorks
         /// <param name="maxRowVersion">Set to null to load all existing orders from ShipWorks server</param>
         /// <param name="months">Set to 0 to ignore and will return all the orders</param>
         /// <returns>List of orders</returns>
-        public static async Task<List<Order>> LoadAsync(bool extended = false, byte[]? maxRowVersion = null)
+        public static async Task<List<Order>> GetAsync(bool extended = false, byte[]? maxRowVersion = null, int months = 0)
         {
             try
             {
@@ -171,6 +171,16 @@ namespace ShipWorks
                         {
                             condition = "WHERE (o.RowVersion > @MaxRowVersion)";
                             command.Parameters.AddWithValue("@MaxRowVersion", maxRowVersion);
+                        }
+
+                        if (months > 0)
+                        {
+                            var date = DateTime.Today.AddMonths(months * -1);
+                            if (string.IsNullOrWhiteSpace(condition))
+                                condition = "WHERE o.OrderDate >= @Date";
+                            else
+                                condition += " AND o.OrderDate >= @Date";
+                            command.Parameters.AddWithValue("@Date", date);
                         }
                         command.CommandText = $@"
                         {rawSqlStr}
@@ -260,7 +270,7 @@ namespace ShipWorks
         /// <param name="endDate"></param>
         /// <param name="ascendingOrder">Determines the sorting order: true - ascdending, false: descending</param>
         /// <returns></returns>
-        public static async Task<List<Order>> LoadAsync(DateTime startDate, DateTime endDate, bool ascendingOrder = true, bool extended = false)
+        public static async Task<List<Order>> GetAsync(DateTime startDate, DateTime endDate, bool ascendingOrder = true, bool extended = false)
         {
             try
             {

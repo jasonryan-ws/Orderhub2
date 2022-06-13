@@ -46,7 +46,7 @@ namespace WS.OrderHub.Managers
                             pb.BinId = @BinId";
                         command.Parameters.AddWithValue("@ProductId", productId);
                         command.Parameters.AddWithValue("@BinId", binId);
-                        var table = App.SQLClient.ExecuteQuery(command);
+                        var table = App.SqlClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             model = new ProductModel();
@@ -93,7 +93,7 @@ namespace WS.OrderHub.Managers
                         JOIN Product p ON p.Id = pb.ProductId
                         WHERE BinId = @BinId";
                         command.Parameters.AddWithValue("@BinId", binId);
-                        var table = App.SQLClient.ExecuteQuery(command);
+                        var table = App.SqlClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             var model = new ProductModel();
@@ -140,7 +140,7 @@ namespace WS.OrderHub.Managers
                         JOIN Bin b ON b.Id = pb.BinId
                         WHERE pb.ProductId = @ProductId";
                         command.Parameters.AddWithValue("@ProductId", productId);
-                        var table = App.SQLClient.ExecuteQuery(command);
+                        var table = App.SqlClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             var model = new BinModel();
@@ -183,7 +183,7 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@Quantity", quantity);
                         command.Parameters.AddWithValue("@CreatedByNodeId", createdByNodeId);
                         command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
-                        App.SQLClient.ExecuteNonQuery(command, rollback);
+                        App.SqlClient.ExecuteNonQuery(command, rollback);
                         newId = (Guid)id.Value;
                     }
                 });
@@ -216,7 +216,7 @@ namespace WS.OrderHub.Managers
                         command.Parameters.AddWithValue("@BinId", binId);
                         command.Parameters.AddWithValue("@Quantity", quantity);
                         command.Parameters.AddWithValue("@ModifiedByNodeId", modifiedByNodeId);
-                        result = App.SQLClient.ExecuteNonQuery(command, rollback);
+                        result = App.SqlClient.ExecuteNonQuery(command, rollback);
                     }
                 });
                 return result;
@@ -244,7 +244,7 @@ namespace WS.OrderHub.Managers
                         @ModifiedByNodeId";
                         command.Parameters.AddWithValue("@Quantity", quantity);
                         command.Parameters.AddWithValue("@ModifiedByNodeId", modifiedByNodeId);
-                        result = App.SQLClient.ExecuteNonQuery(command, rollback);
+                        result = App.SqlClient.ExecuteNonQuery(command, rollback);
                     }
                 });
                 return result;
@@ -271,7 +271,7 @@ namespace WS.OrderHub.Managers
                         EXEC spProductBin_Delete @Id";
                         command.Parameters.AddWithValue("@ProductId", productId);
                         command.Parameters.AddWithValue("@BinId", binId);
-                        result = App.SQLClient.ExecuteNonQuery(command, rollback);
+                        result = App.SqlClient.ExecuteNonQuery(command, rollback);
                     }
                 });
                 return result;
@@ -295,7 +295,7 @@ namespace WS.OrderHub.Managers
                         command.CommandText =
                         @"EXEC spProductBin_Delete @Id";
                         command.Parameters.AddWithValue("@Id", id);
-                        result = App.SQLClient.ExecuteNonQuery(command, rollback);
+                        result = App.SqlClient.ExecuteNonQuery(command, rollback);
                     }
                 });
                 return result;

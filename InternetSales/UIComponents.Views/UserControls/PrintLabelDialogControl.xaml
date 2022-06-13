@@ -1,0 +1,177 @@
+﻿<UserControl x:Class="UIComponents.Views.UserControls.PrintLabelDialogControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:styles="clr-namespace:UIComponents.ViewModels.Visuals;assembly=UIComponents.ViewModels"
+             mc:Ignorable="d"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="White"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             Height="auto" MinHeight="350" Width="auto"  d:DesignHeight="350">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <materialDesign:Card Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel  Margin="10" Orientation="Horizontal">
+                    <materialDesign:PackIcon
+                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                    Kind="BarcodeScan"
+                    Margin="0 0 10 0"
+                    VerticalAlignment="Center"/>
+                    <TextBlock
+                    Text="{Binding Title}"
+                    Typography.Capitals="AllSmallCaps"
+                    FontWeight="Bold"
+                    VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button
+                    VerticalAlignment="Top"
+                    Content="{materialDesign:PackIcon Kind=Undo}"
+                    ToolTip="Reset Label"
+                    Command="{Binding ResetCommand}"
+                    Margin="5"
+                    Style="{StaticResource MaterialDesignIconButton}"/>
+                    <Button
+                    VerticalAlignment="Top"
+                    Content="{materialDesign:PackIcon Kind=Refresh}"
+                    ToolTip="Refresh"
+                    Command="{Binding RefreshCommand}"
+                    Margin="5"
+                    Style="{StaticResource MaterialDesignIconButton}"/>
+                    <Button
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Content="{materialDesign:PackIcon Kind=Close}"
+                    Margin="5"
+                    Command="{Binding CloseCommand}"
+                    Foreground="{Binding Source={x:Static styles:Colors.Danger}}"
+                    Style="{StaticResource MaterialDesignIconButton}"/>
+                </StackPanel>
+            </Grid>
+        </materialDesign:Card>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!--Card 1-->
+            <Grid Margin="10" Grid.Column="0">
+                <StackPanel>
+                    <TextBlock Text="Customize Label" FontWeight="Bold" Margin="0 10 0 10"/>
+                    <TextBox
+                            Text="{Binding ProductCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            materialDesign:HintAssist.Hint="Product Code"/>
+                    <TextBox                    
+                            AcceptsReturn="True"
+                            Text="{Binding ProductName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"    
+                            TextWrapping="Wrap"
+                            Height="80"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            materialDesign:HintAssist.Hint="Product Name"/>
+                    <TextBox
+                            IsEnabled="{Binding AdditionlInfoIsNotBusy}"
+                            Text="{Binding AdditionalInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"    
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            materialDesign:HintAssist.Hint="Additional Info"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox
+                                x:Name="LabelSizeList"
+                                ItemsSource="{Binding LabelSizes}"
+                                SelectedItem="{Binding LabelSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Margin="0 0 5 0"
+                                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                materialDesign:HintAssist.Hint="Label Size"
+                                Grid.Column="0" SelectionChanged="LabelSizeList_SelectionChanged"/>
+                        <ComboBox
+                                x:Name="LabelTypeList"
+                                ItemsSource="{Binding LabelTypes}"        
+                                SelectedItem="{Binding LabelType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Margin="5 0 0 0"
+                                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                materialDesign:HintAssist.Hint="Label Type"
+                                Grid.Column="1" SelectionChanged="LabelTypeList_SelectionChanged"/>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+            <!--Card 2-->
+            <Grid Margin="10" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="Preview" FontWeight="Bold" Margin="0 10 0 10"/>
+                <StackPanel Grid.Row="1">
+                    <Grid
+                        MinWidth="300"
+                        Height="125">
+                        <Image
+                            Margin="3"
+                            Stretch="None"
+                            Source="{Binding PreviewImage}"/>
+                        <!--ProgressBar-->
+                        <ProgressBar
+                                Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                Value="{Binding ProgressBar.Value}"
+                                Visibility="{Binding ProgressBar.Visibility}"
+                                IsIndeterminate="{Binding ProgressBar.IsIndeterminate}"
+                                Grid.Row="0"/>
+                    </Grid>
+                    <ComboBox
+                        x:Name="PrinterList"
+                        ItemsSource="{Binding Printers}"
+                        SelectedItem="{Binding PrinterName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Margin="0 10 0 0"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                        materialDesign:HintAssist.Hint="Printer" SelectionChanged="PrinterList_SelectionChanged"/>
+                </StackPanel>
+                <Grid Grid.Row="2" Margin="0 20 0 10" HorizontalAlignment="Right">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" Margin="0 0 10 0">
+                        <TextBox
+                            Margin="10 0 10 0"
+                            x:Name="CopiesText"
+                            Grid.Column="0"
+                            Text="{Binding Copies}"
+                            HorizontalContentAlignment="Center"
+                            BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
+                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                            Width="auto"
+                            MaxWidth="100"
+                            HorizontalAlignment="Left"
+                            materialDesign:HintAssist.Hint="Copies"/>
+                    </StackPanel>
+                    <Button
+                        Command="{Binding PrintCommand}"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Grid.Column="1"
+                        Content="PRINT"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -43,7 +43,7 @@ namespace ShipWorks
         public static bool IsIntegrated { get; set; } // Set to true if you want to use your Windows login
 
         public static SQL Client
-        {
+        {                                                                                                                                                                                                            
             get
             {
                 var connectionString = Utilities.Builder.SQLConnectionString(Server, Database, IsIntegrated, UserId, Password);

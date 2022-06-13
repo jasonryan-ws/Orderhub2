@@ -11,7 +11,7 @@ namespace ShipWorks.Tests
         public void LoadTest()
         {
             Configuration.TestDatabaseCredentials();
-            var orders = OrderManager.LoadAsync().Result;
+            var orders = OrderManager.GetAsync().Result;
             Assert.IsTrue(orders.Count > 1000);
         }
 
@@ -19,7 +19,7 @@ namespace ShipWorks.Tests
         public void LoadByIdTest()
         {
             Configuration.TestDatabaseCredentials();
-            var order = OrderManager.LoadAsync(760541006).Result;
+            var order = OrderManager.GetAsync(760541006).Result;
             Assert.IsTrue(order != null);
         }
 
@@ -27,7 +27,7 @@ namespace ShipWorks.Tests
         public void LoadByOrderNumberExtendedTest()
         {
             Configuration.TestDatabaseCredentials();
-            var order = OrderManager.LoadAsync("113133", true).Result;
+            var order = OrderManager.GetAsync("113133", true).Result;
             Assert.IsTrue(order.Notes.Count > 0);
         }
 
@@ -35,7 +35,7 @@ namespace ShipWorks.Tests
         public void LoadByOrderNumbertest()
         {
             Configuration.TestDatabaseCredentials();
-            var order = OrderManager.LoadAsync("113133").Result;
+            var order = OrderManager.GetAsync("113133").Result;
             Assert.IsTrue(order != null);
         }
 
@@ -64,7 +64,7 @@ namespace ShipWorks.Tests
             Configuration.TestDatabaseCredentials();
             var startDate = new DateTime(2021, 5, 3);
             var endDate = DateTime.Today;
-            var orders = OrderManager.LoadAsync(startDate, endDate).Result;
+            var orders = OrderManager.GetAsync(startDate, endDate).Result;
             Assert.IsTrue(orders.Count > 1000);
         }
     }

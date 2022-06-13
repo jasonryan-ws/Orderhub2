@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using FileIO = Utilities.FileIO;
 using Cypher = Utilities.Cryptography;
+using Utilities.Cryptography;
+
 namespace WS.OrderHub.Managers
 {
     public static class App
@@ -16,7 +18,17 @@ namespace WS.OrderHub.Managers
         private static readonly string connectionPath = mainPath + "connection.cfg";
         private static readonly string printerPath = Environment.CurrentDirectory + "printer.cfg";
 
-        public static SQL SQLClient { get => IntializeClient(); }
+        public static SQL SqlClient { get => IntializeClient(); }
+
+        public static string  Decrypt(string encryptedText)
+        {
+            return AES.Decrypt(encryptedText, PublicKey, PrivateKey);
+        }
+
+        public static string Encrypt(string plainText)
+        {
+            return AES.Encrypt(plainText, PublicKey, PrivateKey);
+        }
 
         private static SQL IntializeClient()
         {
@@ -59,5 +71,7 @@ namespace WS.OrderHub.Managers
                 throw;
             }
         }
+
+      
     }
 }

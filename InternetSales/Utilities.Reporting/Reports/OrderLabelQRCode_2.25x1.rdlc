@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Textbox Name="txtName">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!txtName.Value</Value>
+                    <Style>
+                      <FontFamily>roboto Black</FontFamily>
+                      <FontSize>7pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.24734in</Top>
+            <Left>0.54778in</Left>
+            <Height>0.10488in</Height>
+            <Width>1.66611in</Width>
+            <DataElementOutput>Output</DataElementOutput>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="txtOrderNumber">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!txtOrderNumber.Value</Value>
+                    <Style>
+                      <FontFamily>Roboto Black</FontFamily>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.1in</Top>
+            <Left>0.54778in</Left>
+            <Height>0.14734in</Height>
+            <Width>1.66611in</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="txtLocation">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!txtLocation.Value</Value>
+                    <Style>
+                      <FontFamily>roboto</FontFamily>
+                      <FontSize>7pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.35222in</Top>
+            <Left>0.54778in</Left>
+            <Height>0.61945in</Height>
+            <Width>1.66611in</Width>
+            <ZIndex>2</ZIndex>
+            <DataElementOutput>Output</DataElementOutput>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Image Name="imgQR">
+            <Source>Database</Source>
+            <Value>=Parameters!txtOrderNumberQRCode.Value</Value>
+            <MIMEType>image/png</MIMEType>
+            <Sizing>FitProportional</Sizing>
+            <Top>0.03in</Top>
+            <Left>0.02in</Left>
+            <Height>0.5in</Height>
+            <Width>0.5in</Width>
+            <ZIndex>3</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Image>
+          <Rectangle Name="Rectangle1">
+            <ReportItems>
+              <Textbox Name="txtCountryCode">
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>=Parameters!txtCodeInDefaultBox.Value</Value>
+                        <Style>
+                          <FontFamily>roboto Black</FontFamily>
+                          <FontSize>11pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <Left>0.05in</Left>
+                <Height>0.2in</Height>
+                <Width>0.4in</Width>
+                <DataElementOutput>Output</DataElementOutput>
+                <Style>
+                  <Border>
+                    <Style>Solid</Style>
+                  </Border>
+                  <VerticalAlign>Middle</VerticalAlign>
+                </Style>
+              </Textbox>
+              <Textbox Name="txtDaysOld">
+                <KeepTogether>true</KeepTogether>
+                <Paragraphs>
+                  <Paragraph>
+                    <TextRuns>
+                      <TextRun>
+                        <Value>=Parameters!txtCodeInSolidBox.Value</Value>
+                        <Style>
+                          <FontFamily>roboto Black</FontFamily>
+                          <FontSize>11pt</FontSize>
+                          <FontWeight>Bold</FontWeight>
+                          <Color>White</Color>
+                        </Style>
+                      </TextRun>
+                    </TextRuns>
+                    <Style>
+                      <TextAlign>Center</TextAlign>
+                    </Style>
+                  </Paragraph>
+                </Paragraphs>
+                <Top>0.2in</Top>
+                <Left>0.05in</Left>
+                <Height>0.2in</Height>
+                <Width>0.4in</Width>
+                <ZIndex>1</ZIndex>
+                <DataElementOutput>Output</DataElementOutput>
+                <Style>
+                  <Border>
+                    <Style>Solid</Style>
+                  </Border>
+                  <BackgroundColor>Black</BackgroundColor>
+                  <VerticalAlign>Middle</VerticalAlign>
+                </Style>
+              </Textbox>
+            </ReportItems>
+            <KeepTogether>true</KeepTogether>
+            <Top>0.53in</Top>
+            <Left>0.02in</Left>
+            <Height>0.44167in</Height>
+            <Width>0.5in</Width>
+            <ZIndex>4</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Rectangle>
+        </ReportItems>
+        <Height>1in</Height>
+        <Style />
+      </Body>
+      <Width>2.25in</Width>
+      <Page>
+        <PageHeight>3in</PageHeight>
+        <PageWidth>2.25in</PageWidth>
+        <InteractiveHeight>3in</InteractiveHeight>
+        <InteractiveWidth>3in</InteractiveWidth>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="txtOrderNumber">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="txtOrderNumberQRCode">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="txtCodeInSolidBox">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="txtName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="txtLocation">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="txtCodeInDefaultBox">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <ReportParametersLayout>
+    <GridLayoutDefinition>
+      <NumberOfColumns>2</NumberOfColumns>
+      <NumberOfRows>9</NumberOfRows>
+      <CellDefinitions>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>txtOrderNumber</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>3</RowIndex>
+          <ParameterName>txtOrderNumberQRCode</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>4</RowIndex>
+          <ParameterName>txtCodeInSolidBox</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>5</RowIndex>
+          <ParameterName>txtName</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>6</RowIndex>
+          <ParameterName>txtLocation</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>7</RowIndex>
+          <ParameterName>txtCodeInDefaultBox</ParameterName>
+        </CellDefinition>
+      </CellDefinitions>
+    </GridLayoutDefinition>
+  </ReportParametersLayout>
+  <EmbeddedImages>
+    <EmbeddedImage Name="QR">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>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</ImageData>
+    </EmbeddedImage>
+    <EmbeddedImage Name="QR1">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>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</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>844fc1c1-85db-4504-9ace-e140b0eb273a</rd:ReportID>
+</Report>

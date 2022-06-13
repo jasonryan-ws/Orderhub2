@@ -16,7 +16,7 @@ namespace WS.OrderHub.Managers
                     using (var command = new SqlCommand())
                     {
                         command.CommandText = "SELECT * FROM Address";
-                        var table = App.SQLClient.ExecuteQuery(command);
+                        var table = App.SqlClient.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)
                         {
                             var model = new AddressModel();
@@ -87,7 +87,7 @@ namespace WS.OrderHub.Managers
                         if (model.CreatedByNodeId == Guid.Empty)
                             model.CreatedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
-                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
+                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
                         model.Id = (Guid)id.Value;
                     }
 
@@ -154,7 +154,7 @@ namespace WS.OrderHub.Managers
                         if (model.ModifiedByNodeId == null)
                             model.ModifiedByNodeId = NodeManager.NodeId;
                         command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
-                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
+                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
 
                     }
                 });
@@ -183,7 +183,7 @@ namespace WS.OrderHub.Managers
                     using (var command = new SqlCommand())
                     {
                         command.CommandText = "EXEC spAddress_DeleteUnused";
-                        result= App.SQLClient.ExecuteNonQuery(command, rollback);
+                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
 
                     }
                 });

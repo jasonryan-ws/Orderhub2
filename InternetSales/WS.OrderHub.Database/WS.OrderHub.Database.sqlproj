@@ -107,6 +107,11 @@
     <Build Include="StoredProcedures\spProductBin_Update.sql" />
     <Build Include="StoredProcedures\spProductBin_Delete.sql" />
     <Build Include="StoredProcedures\spProduct_Search.sql" />
+    <Build Include="Tables\Task.sql" />
+    <Build Include="Tables\Job.sql" />
+    <Build Include="StoredProcedures\spJob_Start.sql" />
+    <Build Include="StoredProcedures\spJob_End.sql" />
+    <Build Include="StoredProcedures\spJob_Progress.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PostDeployment\DefaultData\Configurations.sql" />
@@ -121,6 +126,8 @@
     <None Include="PostDeployment\DefaultData\Products.sql" />
     <None Include="PostDeployment\DefaultData\OrderItems.sql" />
     <None Include="PostDeployment\DefaultData\ProductBins.sql" />
+    <None Include="PostDeployment\DefaultData\Tasks.sql" />
+    <None Include="PostDeployment\DefaultData\Jobs.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\Script.PostDeployment.sql" />

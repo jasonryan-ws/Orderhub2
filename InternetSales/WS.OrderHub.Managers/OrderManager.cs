@@ -23,7 +23,7 @@ namespace WS.OrderHub.Managers
                 {
                     command.CommandText = @"EXEC spOrder_GetById @Id";
                     command.Parameters.AddWithValue("@Id", id);
-                    var table= App.SQLClient.ExecuteQuery(command);
+                    var table= App.SqlClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         model = new OrderModel();
@@ -49,7 +49,7 @@ namespace WS.OrderHub.Managers
                 {
                     command.CommandText = @"EXEC spOrder_GetByChannelOrderNumber @ChannelOrderNumber";
                     command.Parameters.AddWithValue("@ChannelOrderNumber", channelOrderNumber);
-                    var table= App.SQLClient.ExecuteQuery(command);
+                    var table= App.SqlClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         model = new OrderModel();
@@ -72,6 +72,31 @@ namespace WS.OrderHub.Managers
         // Unverify
         // Cancel
         // Verify
+
+
+        /// <summary>
+        /// Load maximum row version
+        /// </summary>
+        /// <returns></returns>
+        public static byte[] LoadMaxRowVersion()
+        {
+            try
+            {
+                byte[] rowVersion = null;
+                var command = new SqlCommand();
+                command.CommandText = "SELECT MAX(ExternalRowVersion) as MaxRowVersion FROM [Order]";
+                var table = App.SqlClient.ExecuteQuery(command);
+                foreach (DataRow row in table.Rows)
+                {
+                    rowVersion = row["MaxRowVersion"] != DBNull.Value ? (byte[])row["MaxRowVersion"] : null;
+                }
+                return rowVersion;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
 
         /// <summary>
