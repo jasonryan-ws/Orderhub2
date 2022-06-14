@@ -6,7 +6,7 @@ namespace UIComponents.ViewModels
 {
     public static class Dialog
     {
-        public static bool IsOpen { get => DialogViewModel.Instance.IsOpen; }
+        public static bool? IsOpen { get => DialogViewModel.Instance.IsOpen; }
         public static SubmitType InputType { get; set; }
         public static void Close(int timeout = 0)
         {

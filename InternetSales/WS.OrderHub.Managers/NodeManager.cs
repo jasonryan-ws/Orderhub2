@@ -14,7 +14,7 @@ namespace WS.OrderHub.Managers
         /// <summary>
         /// The Node ID of the machine that is currently running this app.
         /// </summary>
-        public static readonly Guid NodeId = Get(Environment.MachineName).Id;
+        public static readonly NodeModel ActiveNode = GetActiveAsync().Result;
         public static async Task<int> CreateAsync(NodeModel model, bool rollback = false)
         {
             try
@@ -22,22 +22,36 @@ namespace WS.OrderHub.Managers
                 var result = 0;
                 await Task.Run(() =>
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"EXEC spNode_Create
+                    result = Create(model, rollback);
+                });
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static int Create(NodeModel model, bool rollback = false)
+        {
+            try
+            {
+                var result = 0;
+                using (var command = new SqlCommand())
+                {
+                    command.CommandText =
+                    @"EXEC spNode_Create
                         @Id OUTPUT,
                         @Name,
                         @Description";
-                        var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
-                        id.Direction = ParameterDirection.Output;
-                        command.Parameters.Add(id);
-                        command.Parameters.AddWithValue("@Name", model.Name);
-                        command.Parameters.AddWithValue("@Description", model.Description);
-                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
-                        model.Id = (Guid)id.Value;
-                    }
-                });
+                    var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                    id.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(id);
+                    command.Parameters.AddWithValue("@Name", model.Name);
+                    command.Parameters.AddWithValue("@Description", model.Description != null ? model.Description : DBNull.Value);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                    model.Id = (Guid)id.Value;
+                }
                 return result;
             }
             catch (Exception)
@@ -85,6 +99,26 @@ namespace WS.OrderHub.Managers
                 {
                     model = Get(name);
                 });
+                return model;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static async Task<NodeModel> GetActiveAsync()
+        {
+            try
+            {
+                // If this machine doesn't exist, call the create method.
+                var model = Get(Environment.MachineName);
+                if (model == null)
+                {
+                    model = new NodeModel();
+                    model.Name = Environment.MachineName;
+                   Create(model);
+                }
                 return model;
             }
             catch (Exception)
@@ -150,30 +184,27 @@ namespace WS.OrderHub.Managers
                 throw;
             }
         }
-        public static async Task<int> DeleteAsync(NodeModel model, bool rollback = false)
+        public static int Delete(NodeModel model, bool rollback = false)
         {
             try
             {
                 var result = 0;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"EXEC spNode_DeleteUndelete
+                    command.CommandText =
+                    @"EXEC spNode_DeleteUndelete
                         @Id,
                         @IsDeleted,
                         @DateDeleted,
                         @DeletedByNodeId";
-                        command.Parameters.AddWithValue("@Id", model.Id);
-                        command.Parameters.AddWithValue("@IsDeleted", model.IsDeleted);
-                        command.Parameters.AddWithValue("@DateDeleted", model.DateDeleted);
-                        if (model.DeletedByNodeId == null)
-                            model.DeletedByNodeId = NodeId;
-                        command.Parameters.AddWithValue("@DeletedByNodeId", model.DeletedByNodeId);
-                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
-                    }
-                });
+                    command.Parameters.AddWithValue("@Id", model.Id);
+                    command.Parameters.AddWithValue("@IsDeleted", model.IsDeleted);
+                    command.Parameters.AddWithValue("@DateDeleted", model.DateDeleted);
+                    if (model.DeletedByNodeId == null)
+                        model.DeletedByNodeId = ActiveNode.Id;
+                    command.Parameters.AddWithValue("@DeletedByNodeId", model.DeletedByNodeId);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                }
                 return result;
             }
             catch (Exception)

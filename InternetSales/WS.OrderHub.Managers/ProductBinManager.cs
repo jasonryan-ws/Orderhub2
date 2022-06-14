@@ -158,35 +158,32 @@ namespace WS.OrderHub.Managers
             }
         }
 
-        public static async Task<Guid?> CreateAsync(Guid productId, Guid binId, int quantity, Guid createdByNodeId, bool? forceUpdate = null, bool rollback = false)
+        public static Guid? Create(Guid productId, Guid binId, int quantity, Guid createdByNodeId, bool? forceUpdate = null, bool rollback = false)
         {
             try
             {
                 Guid? newId = null;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"EXEC spProductBin_Create
+                    command.CommandText =
+                    @"EXEC spProductBin_Create
                         @Id OUTPUT,
                         @ProductId,
                         @BinId,
                         @Quantity,
                         @CreatedByNodeId,
                         @ForceUpdate";
-                        var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
-                        id.Direction = ParameterDirection.Output;
-                        command.Parameters.Add(id);
-                        command.Parameters.AddWithValue("@ProductId", productId);
-                        command.Parameters.AddWithValue("@BinId", binId);
-                        command.Parameters.AddWithValue("@Quantity", quantity);
-                        command.Parameters.AddWithValue("@CreatedByNodeId", createdByNodeId);
-                        command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
-                        App.SqlClient.ExecuteNonQuery(command, rollback);
-                        newId = (Guid)id.Value;
-                    }
-                });
+                    var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                    id.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(id);
+                    command.Parameters.AddWithValue("@ProductId", productId);
+                    command.Parameters.AddWithValue("@BinId", binId);
+                    command.Parameters.AddWithValue("@Quantity", quantity);
+                    command.Parameters.AddWithValue("@CreatedByNodeId", createdByNodeId);
+                    command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
+                    App.SqlClient.ExecuteNonQuery(command, rollback);
+                    newId = (Guid)id.Value;
+                }
                 return newId;
             }
             catch (Exception)
@@ -196,29 +193,26 @@ namespace WS.OrderHub.Managers
             }
         }
 
-        public static async Task<int> UpdateAsync(Guid productId, Guid binId, int quantity, Guid modifiedByNodeId, bool rollback = false)
+        public static int Update(Guid productId, Guid binId, int quantity, Guid modifiedByNodeId, bool rollback = false)
         {
             try
             {
                 var result = 0;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"
+                    command.CommandText =
+                    @"
                         DECLARE @Id UNIQUEIDENTIFIER = (SELECT TOP 1 Id FROM ProductBin WHERE ProductId = @ProductId AND BinId = @BinId);
                         EXEC spProductBin_Update
                         @Id,
                         @Quantity,
                         @ModifiedByNodeId";
-                        command.Parameters.AddWithValue("@ProductId", productId);
-                        command.Parameters.AddWithValue("@BinId", binId);
-                        command.Parameters.AddWithValue("@Quantity", quantity);
-                        command.Parameters.AddWithValue("@ModifiedByNodeId", modifiedByNodeId);
-                        result = App.SqlClient.ExecuteNonQuery(command, rollback);
-                    }
-                });
+                    command.Parameters.AddWithValue("@ProductId", productId);
+                    command.Parameters.AddWithValue("@BinId", binId);
+                    command.Parameters.AddWithValue("@Quantity", quantity);
+                    command.Parameters.AddWithValue("@ModifiedByNodeId", modifiedByNodeId);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                }
                 return result;
             }
             catch (Exception)
@@ -228,25 +222,22 @@ namespace WS.OrderHub.Managers
             }
         }
 
-        public static async Task<int> UpdateAsync(Guid id, int quantity, Guid modifiedByNodeId, bool rollback = false)
+        public static int Update(Guid id, int quantity, Guid modifiedByNodeId, bool rollback = false)
         {
             try
             {
                 var result = 0;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"EXEC spProductBin_Create
+                    command.CommandText =
+                    @"EXEC spProductBin_Create
                         @Id,
                         @Quantity,
                         @ModifiedByNodeId";
-                        command.Parameters.AddWithValue("@Quantity", quantity);
-                        command.Parameters.AddWithValue("@ModifiedByNodeId", modifiedByNodeId);
-                        result = App.SqlClient.ExecuteNonQuery(command, rollback);
-                    }
-                });
+                    command.Parameters.AddWithValue("@Quantity", quantity);
+                    command.Parameters.AddWithValue("@ModifiedByNodeId", modifiedByNodeId);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                }
                 return result;
             }
             catch (Exception)

@@ -32,9 +32,9 @@
     <!--Hamburger Menu-->
     <mah:MetroWindow.LeftWindowCommands>
         <mah:WindowCommands>
-            <ToggleButton IsEnabled="True"
-                          VerticalAlignment="Center"
+            <ToggleButton VerticalAlignment="Center"
                           Margin="5"
+                          IsEnabled="{Binding MainProgressBar.IsNotBusy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           x:Name="MenuToggleButton"
                           Style="{StaticResource MaterialDesignHamburgerToggleButton}"
                           IsChecked="False"
@@ -45,7 +45,7 @@
     <!--Right Popup Box-->
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
-            <materialDesign:PopupBox>
+            <materialDesign:PopupBox  IsEnabled="{Binding MainProgressBar.IsNotBusy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <StackPanel>
                     <Button Command="{Binding UpdateOrders.StartCommand}">
                         <StackPanel Orientation="Horizontal">
@@ -94,11 +94,11 @@
 
         <materialDesign:DialogHost Grid.Row="2"
                                    Identifier="RootDialog"
-                                   IsOpen="False"
+                                   IsOpen="{Binding DialogViewModel.IsOpen}"
                                    DialogTheme="Inherit">
 
             <materialDesign:DialogHost.DialogContent>
-                <TextBox Text="Root Dialog" />
+                <uix:DialogControl/>
             </materialDesign:DialogHost.DialogContent>
 
 

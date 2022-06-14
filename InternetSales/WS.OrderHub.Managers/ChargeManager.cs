@@ -107,37 +107,34 @@ namespace WS.OrderHub.Managers
             }
         }
 
-        public static async Task<int> CreateAsync(ChargeModel model, bool? forceUpdate = null, bool rollback = false)
+        public static int Create(ChargeModel model, bool? forceUpdate = null, bool rollback = false)
         {
             try
             {
                 var result = 0;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText = 
-                        @"EXEC spCharge_Create
+                    command.CommandText =
+                    @"EXEC spCharge_Create
                         @Id OUTPUT,
                         @Name,
                         @Description,
                         @CreatedByNodeId,
                         @ForceUpdate";
 
-                        var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
-                        id.Direction = ParameterDirection.Output;
-                        command.Parameters.Add(id);
-                        command.Parameters.AddWithValue("@Name", model.Name);
-                        command.Parameters.AddWithValue("@Description", model.Description);
-                        if (model.CreatedByNodeId == Guid.Empty)
-                            model.CreatedByNodeId = NodeManager.NodeId;
-                        command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
-                        command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
-                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
+                    var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                    id.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(id);
+                    command.Parameters.AddWithValue("@Name", model.Name);
+                    command.Parameters.AddWithValue("@Description", model.Description);
+                    if (model.CreatedByNodeId == Guid.Empty)
+                        model.CreatedByNodeId = NodeManager.ActiveNode.Id;
+                    command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
+                    command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
 
-                        model.Id = (Guid)id.Value;
-                    }
-                });
+                    model.Id = (Guid)id.Value;
+                }
                 return result;
             }
             catch (Exception)

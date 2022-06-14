@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using UIComponents.ViewModels;
+using UIComponents.ViewModels.Modules;
 using WS.OrderHub.Managers;
 using WS.OrderHub.Models;
 
@@ -36,18 +37,36 @@ namespace WS.OrderHub.ViewModels
         public ICommand StartCommand => new AsyncRelayCommand(StartAsync);
         public async Task StartAsync()
         {
-            var maxRowVersion = OrderManager.LoadMaxRowVersion();
-            var swOrders = await ShipWorks.OrderManager.GetAsync(true, maxRowVersion, 0);
-            var i = 0;
-            await Task.Run(() =>
+            try
             {
-                MainBanner.Show("Please wait while orders are being updated...", 0);
-                foreach (var s in swOrders)
+                MainProgressBar.Wait(enableControl: false);
+                var maxRowVersion = OrderManager.LoadMaxRowVersion();
+                var swOrders = await ShipWorks.OrderManager.GetAsync(true, maxRowVersion, 1);
+                var job = new JobModel();
+                job.MaxCount = swOrders.Count;
+                JobManager.Start(job, TaskType.UpdateOrders);
+                MainProgressBar.Hide();
+                await Task.Run(() =>
                 {
-                    MainProgressBar.SetValue(++i, swOrders.Count, false);
-                    Thread.Sleep(100);
-                }
-            });
+                    var count = 0;
+                    foreach (var s in swOrders)
+                    {
+                        MainProgressBar.IsNotBusy = false;
+                        JobManager.SetProgression(job.Id, ++count, $"Orders are being update by {job.StartedbyNode.Name}");
+                        Dialog.Progress($"Updated {count}/{swOrders.Count}", "UPDATING ORDERS" , count, swOrders.Count);
+                        //Thread.Sleep(100);
+                    }
+                    
+                });
+                job.Message = "Completed";
+                Dialog.Show(job.Message, MessageType.Success);
+                MainProgressBar.IsNotBusy = true;
+                JobManager.End(job);
+            }
+            catch (Exception ex)
+            {
+                Dialog.Show(ex.Message, MessageType.Danger);
+            }
 
         }
         //public async Task StartAsync()

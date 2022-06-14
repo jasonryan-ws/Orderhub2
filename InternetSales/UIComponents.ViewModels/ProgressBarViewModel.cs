@@ -179,10 +179,10 @@ namespace UIComponents.ViewModels
             return value;
         }
 
-        public void Hide()
+        public void Hide(bool isNotBusy = true)
         {
             Value = null;
-            IsNotBusy = true;
+            IsNotBusy = isNotBusy;
             IsIndeterminate = false;
             Visibility = "Hidden";
         }

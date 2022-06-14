@@ -15,11 +15,12 @@ namespace WS.OrderHub.ViewModels
 
         public MainViewModel()
         {
-            //MonitorJobs();
+            MonitorJobs();
         }
         public static AppViewModel App { get => AppViewModel.Instance; }
 
         public ProgressBarViewModel MainProgressBar { get => ProgressBarViewModel.Instance; }
+        public DialogViewModel DialogViewModel { get => DialogViewModel.Instance; }
         public BannerViewModel MainBanner { get => BannerViewModel.Instance; }
         public UpdateOrdersViewModel UpdateOrders { get => UpdateOrdersViewModel.Instance; }
 
@@ -30,15 +31,22 @@ namespace WS.OrderHub.ViewModels
             {
                 while (true)
                 {
-                    var job = JobManager.GetActiveAsync().Result;
-                    if (job != null)
+
+                    var job = JobManager.GetActive();
+                    if (job != null && job.StartedByNodeId != NodeManager.ActiveNode.Id)
                     {
-                        MainProgressBar.SetValue((int)job.Progress);
-                        MainBanner.Show(job.Message, 0);
+                        MainProgressBar.SetValue(job.Progress);
+                        if (MainBanner.IsOpen == null && job.Progress > 0)
+                            MainBanner.Show(job.Message, 5);
+                    }
+                    else
+                    {
+                        MainBanner.IsOpen = null;
+                        MainProgressBar.Value = 100;
                     }
                 }
             });
-            
+
         }
 
     }

@@ -33,7 +33,7 @@ namespace WS.OrderHub.Managers.Tests
             model.Name = "Reimbursement";
             model.Description = "Reimbursement charge";
             //model.CreatedByNodeId = NodeManager.GetAsync("IS-SERVER").Result.Id;
-            var result = ChargeManager.CreateAsync(model, null, true).Result;
+            var result = ChargeManager.Create(model, null, true);
             Assert.AreNotEqual(Guid.Empty, model.Id);
         }
     }

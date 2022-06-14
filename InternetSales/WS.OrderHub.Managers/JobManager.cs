@@ -9,6 +9,7 @@ using WS.OrderHub.Models;
 
 namespace WS.OrderHub.Managers
 {
+
     public static class JobManager
     {
         // Get
@@ -74,32 +75,33 @@ namespace WS.OrderHub.Managers
         /// Get the latest active job
         /// </summary>
         /// <returns></returns>
-        public static async Task<JobModel> GetActiveAsync()
+        public static JobModel GetActive()
         {
             try
             {
                 JobModel model = null;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"
-                            SELECT TOP 1 * 
-                            FROM Job
+                    command.CommandText =
+                    @"
+                            SELECT TOP 1
+	                            t.Name,
+	                            t.Description,
+	                            j.*                                
+                            FROM Job j
+                            JOIN Task t ON t.Id = j.TaskId
                             WHERE
-	                            IsFinished = 0 AND
+	                            (IsFinished = 0 OR IsFinished IS NULL) AND
 	                            DateEnded IS NULL
                             ORDER BY
 	                            DateStarted DESC";
-                        var table = App.SqlClient.ExecuteQuery(command);
-                        foreach (DataRow row in table.Rows)
-                        {
-                            model = new JobModel();
-                            Fill(model, row);
-                        }
+                    var table = App.SqlClient.ExecuteQuery(command);
+                    foreach (DataRow row in table.Rows)
+                    {
+                        model = new JobModel();
+                        Fill(model, row);
                     }
-                });
+                }
                 return model;
             }
             catch (Exception)
@@ -136,32 +138,137 @@ namespace WS.OrderHub.Managers
             return models;
         }
 
-        // Start - Creates a new job and mark as started
-        public static async Task<int> StartAsync(JobModel model, bool forceStart = false, bool rollback = false)
+        /// <summary>
+        /// Start - Creates a new job and mark as started
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="taskType"></param>
+        /// <param name="forceStart"></param>
+        /// <param name="rollback"></param>
+        /// <returns></returns>
+        public static int Start(JobModel model, TaskType? taskType = null, bool forceStart = false, bool rollback = false)
+        {
+            try
+            {
+                Exception exception = null;
+                var result = 0;
+                // Override model.TaskId if taskType is set
+                if (taskType != null)
+                {
+                    var taskId = TaskManager.GetByTaskType((TaskType)taskType);
+                    if (taskId != null)
+                        model.TaskId = (Guid)taskId;
+                }
+
+                // Set model.StartedByNodeId if null or empty
+                if (model.StartedByNodeId == Guid.Empty)
+                {
+                    model.StartedbyNode = NodeManager.ActiveNode;
+                    model.StartedByNodeId = model.StartedbyNode.Id;
+
+                }
+                using (var command = new SqlCommand())
+                {
+                    command.CommandText =
+                    @"EXEC spJob_Start
+                        @Id OUTPUT,
+                        @TaskId,
+                        @StartedByNodeId,
+                        @MaxCount,
+                        @ForceStart";
+                    var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                    id.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(id);
+                    command.Parameters.AddWithValue("@TaskId", model.TaskId);
+                    command.Parameters.AddWithValue("@StartedByNodeId", model.StartedByNodeId);
+                    command.Parameters.AddWithValue("@MaxCount", model.MaxCount);
+                    command.Parameters.AddWithValue("@ForceStart", forceStart);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                    model.Id = (Guid)id.Value;
+                }
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static int End(JobModel model, bool cancelled = false, bool rollback = false)
         {
             try
             {
                 var result = 0;
-                await Task.Run(() =>
+
+
+                // Set model.StartedByNodeId if null or empty
+                if (model.EndedByNodeId == null)
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"EXEC spJob_Start
-                        @Id OUTPUT,
-                        @TaskId,
-                        @StartedByNodeId,
-                        @ForceStart";
-                        var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
-                        id.Direction = ParameterDirection.Output;
-                        command.Parameters.Add(id);
-                        command.Parameters.AddWithValue("@TaskId", model.TaskId);
-                        command.Parameters.AddWithValue("@StartedByNodeId", model.StartedByNodeId);
-                        command.Parameters.AddWithValue("@ForceStart", forceStart);
-                        result = App.SqlClient.ExecuteNonQuery(command, rollback);
-                        model.Id = (Guid)id.Value;
-                    }
-                });
+                    model.EndedByNode = NodeManager.ActiveNode;
+                    model.EndedByNodeId = model.EndedByNode.Id;
+                }
+
+                model.IsFinished = !cancelled;
+                using (var command = new SqlCommand())
+                {
+                    command.CommandText =
+                    @"EXEC spJob_End
+                        @Id,
+                        @EndedByNodeId,
+                        @Message,
+                        @IsFinished";
+                    command.Parameters.AddWithValue("@Id", model.Id);
+                    command.Parameters.AddWithValue("@EndedByNodeId", model.EndedByNodeId);
+                    command.Parameters.AddWithValue("@Message", model.Message);
+                    command.Parameters.AddWithValue("@IsFinished", model.IsFinished);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                }
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static int Cancel(JobModel model, bool rollback = false)
+        {
+            try
+            {
+                model.IsFinished = false;
+                return End(model, rollback);
+                
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Set the job progression
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="count"></param>
+        /// <param name="message"></param>
+        /// <returns>Returns the current progress between 0 and 100 (%)</returns>
+        public static int SetProgression(Guid id, int count = 0, string message = null, bool rollback = false)
+        {
+            try
+            {
+                var result = 0;
+                using (var command = new SqlCommand())
+                {
+                    command.CommandText = @"EXEC @Progress = spJob_SetProgression @Id, @Count, @Message";
+                    var progress = new SqlParameter("@Progress", SqlDbType.Int);
+                    progress.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(progress);
+                    command.Parameters.AddWithValue("@Id", id);
+                    command.Parameters.AddWithValue("@Count", count);
+                    command.Parameters.AddWithValue("@Message", message);
+                    App.SqlClient.ExecuteNonQuery(command, rollback);
+                    result = (int)progress.Value;
+                }
                 return result;
             }
             catch (Exception)
@@ -170,9 +277,6 @@ namespace WS.OrderHub.Managers
                 throw;
             }
         }
-
-        // Progress
-
 
         // End
 
@@ -188,13 +292,14 @@ namespace WS.OrderHub.Managers
                 model.DateStarted = Convert.ToDateTime(row["DateStarted"]);
             if (row["StartedByNodeId"] != DBNull.Value)
                 model.StartedByNodeId = Guid.Parse(Convert.ToString(row["StartedByNodeId"]));
-            if (row["Progress"] != DBNull.Value)
-                model.Progress = Convert.ToInt32(row["Progress"]);
+            if (row["Count"] != DBNull.Value)
+                model.Count = Convert.ToInt32(row["Count"]);
+            if (row["MaxCount"] != DBNull.Value)
+                model.MaxCount = Convert.ToInt32(row["MaxCount"]);
             model.Message = Convert.ToString(row["Message"]);
-            if (row["DateProgressed"] != DBNull.Value)
-                model.DateProgressed = Convert.ToDateTime(row["DateProgressed"]);
-            if (row["IsFinished"] != DBNull.Value)
-                model.IsFinished = Convert.ToBoolean(row["IsFinished"]);
+            if (row["DateProgressionSet"] != DBNull.Value)
+                model.DateProgressionSet = Convert.ToDateTime(row["DateProgressionSet"]);
+            model.IsFinished = Convert.ToBoolean(row["IsFinished"]);
             if (row["DateEnded"] != DBNull.Value)
                 model.DateEnded = Convert.ToDateTime(row["DateEnded"]);
             if (row["EndedByNodeId"] != DBNull.Value)

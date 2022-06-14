@@ -40,17 +40,15 @@ namespace WS.OrderHub.Managers
         /// <param name="model"></param>
         /// <param name="rollback">Set to true if you don't want to commit the changes in the database</param>
         /// <returns></returns>
-        public static async Task<int> CreateAsync(AddressModel model, bool rollback = false)
+        public static int Create(AddressModel model, bool rollback = false)
         {
             try
             {
                 var result = 0;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        $@"EXEC spAddress_Create
+                    command.CommandText =
+                    $@"EXEC spAddress_Create
                             @Id OUTPUT,
                             @FirstName,
                             @MiddleName,
@@ -67,31 +65,29 @@ namespace WS.OrderHub.Managers
                             @Fax,
                             @Email,
                             @CreatedByNodeId";
-                        var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
-                        id.Direction = ParameterDirection.Output;
-                        command.Parameters.Add(id);
-                        command.Parameters.AddWithValue("@FirstName", model.FirstName);
-                        command.Parameters.AddWithValue("@MiddleName", model.MiddleName);
-                        command.Parameters.AddWithValue("@LastName", model.LastName);
-                        command.Parameters.AddWithValue("@Company", model.Company);
-                        command.Parameters.AddWithValue("@Street1", model.Street1);
-                        command.Parameters.AddWithValue("@Street2", model.Street2);
-                        command.Parameters.AddWithValue("@Street3", model.Street3);
-                        command.Parameters.AddWithValue("@City", model.City);
-                        command.Parameters.AddWithValue("@State", model.State);
-                        command.Parameters.AddWithValue("@PostalCode", model.PostalCode);
-                        command.Parameters.AddWithValue("@CountryCode", model.CountryCode);
-                        command.Parameters.AddWithValue("@Phone", model.Phone);
-                        command.Parameters.AddWithValue("@Fax", model.Fax);
-                        command.Parameters.AddWithValue("@Email", model.Email);
-                        if (model.CreatedByNodeId == Guid.Empty)
-                            model.CreatedByNodeId = NodeManager.NodeId;
-                        command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
-                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
-                        model.Id = (Guid)id.Value;
-                    }
-
-                });
+                    var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                    id.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(id);
+                    command.Parameters.AddWithValue("@FirstName", model.FirstName);
+                    command.Parameters.AddWithValue("@MiddleName", model.MiddleName);
+                    command.Parameters.AddWithValue("@LastName", model.LastName);
+                    command.Parameters.AddWithValue("@Company", model.Company);
+                    command.Parameters.AddWithValue("@Street1", model.Street1);
+                    command.Parameters.AddWithValue("@Street2", model.Street2);
+                    command.Parameters.AddWithValue("@Street3", model.Street3);
+                    command.Parameters.AddWithValue("@City", model.City);
+                    command.Parameters.AddWithValue("@State", model.State);
+                    command.Parameters.AddWithValue("@PostalCode", model.PostalCode);
+                    command.Parameters.AddWithValue("@CountryCode", model.CountryCode);
+                    command.Parameters.AddWithValue("@Phone", model.Phone);
+                    command.Parameters.AddWithValue("@Fax", model.Fax);
+                    command.Parameters.AddWithValue("@Email", model.Email);
+                    if (model.CreatedByNodeId == Guid.Empty)
+                        model.CreatedByNodeId = NodeManager.ActiveNode.Id;
+                    command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                    model.Id = (Guid)id.Value;
+                }
 
                 return result;
             }
@@ -108,18 +104,15 @@ namespace WS.OrderHub.Managers
         /// <param name="model"></param>
         /// <param name="rollback">Only set this to true if running a test</param>
         /// <returns>Number of affected rows</returns>
-        public static async Task<int> UpdateAsync(AddressModel model, bool rollback = false)
+        public static int Update(AddressModel model, bool rollback = false)
         {
             try
             {
                 var result = 0;
-
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        $@"EXEC spAddress_Update
+                    command.CommandText =
+                    $@"EXEC spAddress_Update
                          @Id,
                          @FirstName,
                          @MiddleName,
@@ -136,28 +129,27 @@ namespace WS.OrderHub.Managers
                          @Fax,
                          @Email,
                          @ModifiedByNodeId";
-                        command.Parameters.AddWithValue("@Id", model.Id);
-                        command.Parameters.AddWithValue("@FirstName", model.FirstName);
-                        command.Parameters.AddWithValue("@MiddleName", model.MiddleName);
-                        command.Parameters.AddWithValue("@LastName", model.LastName);
-                        command.Parameters.AddWithValue("@Company", model.Company);
-                        command.Parameters.AddWithValue("@Street1", model.Street1);
-                        command.Parameters.AddWithValue("@Street2", model.Street2);
-                        command.Parameters.AddWithValue("@Street3", model.Street3);
-                        command.Parameters.AddWithValue("@City", model.City);
-                        command.Parameters.AddWithValue("@State", model.State);
-                        command.Parameters.AddWithValue("@PostalCode", model.PostalCode);
-                        command.Parameters.AddWithValue("@CountryCode", model.CountryCode);
-                        command.Parameters.AddWithValue("@Phone", model.Phone);
-                        command.Parameters.AddWithValue("@Fax", model.Fax);
-                        command.Parameters.AddWithValue("@Email", model.Email);
-                        if (model.ModifiedByNodeId == null)
-                            model.ModifiedByNodeId = NodeManager.NodeId;
-                        command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
-                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
+                    command.Parameters.AddWithValue("@Id", model.Id);
+                    command.Parameters.AddWithValue("@FirstName", model.FirstName);
+                    command.Parameters.AddWithValue("@MiddleName", model.MiddleName);
+                    command.Parameters.AddWithValue("@LastName", model.LastName);
+                    command.Parameters.AddWithValue("@Company", model.Company);
+                    command.Parameters.AddWithValue("@Street1", model.Street1);
+                    command.Parameters.AddWithValue("@Street2", model.Street2);
+                    command.Parameters.AddWithValue("@Street3", model.Street3);
+                    command.Parameters.AddWithValue("@City", model.City);
+                    command.Parameters.AddWithValue("@State", model.State);
+                    command.Parameters.AddWithValue("@PostalCode", model.PostalCode);
+                    command.Parameters.AddWithValue("@CountryCode", model.CountryCode);
+                    command.Parameters.AddWithValue("@Phone", model.Phone);
+                    command.Parameters.AddWithValue("@Fax", model.Fax);
+                    command.Parameters.AddWithValue("@Email", model.Email);
+                    if (model.ModifiedByNodeId == null)
+                        model.ModifiedByNodeId = NodeManager.ActiveNode.Id;
+                    command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
 
-                    }
-                });
+                }
 
                 return result;
             }
@@ -172,22 +164,17 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="rollback"></param>
         /// <returns></returns>
-        public static async Task<int> DeleteUnusedAsync(bool rollback = false)
+        public static int DeleteUnused(bool rollback = false)
         {
             try
             {
                 var result = 0;
-
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText = "EXEC spAddress_DeleteUnused";
-                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
+                    command.CommandText = "EXEC spAddress_DeleteUnused";
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
 
-                    }
-                });
-
+                }
                 return result;
             }
             catch (Exception)

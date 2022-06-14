@@ -114,35 +114,32 @@ namespace WS.OrderHub.Managers
         /// <param name="model"></param>
         /// <param name="rollback"></param>
         /// <returns></returns>
-        public static async Task<int> CreateAsync(ChannelModel model, bool rollback = false)
+        public static int Create(ChannelModel model, bool rollback = false)
         {
             try
             {
                 var result = 0;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"EXEC spChannel_Create
+                    command.CommandText =
+                    @"EXEC spChannel_Create
                         @Id OUTPUT,
                         @Name,
                         @Code,
                         @ColorCode,
                         @CreatedByNodeId";
-                        var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
-                        id.Direction = ParameterDirection.Output;
-                        command.Parameters.Add(id);
-                        command.Parameters.AddWithValue("Name", model.Name);
-                        command.Parameters.AddWithValue("Code", model.Code);
-                        command.Parameters.AddWithValue("ColorCode", model.ColorCode);
-                        if (model.CreatedByNodeId == Guid.Empty)
-                            model.CreatedByNodeId = NodeManager.NodeId;
-                        command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
-                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
-                        model.Id = (Guid)id.Value;
-                    }
-                });
+                    var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                    id.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(id);
+                    command.Parameters.AddWithValue("Name", model.Name);
+                    command.Parameters.AddWithValue("Code", model.Code);
+                    command.Parameters.AddWithValue("ColorCode", model.ColorCode);
+                    if (model.CreatedByNodeId == Guid.Empty)
+                        model.CreatedByNodeId = NodeManager.ActiveNode.Id;
+                    command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                    model.Id = (Guid)id.Value;
+                }
                 return result;
             }
             catch (Exception)
@@ -157,30 +154,27 @@ namespace WS.OrderHub.Managers
         /// <param name="model"></param>
         /// <param name="rollback"></param>
         /// <returns></returns>
-        public static async Task<int> UpdateAsync(ChannelModel model, bool rollback = false)
+        public static int Update(ChannelModel model, bool rollback = false)
         {
             try
             {
                 var result = 0;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"EXEC spChannel_Update
+                    command.CommandText =
+                    @"EXEC spChannel_Update
                         @Id,
                         @Name,
                         @Code,
                         @ColorCode,
                         @ModifiedByNodeId";
-                        command.Parameters.AddWithValue("Id", model.Id);
-                        command.Parameters.AddWithValue("Name", model.Name);
-                        command.Parameters.AddWithValue("Code", model.Code);
-                        command.Parameters.AddWithValue("ColorCode", model.ColorCode != null ? model.ColorCode : DBNull.Value);
-                        command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId != null ? model.ModifiedByNodeId : NodeManager.NodeId);
-                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
-                    }
-                });
+                    command.Parameters.AddWithValue("Id", model.Id);
+                    command.Parameters.AddWithValue("Name", model.Name);
+                    command.Parameters.AddWithValue("Code", model.Code);
+                    command.Parameters.AddWithValue("ColorCode", model.ColorCode != null ? model.ColorCode : DBNull.Value);
+                    command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId != null ? model.ModifiedByNodeId : NodeManager.ActiveNode);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                }
                 return result;
             }
             catch (Exception)

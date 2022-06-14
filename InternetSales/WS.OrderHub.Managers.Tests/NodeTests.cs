@@ -18,7 +18,7 @@ namespace WS.OrderHub.Managers.Tests
             var model = new NodeModel();
             model.Name = "DT-JASON";
             model.Description = "Jason's personal computer";
-            var result = NodeManager.CreateAsync(model).Result;
+            var result = NodeManager.Create(model);
             Assert.AreNotEqual(model.Id, Guid.Empty);
         }
 
@@ -52,14 +52,14 @@ namespace WS.OrderHub.Managers.Tests
             model.IsDeleted = true;
             model.DateDeleted = DateTime.Now;
             //model.DeletedByNodeId = NodeManager.GetAsync("DT-JASON").Result.Id;
-            var result = NodeManager.DeleteAsync(model).Result;
+            var result = NodeManager.Delete(model);
             Assert.IsTrue(result > 0);
         }
 
         [TestMethod]
         public void GetCurrentNodeId()
         {
-            Assert.AreNotEqual(Guid.Empty, NodeManager.NodeId);
+            Assert.AreNotEqual(Guid.Empty, NodeManager.ActiveNode);
         }
     }
 }

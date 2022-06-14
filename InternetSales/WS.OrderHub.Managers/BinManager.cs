@@ -19,38 +19,35 @@ namespace WS.OrderHub.Managers
         /// <param name="forceUpdate">If name exists and forceUpdate is null - throws error, false - hide error, true - perform update)</param>
         /// <param name="rollback">If true, changes will not be committed. For UnitTesting only.</param>
         /// <returns></returns>
-        public static async Task<int> CreateAsync(BinModel model, bool? forceUpdate = null, bool rollback = false)
+        public static int Create(BinModel model, bool? forceUpdate = null, bool rollback = false)
         {
             try
             {
                 var result = 0;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                            @"EXEC spBin_Create
+                    command.CommandText =
+                        @"EXEC spBin_Create
                             @Id OUTPUT,
                             @Name,
                             @IsReserved,
                             @IsDefault,
                             @CreatedByNodeId,
                             @ForceUpdate";
-                        var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
-                        id.Direction = ParameterDirection.Output;
-                        command.Parameters.Add(id);
-                        command.Parameters.AddWithValue("@Name", model.Name);
-                        command.Parameters.AddWithValue("@IsReserved", model.IsReserved);
-                        command.Parameters.AddWithValue("@IsDefault", model.IsDefault);
-                        if (model.CreatedByNodeId == Guid.Empty)
-                            model.CreatedByNodeId = NodeManager.NodeId;
-                        command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
-                        command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
-                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
-                        model.Id = (Guid)id.Value;
+                    var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                    id.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(id);
+                    command.Parameters.AddWithValue("@Name", model.Name);
+                    command.Parameters.AddWithValue("@IsReserved", model.IsReserved);
+                    command.Parameters.AddWithValue("@IsDefault", model.IsDefault);
+                    if (model.CreatedByNodeId == Guid.Empty)
+                        model.CreatedByNodeId = NodeManager.ActiveNode.Id;
+                    command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);
+                    command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                    model.Id = (Guid)id.Value;
 
-                    }
-                });
+                }
                 return result;
             }
             catch (Exception)
@@ -60,32 +57,29 @@ namespace WS.OrderHub.Managers
             }
         }
 
-        public static async Task<int> UpdateAsync(BinModel model, bool rollback = false)
+        public static int Update(BinModel model, bool rollback = false)
         {
             try
             {
                 var result = 0;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                            @"EXEC spBin_Update
+                    command.CommandText =
+                        @"EXEC spBin_Update
                             @Id,
                             @Name,
                             @IsReserved,
                             @IsDefault,
                             @ModifiedByNodeId";
-                        command.Parameters.AddWithValue("@Id", model.Id);
-                        command.Parameters.AddWithValue("@Name", model.Name);
-                        command.Parameters.AddWithValue("@IsReserved", model.IsReserved);
-                        command.Parameters.AddWithValue("@IsDefault", model.IsDefault);
-                        if (model.ModifiedByNodeId == null)
-                            model.ModifiedByNodeId = NodeManager.NodeId;
-                        command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
-                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
-                    }
-                });
+                    command.Parameters.AddWithValue("@Id", model.Id);
+                    command.Parameters.AddWithValue("@Name", model.Name);
+                    command.Parameters.AddWithValue("@IsReserved", model.IsReserved);
+                    command.Parameters.AddWithValue("@IsDefault", model.IsDefault);
+                    if (model.ModifiedByNodeId == null)
+                        model.ModifiedByNodeId = NodeManager.ActiveNode.Id;
+                    command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                }
                 return result;
             }
             catch (Exception)

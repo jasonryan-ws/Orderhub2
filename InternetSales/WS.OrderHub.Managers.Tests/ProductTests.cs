@@ -34,8 +34,8 @@ namespace WS.OrderHub.Managers.Tests
             model.UPC = "817966011168";
             model.Name = "Feedback Sports RAKK XL Display Stand - 1-Bike, Wheel Mount, 2.3-5\" Tire, Black";
             model.ImageURL = "https://productimages.qbp.com/6SPsvm45/prodxl/DS1844.jpg";
-            model.CreatedByNodeId = NodeManager.NodeId;
-            var result = ProductManager.CreateAsync(model, null, true).Result;
+            model.CreatedByNodeId = NodeManager.ActiveNode.Id;
+            var result = ProductManager.Create(model, null, true);
             Assert.AreNotEqual(Guid.Empty, model.Id);
         }
 
@@ -48,8 +48,8 @@ namespace WS.OrderHub.Managers.Tests
             model.UPC = "643187000557";
             model.Name = "Feedback Sports RAKK XL Display Stand - 1-Bike, Wheel Mount, 2.3-5\" Tire, Black";
             model.ImageURL = "https://productimages.qbp.com/6SPsvm45/prodxl/DS1844.jpg";
-            model.CreatedByNodeId = NodeManager.NodeId;
-            var result = ProductManager.UpdateAsync(model, true).Result;
+            model.CreatedByNodeId = NodeManager.ActiveNode.Id;
+            var result = ProductManager.Update(model, true);
             Assert.IsTrue(result > 0);
         }
 

@@ -23,9 +23,9 @@ namespace WS.OrderHub.Managers.Tests
         public void StartTest()
         {
             var model = new JobModel();
-            model.TaskId = (Guid)TaskManager.Get("Update Orders").Result;
-            model.StartedByNodeId = NodeManager.NodeId;
-            var result = JobManager.StartAsync(model).Result;
+            model.TaskId = (Guid)TaskManager.Get("Update Orders");
+            model.StartedByNodeId = NodeManager.ActiveNode.Id;
+            var result = JobManager.Start(model);
             Assert.AreNotEqual(Guid.Empty, model.Id);
         }
 

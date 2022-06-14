@@ -1,5 +1,5 @@
 ﻿
-DECLARE @ModifiedByNodeId UNIQUEIDENTIFIER = (SELECT Id FROM Node WHERE Name = 'IS-JASON');
+DECLARE @ModifiedByNodeId UNIQUEIDENTIFIER = (SELECT Id FROM Node WHERE Name = 'IS-AUTH-01');
 DECLARE @StoreAddressId VARCHAR(MAX) = (SELECT Id FROM Address WHERE Email = 'support@wheelandsprocket.com')
 DECLARE @ReceiptFooter VARCHAR(MAX) =
 'We''d like to hear from you: review our product; review us; or join us online at facebook.com/wheelandsprocket' + CHAR(13) +

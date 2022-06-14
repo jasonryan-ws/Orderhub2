@@ -38,7 +38,7 @@ namespace WS.OrderHub.Managers.Tests
             model.Email = "aldrin.ybas@gmail.com";
             //model.CreatedByNodeId = NodeManager.GetAsync("IS-JASON").Result.Id;
 
-            var result = AddressManager.CreateAsync(model, true).Result;
+            var result = AddressManager.Create(model, true);
             Assert.AreNotEqual(model.Id, Guid.Empty);
         }
 
@@ -49,7 +49,7 @@ namespace WS.OrderHub.Managers.Tests
             model.LastName = "Ybas";
             //model.ModifiedByNodeId = NodeManager.GetAsync("IS-JASON").Result.Id;
 
-            var result = AddressManager.UpdateAsync(model, true).Result;
+            var result = AddressManager.Update(model, true);
             Assert.IsTrue(result > 0);
            // Assert.AreNotEqual(model.Id, Guid.Empty);
         }
@@ -58,7 +58,7 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void DeleteTest()
         {
-            var result = AddressManager.DeleteUnusedAsync(true).Result;
+            var result = AddressManager.DeleteUnused(true);
             Assert.IsTrue(result > 0);
         }
     }

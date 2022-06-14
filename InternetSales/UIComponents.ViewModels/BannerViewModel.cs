@@ -63,12 +63,20 @@ namespace UIComponents.ViewModels
             }
         }
 
+        private bool dismissed;
+        public bool Dismissed
+        {
+            get => dismissed;
+            set => SetProperty(ref dismissed, value);
+        }
+
         public void Dismiss(int timeout = 0)
         {
             if (timeout > 0)
                 Close(timeout);
             else
                 Close();
+
         }
         public void Show(string message, int timeout = 5)
         {

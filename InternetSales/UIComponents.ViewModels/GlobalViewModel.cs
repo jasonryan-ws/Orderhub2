@@ -29,7 +29,7 @@ namespace UIComponents.ViewModels
 
         public void SetControlActivity(bool isInProgress = false)
         {
-            IsNotBusy = !DialogViewModel.Instance.IsOpen && !ControlDialogViewModel.Instance.IsOpen && !isInProgress;
+            IsNotBusy = !DialogViewModel.Instance.IsOpen == true && !ControlDialogViewModel.Instance.IsOpen == true && !isInProgress;
         }
     }
 }

@@ -30,14 +30,14 @@ namespace WS.OrderHub.Managers.Tests
         {
             var model = ConfigurationManager.GetAsync("SWServer").Result;
             model.Value = "IS-SERVER";
-            var result = ConfigurationManager.UpdateAsync(model, true).Result;
+            var result = ConfigurationManager.Update(model, true);
             Assert.IsTrue(result > 0);
         }
 
         [TestMethod]
         public void UpdateByNameTest()
         {
-            var result = ConfigurationManager.UpdateAsync("SWServer", "IS-SERVER", null, true).Result;
+            var result = ConfigurationManager.Update("SWServer", "IS-SERVER", null, true);
             Assert.IsTrue(result > 0);
         }
 

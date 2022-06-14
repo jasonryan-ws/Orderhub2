@@ -61,17 +61,15 @@ namespace WS.OrderHub.Managers
         /// <param name="forceUpdate"></param>
         /// <param name="rollback"></param>
         /// <returns>Id of the newly created row</returns>
-        public static async Task<Guid?> CreateAsync(Guid orderId, ProductModel product, bool? forceUpdate = null, bool rollback = true)
+        public static Guid? Create(Guid orderId, ProductModel product, bool? forceUpdate = null, bool rollback = true)
         {
             try
             {
                 Guid? newId = null;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"EXEC spOrderItem_Create
+                    command.CommandText =
+                    @"EXEC spOrderItem_Create
                         @Id OUTPUT,
                         @OrderId,
                         @ProductId,
@@ -79,19 +77,18 @@ namespace WS.OrderHub.Managers
                         @UnitPrice,
                         @ForceUpdate";
 
-                        var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
-                        id.Direction = ParameterDirection.Output;
-                        command.Parameters.Add(id);
-                        command.Parameters.AddWithValue("@OrderId", orderId);
-                        command.Parameters.AddWithValue("@ProductId", product.Id);
-                        command.Parameters.AddWithValue("@Quantity", product.Quantity);
-                        command.Parameters.AddWithValue("@UnitPrice", product.UnitPrice);
-                        command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
-                        App.SqlClient.ExecuteNonQuery(command, rollback);
-                        newId = (Guid)id.Value;
+                    var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                    id.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(id);
+                    command.Parameters.AddWithValue("@OrderId", orderId);
+                    command.Parameters.AddWithValue("@ProductId", product.Id);
+                    command.Parameters.AddWithValue("@Quantity", product.Quantity);
+                    command.Parameters.AddWithValue("@UnitPrice", product.UnitPrice);
+                    command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
+                    App.SqlClient.ExecuteNonQuery(command, rollback);
+                    newId = (Guid)id.Value;
 
-                    }
-                });
+                }
                 return newId;
             }
             catch (Exception)
@@ -100,17 +97,15 @@ namespace WS.OrderHub.Managers
             }
         }
 
-        public static async Task<Guid?> CreateAsync(Guid orderId, Guid productId, int quantity, decimal unitPrice, bool? forceUpdate = null, bool rollback = true)
+        public static Guid? Create(Guid orderId, Guid productId, int quantity, decimal unitPrice, bool? forceUpdate = null, bool rollback = true)
         {
             try
             {
                 Guid? newId = null;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"EXEC spOrderItem_Create
+                    command.CommandText =
+                    @"EXEC spOrderItem_Create
                         @Id OUTPUT,
                         @OrderId,
                         @ProductId,
@@ -118,19 +113,18 @@ namespace WS.OrderHub.Managers
                         @UnitPrice,
                         @ForceUpdate";
 
-                        var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
-                        id.Direction = ParameterDirection.Output;
-                        command.Parameters.Add(id);
-                        command.Parameters.AddWithValue("@OrderId", orderId);
-                        command.Parameters.AddWithValue("@ProductId", productId);
-                        command.Parameters.AddWithValue("@Quantity", quantity);
-                        command.Parameters.AddWithValue("@UnitPrice", unitPrice);
-                        command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
-                        App.SqlClient.ExecuteNonQuery(command, rollback);
-                        newId = (Guid)id.Value;
+                    var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                    id.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(id);
+                    command.Parameters.AddWithValue("@OrderId", orderId);
+                    command.Parameters.AddWithValue("@ProductId", productId);
+                    command.Parameters.AddWithValue("@Quantity", quantity);
+                    command.Parameters.AddWithValue("@UnitPrice", unitPrice);
+                    command.Parameters.AddWithValue("@ForceUpdate", forceUpdate != null ? forceUpdate : DBNull.Value);
+                    App.SqlClient.ExecuteNonQuery(command, rollback);
+                    newId = (Guid)id.Value;
 
-                    }
-                });
+                }
                 return newId;
             }
             catch (Exception)
@@ -140,26 +134,23 @@ namespace WS.OrderHub.Managers
             }
         }
 
-        public static async Task<int> UpdateAsync(Guid id, int quantity, decimal unitPrice, bool rollback = true)
+        public static int Update(Guid id, int quantity, decimal unitPrice, bool rollback = true)
         {
             try
             {
                 var result = 0;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"EXEC spOrderItem_Update
+                    command.CommandText =
+                    @"EXEC spOrderItem_Update
                         @Id,
                         @Quantity,
                         @UnitPrice";
-                        command.Parameters.AddWithValue("@Id", id);
-                        command.Parameters.AddWithValue("@Quantity", quantity);
-                        command.Parameters.AddWithValue("@UnitPrice", unitPrice);
-                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
-                    }
-                });
+                    command.Parameters.AddWithValue("@Id", id);
+                    command.Parameters.AddWithValue("@Quantity", quantity);
+                    command.Parameters.AddWithValue("@UnitPrice", unitPrice);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                }
                 return result;
             }
             catch (Exception)
@@ -169,37 +160,32 @@ namespace WS.OrderHub.Managers
             }
         }
 
-        public static async Task<int> UpdateAsync(Guid orderId, Guid productId, int quantity, decimal unitPrice, bool rollback = true)
+        public static int Update(Guid orderId, Guid productId, int quantity, decimal unitPrice, bool rollback = true)
         {
             try
             {
                 var result = 0;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"EXEC spOrderItem_UpdateByIds
+                    command.CommandText =
+                    @"EXEC spOrderItem_UpdateByIds
                         @OrderId,
                         @ProductId,
                         @Quantity,
                         @UnitPrice";
-                        command.Parameters.AddWithValue("@OrderId", orderId);
-                        command.Parameters.AddWithValue("@ProductId", productId);
-                        command.Parameters.AddWithValue("@Quantity", quantity);
-                        command.Parameters.AddWithValue("@UnitPrice", unitPrice);
-                        result= App.SqlClient.ExecuteNonQuery(command, rollback);
-                    }
-                });
+                    command.Parameters.AddWithValue("@OrderId", orderId);
+                    command.Parameters.AddWithValue("@ProductId", productId);
+                    command.Parameters.AddWithValue("@Quantity", quantity);
+                    command.Parameters.AddWithValue("@UnitPrice", unitPrice);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                }
                 return result;
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
-
 
         private static void Fill(ProductModel model, DataRow row)
         {

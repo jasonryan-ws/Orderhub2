@@ -111,7 +111,7 @@
     <Build Include="Tables\Job.sql" />
     <Build Include="StoredProcedures\spJob_Start.sql" />
     <Build Include="StoredProcedures\spJob_End.sql" />
-    <Build Include="StoredProcedures\spJob_Progress.sql" />
+    <Build Include="StoredProcedures\spJob_SetProgression.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PostDeployment\DefaultData\Configurations.sql" />

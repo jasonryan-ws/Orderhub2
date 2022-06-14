@@ -19,7 +19,7 @@ namespace WS.OrderHub.Managers.Tests
             model.IsReserved = false;
             model.IsDefault = true;
             //model.CreatedByNodeId = NodeManager.GetAsync("IS-JASON").Result.Id;
-            var result = BinManager.CreateAsync(model, false, true).Result;
+            var result = BinManager.Create(model, false, true);
             Assert.AreNotEqual(model.Id, Guid.Empty);
         }
 
@@ -31,7 +31,7 @@ namespace WS.OrderHub.Managers.Tests
             model.IsReserved = true;
             model.IsDefault = true;
             //model.CreatedByNodeId = NodeManager.GetAsync("IS-SERVER").Result.Id;
-            var result = BinManager.CreateAsync(model, true).Result;
+            var result = BinManager.Create(model, true);
             Assert.AreNotEqual(model.Id, Guid.Empty);
         }
 
@@ -42,7 +42,7 @@ namespace WS.OrderHub.Managers.Tests
             model.IsReserved = true;
             model.IsDefault = true;
             //model.ModifiedByNodeId = NodeManager.GetAsync("IS-SERVER").Result.Id;
-            var result = BinManager.UpdateAsync(model, true).Result;
+            var result = BinManager.Update(model, true);
             Assert.IsTrue(result > 0);
         }
 
@@ -54,7 +54,7 @@ namespace WS.OrderHub.Managers.Tests
             model.IsReserved = true;
             model.IsDefault = true;
             //model.ModifiedByNodeId = NodeManager.GetAsync("IS-SERVER").Result.Id;
-            var result = BinManager.UpdateAsync(model, true).Result;
+            var result = BinManager.Update(model, true);
             Assert.IsTrue(result > 0);
         }
 

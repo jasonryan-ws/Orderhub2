@@ -34,7 +34,7 @@ namespace WS.OrderHub.Managers.Tests
             model.Code = "SFY";
             model.ColorCode = 1234;
             //model.CreatedByNodeId = NodeManager.GetAsync("IS-JASON").Result.Id;
-            var result = ChannelManager.CreateAsync(model, true).Result;
+            var result = ChannelManager.Create(model, true);
             Assert.AreNotEqual(Guid.Empty, model.Id);
         }
 
@@ -48,7 +48,7 @@ namespace WS.OrderHub.Managers.Tests
                 model.Code = "SFY";
                 model.ColorCode = 1234;
                 //model.CreatedByNodeId = NodeManager.GetAsync("IS-JASON").Result.Id;
-                var result = ChannelManager.CreateAsync(model, true).Result;
+                var result = ChannelManager.Create(model, true);
 
             }
             catch (Exception)
@@ -65,7 +65,7 @@ namespace WS.OrderHub.Managers.Tests
             model.Name = "Amazon Prime";
             model.Code = "AMZ";
             //model.ModifiedByNodeId = NodeManager.GetAsync("IS-JASON").Result.Id;
-            var result = ChannelManager.UpdateAsync(model, true).Result;
+            var result = ChannelManager.Update(model, true);
             Assert.IsTrue(result > 0);
         }
     }

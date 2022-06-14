@@ -25,7 +25,7 @@ namespace WS.OrderHub.Managers.Tests
             var product = ProductManager.GetAsync("689228389267").Result;
             product.Quantity = 47;
             product.UnitPrice = 39.99m;
-            var result = OrderItemManager.CreateAsync(order.Id, product, null, true).Result;
+            var result = OrderItemManager.Create(order.Id, product, null, true);
             Assert.AreNotEqual(null, result);
         }
 
@@ -34,7 +34,7 @@ namespace WS.OrderHub.Managers.Tests
         {
             var order = OrderManager.GetAsync("1345756").Result;
             var product = ProductManager.GetAsync("689228389267").Result;
-            var result = OrderItemManager.CreateAsync(order.Id, product.Id, 47, 34.99m, null, true).Result;
+            var result = OrderItemManager.Create(order.Id, product.Id, 47, 34.99m, null, true);
             Assert.AreNotEqual(null, result);
         }
 
@@ -44,7 +44,7 @@ namespace WS.OrderHub.Managers.Tests
         {
             var order = OrderManager.GetAsync("1345756").Result;
             var product = ProductManager.GetAsync("4710944224184").Result;
-            var result = OrderItemManager.UpdateAsync(order.Id, product.Id, 58, 34.99m, false).Result;
+            var result = OrderItemManager.Update(order.Id, product.Id, 58, 34.99m, false);
             Assert.IsTrue(result > 0);
         }
     }

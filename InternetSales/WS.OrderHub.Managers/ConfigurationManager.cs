@@ -106,31 +106,28 @@ namespace WS.OrderHub.Managers
         /// Update configuration by filled ConfigurationModel
         /// </summary>
         /// <returns></returns>
-        public static async Task<int> UpdateAsync(ConfigurationModel model, bool rollback = false)
+        public static int Update(ConfigurationModel model, bool rollback = false)
         {
             try
             {
                 var result = 0;
                 if (model.Id == Guid.Empty && !string.IsNullOrEmpty(model.Name))
-                    model.Id = (await GetAsync(model.Name)).Id;
-                await Task.Run(() =>
-                {
+                    model.Id = (GetAsync(model.Name).Result).Id;
 
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"EXEC spConfiguration_Update
+                using (var command = new SqlCommand())
+                {
+                    command.CommandText =
+                    @"EXEC spConfiguration_Update
                         @Id,
                         @Value,
                         @ModifiedByNodeId";
-                        command.Parameters.AddWithValue("@Id", model.Id);
-                        command.Parameters.AddWithValue("@Value", model.Value);
-                        if (model.ModifiedByNodeId == null)
-                            model.ModifiedByNodeId = NodeManager.NodeId;
-                        command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
-                        result = App.SqlClient.ExecuteNonQuery(command, rollback);
-                    }
-                });
+                    command.Parameters.AddWithValue("@Id", model.Id);
+                    command.Parameters.AddWithValue("@Value", model.Value);
+                    if (model.ModifiedByNodeId == null)
+                        model.ModifiedByNodeId = NodeManager.ActiveNode.Id;
+                    command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                }
                 return result;
             }
             catch (Exception)
@@ -146,7 +143,7 @@ namespace WS.OrderHub.Managers
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static async Task<int> UpdateAsync(string name, object value, Guid? modifiedByNodeId = null, bool rollback = false)
+        public static int Update(string name, object value, Guid? modifiedByNodeId = null, bool rollback = false)
         {
             try
             {
@@ -156,8 +153,8 @@ namespace WS.OrderHub.Managers
                     var model = new ConfigurationModel();
                     model.Name = name;
                     model.Value = value;
-                    model.ModifiedByNodeId = modifiedByNodeId != null ? modifiedByNodeId : NodeManager.NodeId;
-                    result = await UpdateAsync(model, rollback);
+                    model.ModifiedByNodeId = modifiedByNodeId != null ? modifiedByNodeId : NodeManager.ActiveNode.Id;
+                    result = Update(model, rollback);
                 }
                 return result;
             }

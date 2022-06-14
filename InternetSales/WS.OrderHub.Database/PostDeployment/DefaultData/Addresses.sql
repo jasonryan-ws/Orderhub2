@@ -1,4 +1,4 @@
-﻿DECLARE @CreatedByNodeId UNIQUEIDENTIFIER = (SELECT Id FROM Node WHERE Name = 'IS-JASON');
+﻿DECLARE @CreatedByNodeId UNIQUEIDENTIFIER = (SELECT Id FROM Node WHERE Name = 'IS-AUTH-01');
 
 INSERT INTO [Address]
 	(Id, FirstName, LastName, Company, Street1, Street2, City, State, PostalCode, CountryCode, Phone, Email, DateCreated, CreatedByNodeId)

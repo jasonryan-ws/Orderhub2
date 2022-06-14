@@ -41,7 +41,7 @@ namespace WS.OrderHub.Managers.Tests
         {
             var product = ProductManager.GetAsync("643187000557").Result;
             var bin = BinManager.GetAsync("TestBin-B").Result;
-            var result = ProductBinManager.CreateAsync(product.Id, bin.Id, 32, NodeManager.NodeId, null, false).Result;
+            var result = ProductBinManager.Create(product.Id, bin.Id, 32, NodeManager.ActiveNode.Id, null, false);
             Assert.IsNotNull(result);
         }
 
@@ -50,7 +50,7 @@ namespace WS.OrderHub.Managers.Tests
         {
             var product = ProductManager.GetAsync("643187000557").Result;
             var bin = BinManager.GetAsync("TestBin-M").Result;
-            var result = ProductBinManager.UpdateAsync(product.Id, bin.Id, 50, NodeManager.NodeId, true).Result;
+            var result = ProductBinManager.Update(product.Id, bin.Id, 50, NodeManager.ActiveNode.Id, true);
             Assert.IsTrue(result > 0);
         }
 

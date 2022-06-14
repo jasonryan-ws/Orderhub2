@@ -2,6 +2,7 @@
 	@Id UNIQUEIDENTIFIER OUTPUT,
 	@TaskId UNIQUEIDENTIFIER,
 	@StartedByNodeId UNIQUEIDENTIFIER,
+	@MaxCount INT = 100,
 	@ForceStart BIT = 0 --If true, start a new job regardless of another computer running on similar task 
 AS
 BEGIN TRY
@@ -27,9 +28,9 @@ BEGIN TRY
 		SET @Id = NEWID();
 		BEGIN TRAN StartJob
 		INSERT INTO Job
-			(Id, TaskId, DateStarted, StartedByNodeId)
+			(Id, TaskId, DateStarted, StartedByNodeId, MaxCount)
 		VALUES
-			(@Id, @TaskId, GETDATE(), @StartedByNodeId);
+			(@Id, @TaskId, GETDATE(), @StartedByNodeId, @MaxCount);
 		COMMIT TRAN StartJob;
 		RETURN @@ROWCOUNT;
 	END

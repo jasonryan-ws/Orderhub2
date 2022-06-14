@@ -39,8 +39,8 @@ namespace UIComponents.ViewModels
         }
 
         #region MVVM Properties
-        private bool isOpen;
-        public bool IsOpen
+        private bool? isOpen;
+        public bool? IsOpen
         {
             get => isOpen;
             set
@@ -48,7 +48,7 @@ namespace UIComponents.ViewModels
                 if (SetProperty(ref isOpen, value))
                 {
                     GlobalViewModel.Instance.SetControlActivity();
-                    Visibility = value ? "Visible" : "Collapsed";
+                    Visibility = value == true ? "Visible" : "Collapsed";
                 }
             }
         }
@@ -207,7 +207,7 @@ namespace UIComponents.ViewModels
         {
             await Task.Run(() =>
             {
-                while (IsOpen) { }
+                while (IsOpen == true) { }
             });
             return responseType;
         }

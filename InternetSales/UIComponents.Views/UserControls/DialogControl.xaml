@@ -61,14 +61,14 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid
-                    Margin="0 0 20 0"
+                    Margin="0 0 10 0"
                     Visibility="{Binding DialogViewModel.ProgressBarViewModel.Visibility}"
                     Grid.Column="0">
                     <ProgressBar
-                        IsIndeterminate="{Binding DialogViewModel.ProgressBarViewModel.IsIndeterminate}"
-                        Value="{Binding DialogViewModel.ProgressBarViewModel.Value}"
                         Width="30"
                         Height="30"
+                        IsIndeterminate="{Binding DialogViewModel.ProgressBarViewModel.IsIndeterminate}"
+                        Value="{Binding DialogViewModel.ProgressBarViewModel.Value}"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         Style="{StaticResource MaterialDesignCircularProgressBar}"/>

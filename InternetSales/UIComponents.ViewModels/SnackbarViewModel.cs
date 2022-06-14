@@ -5,7 +5,7 @@ namespace UIComponents.ViewModels
 {
     public static class Snackbar
     {
-        public static bool IsOpen { get => SnackbarViewModel.Instance.IsOpen; }
+        public static bool? IsOpen { get => SnackbarViewModel.Instance.IsOpen; }
         public static void Close(int timeout = 0, bool enableControls = true)
         {
             if (timeout > 0)
