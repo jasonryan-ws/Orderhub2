@@ -59,7 +59,7 @@ namespace WS.OrderHub.Managers.Tests
         {
             var product = ProductManager.GetAsync("643187000557").Result;
             var bin = BinManager.GetAsync("TestBin-B").Result;
-            var result = ProductBinManager.DeleteAsync(product.Id, bin.Id, false).Result;
+            var result = ProductBinManager.Delete(product.Id, bin.Id, false);
             Assert.IsTrue(result > 0);
         }
 

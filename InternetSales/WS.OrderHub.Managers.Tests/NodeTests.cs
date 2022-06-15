@@ -33,22 +33,22 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void GetByNameTest()
         {
-            var result = NodeManager.GetAsync("IS-JASON").Result;
-            Assert.IsTrue(result.Description.Contains("Ryan"));
+            var result = NodeManager.Get("IS-AUTH-01");
+            Assert.IsTrue(result.Description.Contains("IS"));
         }
 
         [TestMethod]
         public void GetByIdTest()
         {
-            var id = NodeManager.GetAsync("IS-JASON").Result.Id;
-            var result = NodeManager.GetAsync(id).Result;
-            Assert.IsTrue(result.Description.Contains("Ryan"));
+            var id = NodeManager.Get("IS-AUTH-01").Id;
+            var result = NodeManager.Get(id);
+            Assert.IsTrue(result.Description.Contains("IS"));
         }
 
         [TestMethod]
         public void DeleteTest()
         { 
-            var model = NodeManager.GetAsync("IS-JASON").Result;
+            var model = NodeManager.Get("IS-JASON");
             model.IsDeleted = true;
             model.DateDeleted = DateTime.Now;
             //model.DeletedByNodeId = NodeManager.GetAsync("DT-JASON").Result.Id;

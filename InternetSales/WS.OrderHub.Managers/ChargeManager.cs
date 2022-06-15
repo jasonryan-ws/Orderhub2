@@ -126,7 +126,7 @@ namespace WS.OrderHub.Managers
                     id.Direction = ParameterDirection.Output;
                     command.Parameters.Add(id);
                     command.Parameters.AddWithValue("@Name", model.Name);
-                    command.Parameters.AddWithValue("@Description", model.Description);
+                    command.Parameters.AddWithValue("@Description", !string.IsNullOrWhiteSpace(model.Description) ? model.Description : DBNull.Value);
                     if (model.CreatedByNodeId == Guid.Empty)
                         model.CreatedByNodeId = NodeManager.ActiveNode.Id;
                     command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId);

@@ -247,24 +247,21 @@ namespace WS.OrderHub.Managers
             }
         }
 
-        public static async Task<int> DeleteAsync(Guid productId, Guid binId, bool rollback = false)
+        public static int Delete(Guid productId, Guid binId, bool rollback = false)
         {
             try
             {
                 var result = 0;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"
+                    command.CommandText =
+                    @"
                         DECLARE @Id UNIQUEIDENTIFIER = (SELECT TOP 1 Id FROM ProductBin WHERE ProductId = @ProductId AND BinId = @BinId);
                         EXEC spProductBin_Delete @Id";
-                        command.Parameters.AddWithValue("@ProductId", productId);
-                        command.Parameters.AddWithValue("@BinId", binId);
-                        result = App.SqlClient.ExecuteNonQuery(command, rollback);
-                    }
-                });
+                    command.Parameters.AddWithValue("@ProductId", productId);
+                    command.Parameters.AddWithValue("@BinId", binId);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                }
                 return result;
             }
             catch (Exception)
@@ -274,21 +271,18 @@ namespace WS.OrderHub.Managers
             }
         }
 
-        public static async Task<int> DeleteAsync(Guid id, bool rollback = false)
+        public static int Delete(Guid id, bool rollback = false)
         {
             try
             {
                 var result = 0;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"EXEC spProductBin_Delete @Id";
-                        command.Parameters.AddWithValue("@Id", id);
-                        result = App.SqlClient.ExecuteNonQuery(command, rollback);
-                    }
-                });
+                    command.CommandText =
+                    @"EXEC spProductBin_Delete @Id";
+                    command.Parameters.AddWithValue("@Id", id);
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                }
                 return result;
             }
             catch (Exception)

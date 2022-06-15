@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="WS.OrderHub.Views.UserControls.OrderControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:WS.OrderHub.Views.UserControls"
+             mc:Ignorable="d"
+             xmlns:vm="clr-namespace:WS.OrderHub.ViewModels;assembly=WS.OrderHub.ViewModels"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="{DynamicResource MaterialDesignPaper}"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             d:DesignHeight="600"
+             d:DesignWidth="800"
+             d:Background="White">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <!--Order Number-->
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           FontSize="25">
+                    <Run Text="Order ID:" />
+                    <Run Text="13412143" />
+                </TextBlock>
+                <Button VerticalAlignment="Center"
+                        Width="25"
+                        Height="25"
+                        Margin="10 0 0 0"
+                        ToolTip="Copy order id to clipboard"
+                        Style="{StaticResource MaterialDesignIconButton}"
+                        Content="{materialDesign:PackIcon Kind=ContentCopy, Size=20}" />
+            </StackPanel>
+
+        </Grid>
+        
+        <!--Order date-->
+        <Grid Grid.Row="1" Margin="10 0 10 0">
+            <TextBlock VerticalAlignment="Center">
+                    <Run Text="Order date:" Foreground="Gray"/>
+                    <Run Text="Jun 15, 2022"
+                         Foreground="SlateGray"
+                         FontWeight="Bold"/>
+            </TextBlock>
+        </Grid>
+    </Grid>
+</UserControl>
+
+    

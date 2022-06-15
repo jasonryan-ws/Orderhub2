@@ -17,25 +17,22 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>ChannelModel</returns>
-        public static async Task<ChannelModel> GetAsync(Guid id)
+        public static ChannelModel Get(Guid id)
         {
             try
             {
                 ChannelModel model = null;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
+                    command.CommandText = "SELECT * FROM Channel WHERE Id = @Id";
+                    command.Parameters.AddWithValue("Id", id);
+                    var table = App.SqlClient.ExecuteQuery(command);
+                    foreach (DataRow row in table.Rows)
                     {
-                        command.CommandText = "SELECT * FROM Channel WHERE Id = @Id";
-                        command.Parameters.AddWithValue("Id", id);
-                        var table= App.SqlClient.ExecuteQuery(command);
-                        foreach (DataRow row in table.Rows)
-                        {
-                            model = new ChannelModel();
-                            Fill(model, row);
-                        }
+                        model = new ChannelModel();
+                        Fill(model, row);
                     }
-                });
+                }
                 return model;
             }
             catch (Exception)
@@ -49,25 +46,22 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="name"></param>
         /// <returns>ChannelModel</returns>
-        public static async Task<ChannelModel> GetAsync(string name)
+        public static ChannelModel Get(string name)
         {
             try
             {
                 ChannelModel model = null;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
+                    command.CommandText = "SELECT * FROM Channel WHERE Name = @Name";
+                    command.Parameters.AddWithValue("Name", name);
+                    var table = App.SqlClient.ExecuteQuery(command);
+                    foreach (DataRow row in table.Rows)
                     {
-                        command.CommandText = "SELECT * FROM Channel WHERE Name = @Name";
-                        command.Parameters.AddWithValue("Name", name);
-                        var table= App.SqlClient.ExecuteQuery(command);
-                        foreach (DataRow row in table.Rows)
-                        {
-                            model = new ChannelModel();
-                            Fill(model, row);
-                        }
+                        model = new ChannelModel();
+                        Fill(model, row);
                     }
-                });
+                }
                 return model;
             }
             catch (Exception)
@@ -172,7 +166,7 @@ namespace WS.OrderHub.Managers
                     command.Parameters.AddWithValue("Name", model.Name);
                     command.Parameters.AddWithValue("Code", model.Code);
                     command.Parameters.AddWithValue("ColorCode", model.ColorCode != null ? model.ColorCode : DBNull.Value);
-                    command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId != null ? model.ModifiedByNodeId : NodeManager.ActiveNode);
+                    command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId != null ? model.ModifiedByNodeId : NodeManager.ActiveNode.Id);
                     result = App.SqlClient.ExecuteNonQuery(command, rollback);
                 }
                 return result;

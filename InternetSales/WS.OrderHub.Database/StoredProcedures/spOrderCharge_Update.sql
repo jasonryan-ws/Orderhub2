@@ -1,0 +1,18 @@
+﻿CREATE PROCEDURE [dbo].[spOrderCharge_Update]
+	@Id UNIQUEIDENTIFIER,
+	@Amount MONEY
+AS
+BEGIN TRAN UpdateOrderCharge
+BEGIN TRY
+	UPDATE OrderCharge
+	SET Amount = @Amount
+	WHERE
+		Id = @Id;
+	COMMIT TRAN UpdateOrderCharge;
+	RETURN @@ROWCOUNT;
+END TRY
+BEGIN CATCH
+	IF @@TRANCOUNT > 0
+		ROLLBACK TRAN;
+	THROW;
+END CATCH

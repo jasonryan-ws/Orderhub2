@@ -106,7 +106,6 @@ namespace WS.OrderHub.Managers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -252,22 +251,34 @@ namespace WS.OrderHub.Managers
         /// <param name="count"></param>
         /// <param name="message"></param>
         /// <returns>Returns the current progress between 0 and 100 (%)</returns>
-        public static int SetProgression(Guid id, int count = 0, string message = null, bool rollback = false)
+        public static int SetProgression(JobModel model, bool rollback = false)
         {
             try
             {
                 var result = 0;
                 using (var command = new SqlCommand())
                 {
-                    command.CommandText = @"EXEC @Progress = spJob_SetProgression @Id, @Count, @Message";
+                    command.CommandText = @"EXEC @Progress = spJob_SetProgression @Id, @Count, @Message, @DateEnded OUTPUT, @EndedByNodeId OUTPUT";
                     var progress = new SqlParameter("@Progress", SqlDbType.Int);
                     progress.Direction = ParameterDirection.Output;
+
+                    var dateEnded = new SqlParameter("@DateEnded", SqlDbType.DateTime);
+                    dateEnded.Direction = ParameterDirection.Output;
+
+                    var endedByNodeId = new SqlParameter("@EndedByNodeId", SqlDbType.UniqueIdentifier);
+                    endedByNodeId.Direction = ParameterDirection.Output;
+
                     command.Parameters.Add(progress);
-                    command.Parameters.AddWithValue("@Id", id);
-                    command.Parameters.AddWithValue("@Count", count);
-                    command.Parameters.AddWithValue("@Message", message);
+                    command.Parameters.Add(dateEnded);
+                    command.Parameters.Add(endedByNodeId);
+                    command.Parameters.AddWithValue("@Id", model.Id);
+                    command.Parameters.AddWithValue("@Count", model.Count);
+                    command.Parameters.AddWithValue("@Message", model.Message);
                     App.SqlClient.ExecuteNonQuery(command, rollback);
                     result = (int)progress.Value;
+
+                    model.DateEnded = dateEnded.Value != DBNull.Value ? (DateTime)dateEnded.Value : null;
+                    model.EndedByNodeId = endedByNodeId.Value != DBNull.Value ? (Guid)endedByNodeId.Value : null;
                 }
                 return result;
             }

@@ -23,7 +23,7 @@ namespace WS.OrderHub.Managers
                 {
                     command.CommandText = @"EXEC spOrder_GetById @Id";
                     command.Parameters.AddWithValue("@Id", id);
-                    var table= App.SqlClient.ExecuteQuery(command);
+                    var table = App.SqlClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         model = new OrderModel();
@@ -49,7 +49,7 @@ namespace WS.OrderHub.Managers
                 {
                     command.CommandText = @"EXEC spOrder_GetByChannelOrderNumber @ChannelOrderNumber";
                     command.Parameters.AddWithValue("@ChannelOrderNumber", channelOrderNumber);
-                    var table= App.SqlClient.ExecuteQuery(command);
+                    var table = App.SqlClient.ExecuteQuery(command);
                     foreach (DataRow row in table.Rows)
                     {
                         model = new OrderModel();
@@ -58,6 +58,159 @@ namespace WS.OrderHub.Managers
                 }
             });
             return model;
+        }
+
+
+        /// <summary>
+        /// Mark new order status to 'Cleared' and return the number of affected rows
+        /// </summary>
+        /// <returns></returns>
+        public static int ClearNewOrders(bool rollback = false)
+        {
+            try
+            {
+                var result = 0;
+                using (var command = new SqlCommand())
+                {
+                    command.CommandText =
+                    @"UPDATE [Order] SET Status = 'Cleared' WHERE Status = 'New' AND IsCancelled = 0 AND IsShipped = 0";
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                }
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public static int MarkNewOrdersAsCleared()
+        {
+            try
+            {
+                var result = 0;
+                using (var command = new SqlCommand())
+                {
+                    command.CommandText =
+                    @"SELECT Id FROM [Order] WHERE Stats";
+                    var table = App.SqlClient.ExecuteQuery(command);
+                    foreach (DataRow row in table.Rows)
+                    {
+                        result = Convert.ToInt32(row["Count"]);
+                    }
+                }
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public static int Create(OrderModel model, bool forceUpdate = false, bool rollback = false)
+        {
+            try
+            {
+                var result = 0;
+                using (var command = new SqlCommand())
+                {
+                    command.CommandText =
+                        @"EXEC spOrder_Create
+	                    @Id OUTPUT,
+                        @ChannelId,
+                        @ChannelOrderNumber,
+	                    @DateOrdered,
+                        @BillAddressId,
+                        @ShipAddressId,
+                        @Status, 
+                        @ShipMethod, 
+                        @IsShipped,
+                        @DateShipped,
+                        @ShipCost,
+                        @IsCancelled,
+                        @DateCancelled,
+                        @CancelledByNodeId,
+                        @Comments,  
+                        @CreatedByNodeId,
+                        @ExternalRowVersion,
+                        @ForceUpdate";
+                    var id = new SqlParameter("@Id", SqlDbType.UniqueIdentifier);
+                    id.Direction = ParameterDirection.Output;
+                    command.Parameters.Add(id);
+                    command.Parameters.AddWithValue("@ChannelId", model.ChannelId);
+                    command.Parameters.AddWithValue("@ChannelOrderNumber", model.ChannelOrderNumber);
+                    command.Parameters.AddWithValue("@DateOrdered", model.DateOrdered);
+                    command.Parameters.AddWithValue("@BillAddressId", model.BillAddressId);
+                    command.Parameters.AddWithValue("@ShipAddressId", model.ShipAddressId);
+                    command.Parameters.AddWithValue("@Status", model.Status);
+                    command.Parameters.AddWithValue("@ShipMethod", model.ShipMethod);
+                    command.Parameters.AddWithValue("@IsShipped", model.IsShipped != null ? model.IsShipped : DBNull.Value);
+                    command.Parameters.AddWithValue("@DateShipped", model.DateShipped != null ? model.DateShipped : DBNull.Value);
+                    command.Parameters.AddWithValue("@ShipCost", model.ShipCost != null ? model.ShipCost : DBNull.Value);
+                    command.Parameters.AddWithValue("@IsCancelled", model.IsCancelled != null ? model.IsCancelled : DBNull.Value);
+                    command.Parameters.AddWithValue("@DateCancelled", model.DateCancelled != null ? model.DateCancelled : DBNull.Value);
+                    command.Parameters.AddWithValue("@CancelledByNodeId", model.CancelledByNodeId != null ? model.CancelledByNodeId : DBNull.Value);
+                    command.Parameters.AddWithValue("@Comments", model.Comments);
+                    command.Parameters.AddWithValue("@CreatedByNodeId", model.CreatedByNodeId != Guid.Empty ? model.CreatedByNodeId != Guid.Empty : NodeManager.ActiveNode.Id);
+                    command.Parameters.AddWithValue("@ExternalRowVersion", model.ExternalRowVersion);
+                    command.Parameters.AddWithValue("@ForceUpdate", forceUpdate);
+
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                    model.Id = (Guid)id.Value;
+                }
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public static int Update(OrderModel model, bool rollback = false)
+        {
+            try
+            {
+                var result = 0;
+                using (var command = new SqlCommand())
+                {
+                    command.CommandText =
+                        @"EXEC spOrder_Update
+	                    @Id,
+                        @Status, 
+                        @ShipMethod, 
+                        @IsShipped, 
+                        @DateShipped,
+                        @IsCancelled,
+                        @DateCancelled,
+                        @CancelledByNodeId,
+                        @ShipCost, 
+                        @Comments,  
+                        @ModifiedByNodeId,
+                        @ExternalRowVersion";
+                    command.Parameters.AddWithValue("@Id", model.Id);
+                    command.Parameters.AddWithValue("@Status", model.Status);
+                    command.Parameters.AddWithValue("@ShipMethod", model.ShipMethod);
+                    command.Parameters.AddWithValue("@IsShipped", model.IsShipped != null ? model.IsShipped : DBNull.Value);
+                    command.Parameters.AddWithValue("@DateShipped", model.DateShipped != null ? model.DateShipped : DBNull.Value);
+                    command.Parameters.AddWithValue("@ShipCost", model.ShipCost != null ? model.ShipCost : DBNull.Value);
+                    command.Parameters.AddWithValue("@IsCancelled", model.IsCancelled != null ? model.IsCancelled : DBNull.Value);
+                    command.Parameters.AddWithValue("@DateCancelled", model.DateCancelled != null ? model.DateCancelled : DBNull.Value);
+                    command.Parameters.AddWithValue("@CancelledByNodeId", model.CancelledByNodeId != null ? model.CancelledByNodeId : DBNull.Value);
+                    command.Parameters.AddWithValue("@Comments", model.Comments);
+                    command.Parameters.AddWithValue("@ModifiedByNodeId", model.ModifiedByNodeId);
+                    command.Parameters.AddWithValue("@ExternalRowVersion", model.ExternalRowVersion);
+
+                    result = App.SqlClient.ExecuteNonQuery(command, rollback);
+                }
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
 

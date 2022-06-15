@@ -14,8 +14,8 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void GetByIdAndNameTest()
         {
-            var model = ChannelManager.GetAsync("Amazon").Result;
-            var result = ChannelManager.GetAsync(model.Id).Result;
+            var model = ChannelManager.Get("Amazon");
+            var result = ChannelManager.Get(model.Id);
             Assert.AreEqual(model.Id, result.Id);
         }
 
@@ -61,7 +61,7 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void UpdateTest()
         {
-            var model = ChannelManager.GetAsync("Amazon").Result;
+            var model = ChannelManager.Get("Amazon");
             model.Name = "Amazon Prime";
             model.Code = "AMZ";
             //model.ModifiedByNodeId = NodeManager.GetAsync("IS-JASON").Result.Id;

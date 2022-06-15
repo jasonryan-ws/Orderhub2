@@ -14,7 +14,7 @@ namespace WS.OrderHub.Managers
         /// <summary>
         /// The Node ID of the machine that is currently running this app.
         /// </summary>
-        public static readonly NodeModel ActiveNode = GetActiveAsync().Result;
+        public static readonly NodeModel ActiveNode = GetActive();
         public static async Task<int> CreateAsync(NodeModel model, bool rollback = false)
         {
             try
@@ -59,25 +59,22 @@ namespace WS.OrderHub.Managers
                 throw;
             }
         }
-        public static async Task<NodeModel> GetAsync(Guid Id)
+        public static NodeModel Get(Guid Id)
         {
             try
             {
                 NodeModel model = null;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
+                    command.CommandText = "SELECT * FROM [Node] WHERE Id = @Id";
+                    command.Parameters.AddWithValue("@Id", Id);
+                    var table = App.SqlClient.ExecuteQuery(command);
+                    foreach (DataRow row in table.Rows)
                     {
-                        command.CommandText = "SELECT * FROM [Node] WHERE Id = @Id";
-                        command.Parameters.AddWithValue("@Id", Id);
-                        var table= App.SqlClient.ExecuteQuery(command);
-                        foreach (DataRow row in table.Rows)
-                        {
-                            model = new NodeModel();
-                            Fill(model, row);
-                        }
+                        model = new NodeModel();
+                        Fill(model, row);
                     }
-                });
+                }
                 return model;
             }
             catch (Exception)
@@ -85,29 +82,7 @@ namespace WS.OrderHub.Managers
                 throw;
             }
         }
-        /// <summary>
-        /// Get Node by name
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static async Task<NodeModel> GetAsync(string name)
-        {
-            try
-            {
-                NodeModel model = null;
-                await Task.Run(() =>
-                {
-                    model = Get(name);
-                });
-                return model;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public static async Task<NodeModel> GetActiveAsync()
+        public static NodeModel GetActive()
         {
             try
             {

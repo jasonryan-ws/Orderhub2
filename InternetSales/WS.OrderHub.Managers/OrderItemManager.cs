@@ -53,6 +53,9 @@ namespace WS.OrderHub.Managers
                 throw;
             }
         }
+
+
+
         /// <summary>
         /// Create a new order item with orderId and product model
         /// </summary>
@@ -97,7 +100,7 @@ namespace WS.OrderHub.Managers
             }
         }
 
-        public static Guid? Create(Guid orderId, Guid productId, int quantity, decimal unitPrice, bool? forceUpdate = null, bool rollback = true)
+        public static Guid? Create(Guid orderId, Guid productId, int quantity, decimal unitPrice, bool? forceUpdate = null, bool rollback = false)
         {
             try
             {

@@ -195,7 +195,7 @@ namespace UIComponents.ViewModels
             Visibility = "Collapsed";
         }
 
-        public void Complete(string text, string progress = "100%", MessageType messageType = MessageType.Default, int value = 100)
+        public void Complete(string text = "Complete", string progress = "100%", MessageType messageType = MessageType.Default, int value = 100)
         {
             if (messageType == MessageType.Info)
                 Foreground = Colors.Info;
@@ -224,6 +224,7 @@ namespace UIComponents.ViewModels
             IsNotBusy = enableControl;
             IsIndeterminate = true;
         }
+
         public void SetValue(int value, bool enableControl = true)
         {
             BackColor = null;

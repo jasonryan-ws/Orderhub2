@@ -22,7 +22,8 @@ namespace ShipWorks
                         WHERE
                             ObjectId = @ObjectId AND
                             Text NOT LIKE '%Client order number:%' AND
-                            Text NOT LIKE '%Sales Channel%'";
+                            Text NOT LIKE '%Sales Channel%' AND
+                            Text NOT LIKE '%eBay Order Id%'";
                         command.Parameters.AddWithValue("ObjectId", objectId);
                         var table = Configuration.Client.ExecuteQuery(command);
                         foreach (DataRow row in table.Rows)

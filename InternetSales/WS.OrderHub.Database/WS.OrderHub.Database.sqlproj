@@ -112,6 +112,10 @@
     <Build Include="StoredProcedures\spJob_Start.sql" />
     <Build Include="StoredProcedures\spJob_End.sql" />
     <Build Include="StoredProcedures\spJob_SetProgression.sql" />
+    <Build Include="StoredProcedures\spOrderCharge_Create.sql" />
+    <Build Include="StoredProcedures\spOrderCharge_Update.sql" />
+    <Build Include="StoredProcedures\spOrder_Create.sql" />
+    <Build Include="StoredProcedures\spOrder_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PostDeployment\DefaultData\Configurations.sql" />
