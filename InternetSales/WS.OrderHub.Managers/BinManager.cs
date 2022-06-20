@@ -92,26 +92,22 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static async Task<BinModel> GetAsync(Guid id)
+        public static BinModel Get(Guid id)
         {
             try
             {
                 BinModel model = null;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
+                    command.CommandText = @"SELECT * FROM Bin WHERE Id = @Id";
+                    command.Parameters.AddWithValue("@Id", id);
+                    var table = App.SqlClient.ExecuteQuery(command);
+                    foreach (DataRow row in table.Rows)
                     {
-                        command.CommandText = @"SELECT * FROM Bin WHERE Id = @Id";
-                        command.Parameters.AddWithValue("@Id", id);
-                        var table= App.SqlClient.ExecuteQuery(command);
-                        foreach (DataRow row in table.Rows)
-                        {
-                            model = new BinModel();
-                            Fill(model, row);
-                        }
+                        model = new BinModel();
+                        Fill(model, row);
                     }
-                });
-
+                }
                 return model;
             }
             catch (Exception)
@@ -126,26 +122,22 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static async Task<BinModel> GetAsync(string name)
+        public static BinModel Get(string name)
         {
             try
             {
                 BinModel model = null;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
+                    command.CommandText = @"SELECT * FROM Bin WHERE Name = @Name";
+                    command.Parameters.AddWithValue("@Name", name);
+                    var table = App.SqlClient.ExecuteQuery(command);
+                    foreach (DataRow row in table.Rows)
                     {
-                        command.CommandText = @"SELECT * FROM Bin WHERE Name = @Name";
-                        command.Parameters.AddWithValue("@Name", name);
-                        var table= App.SqlClient.ExecuteQuery(command);
-                        foreach (DataRow row in table.Rows)
-                        {
-                            model = new BinModel();
-                            Fill(model, row);
-                        }
+                        model = new BinModel();
+                        Fill(model, row);
                     }
-                });
-
+                }
                 return model;
             }
             catch (Exception)

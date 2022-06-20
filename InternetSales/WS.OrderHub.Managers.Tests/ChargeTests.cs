@@ -14,8 +14,8 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void GetByIdAndNameTest()
         {
-            var model = ChargeManager.GetAsync("Tax").Result;
-            var result = ChargeManager.GetAsync(model.Id).Result;
+            var model = ChargeManager.Get("Tax");
+            var result = ChargeManager.Get(model.Id);
             Assert.AreEqual(model.Id, result.Id);
         }
 

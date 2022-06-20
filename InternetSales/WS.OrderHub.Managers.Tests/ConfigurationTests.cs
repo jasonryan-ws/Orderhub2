@@ -13,8 +13,8 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void GetByIdAndNameTest()
         {
-            var model = ConfigurationManager.GetAsync("SWServer").Result;
-            var result = ConfigurationManager.GetAsync(model.Id).Result;
+            var model = ConfigurationManager.Get("SWServer");
+            var result = ConfigurationManager.Get(model.Id);
             Assert.AreEqual(model.Id, result.Id);
         }
 
@@ -28,7 +28,7 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void UpdateTest()
         {
-            var model = ConfigurationManager.GetAsync("SWServer").Result;
+            var model = ConfigurationManager.Get("SWServer");
             model.Value = "IS-SERVER";
             var result = ConfigurationManager.Update(model, true);
             Assert.IsTrue(result > 0);
@@ -44,7 +44,7 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void GetValueTest()
         {
-            var value = ConfigurationManager.GetValue("SWIntegrated").Result;
+            var value = ConfigurationManager.GetValue("SWIntegrated");
             Assert.AreEqual("False", value);
         }
     }

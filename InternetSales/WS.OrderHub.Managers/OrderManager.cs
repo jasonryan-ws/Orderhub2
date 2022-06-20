@@ -14,11 +14,11 @@ namespace WS.OrderHub.Managers
         /// <param name="extended">Set to true to included address and channel info</param>
         /// <param name="includeItems">Set to true to include order items</param>
         /// <returns></returns>
-        public static async Task<OrderModel> GetAsync(Guid id, bool extended = false, bool includeItems = false)
+        public static OrderModel Get(Guid id, bool extended = false, bool includeItems = false)
         {
-            OrderModel model = null;
-            await Task.Run(() =>
+            try
             {
+                OrderModel model = null;
                 using (var command = new SqlCommand())
                 {
                     command.CommandText = @"EXEC spOrder_GetById @Id";
@@ -30,8 +30,13 @@ namespace WS.OrderHub.Managers
                         Fill(model, row, extended, includeItems);
                     }
                 }
-            });
-            return model;
+                return model;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         /// <summary>
         /// Get order by channel order number
@@ -40,11 +45,11 @@ namespace WS.OrderHub.Managers
         /// <param name="extended">Set to true to included address and channel info</param>
         /// <param name="includeItems">Set to true to include order items</param>
         /// <returns></returns>
-        public static async Task<OrderModel> GetAsync(string channelOrderNumber, bool extended = false, bool includeItems = false)
+        public static OrderModel Get(string channelOrderNumber, bool extended = false, bool includeItems = false)
         {
-            OrderModel model = null;
-            await Task.Run(() =>
+            try
             {
+                OrderModel model = null;
                 using (var command = new SqlCommand())
                 {
                     command.CommandText = @"EXEC spOrder_GetByChannelOrderNumber @ChannelOrderNumber";
@@ -56,8 +61,13 @@ namespace WS.OrderHub.Managers
                         Fill(model, row, extended, includeItems);
                     }
                 }
-            });
-            return model;
+                return model;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
 

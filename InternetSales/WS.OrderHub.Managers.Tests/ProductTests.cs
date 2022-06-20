@@ -14,8 +14,8 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void GetByIdAndSKUTest()
         {
-            var model = ProductManager.GetAsync("4710944224184").Result;
-            var result = ProductManager.GetAsync(model.Id).Result;
+            var model = ProductManager.Get("4710944224184");
+            var result = ProductManager.Get(model.Id);
             Assert.AreEqual(result.Id, model.Id);
         }
 
@@ -43,7 +43,7 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void UpdateTest()
         {
-            var model = ProductManager.GetAsync("643187000557").Result;
+            var model = ProductManager.Get("643187000557");
             model.SKU = "643187000557";
             model.UPC = "643187000557";
             model.Name = "Feedback Sports RAKK XL Display Stand - 1-Bike, Wheel Mount, 2.3-5\" Tire, Black";

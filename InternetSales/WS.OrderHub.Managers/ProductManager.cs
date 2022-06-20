@@ -17,26 +17,22 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<ProductModel> GetAsync(Guid id)
+        public static ProductModel Get(Guid id)
         {
             try
             {
                 ProductModel model = null;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
+                    command.CommandText = @"SELECT * FROM Product WHERE Id = @Id";
+                    command.Parameters.AddWithValue("@Id", id);
+                    var table = App.SqlClient.ExecuteQuery(command);
+                    foreach (DataRow row in table.Rows)
                     {
-                        command.CommandText = @"SELECT * FROM Product WHERE Id = @Id";
-                        command.Parameters.AddWithValue("@Id", id);
-                        var table = App.SqlClient.ExecuteQuery(command);
-                        foreach (DataRow row in table.Rows)
-                        {
-                            model = new ProductModel();
-                            Fill(model, row);
-                        }
+                        model = new ProductModel();
+                        Fill(model, row);
                     }
-                });
-
+                }
                 return model;
             }
             catch (Exception)
@@ -51,26 +47,22 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="identifier"></param>
         /// <returns></returns>
-        public static async Task<ProductModel> GetAsync(string identifier)
+        public static ProductModel Get(string identifier)
         {
             try
             {
                 ProductModel model = null;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
+                    command.CommandText = @"SELECT * FROM Product WHERE SKU = @Identifier OR UPC = @Identifier";
+                    command.Parameters.AddWithValue("@Identifier", identifier);
+                    var table = App.SqlClient.ExecuteQuery(command);
+                    foreach (DataRow row in table.Rows)
                     {
-                        command.CommandText = @"SELECT * FROM Product WHERE SKU = @Identifier OR UPC = @Identifier";
-                        command.Parameters.AddWithValue("@Identifier", identifier);
-                        var table = App.SqlClient.ExecuteQuery(command);
-                        foreach (DataRow row in table.Rows)
-                        {
-                            model = new ProductModel();
-                            Fill(model, row);
-                        }
+                        model = new ProductModel();
+                        Fill(model, row);
                     }
-                });
-
+                }
                 return model;
             }
             catch (Exception)

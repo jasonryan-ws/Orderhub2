@@ -17,25 +17,22 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<ChargeModel> GetAsync(Guid id)
+        public static ChargeModel Get(Guid id)
         {
             try
             {
                 ChargeModel model = null;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
+                    command.CommandText = "SELECT * FROM Charge WHERE Id = @Id";
+                    command.Parameters.AddWithValue("@Id", id);
+                    var table = App.SqlClient.ExecuteQuery(command);
+                    foreach (DataRow row in table.Rows)
                     {
-                        command.CommandText = "SELECT * FROM Charge WHERE Id = @Id";
-                        command.Parameters.AddWithValue("@Id", id);
-                        var table= App.SqlClient.ExecuteQuery(command);
-                        foreach (DataRow row in table.Rows)
-                        { 
-                            model = new ChargeModel();
-                            Fill(model, row);
-                        }
+                        model = new ChargeModel();
+                        Fill(model, row);
                     }
-                });
+                }
                 return model;
             }
             catch (Exception)
@@ -49,25 +46,22 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static async Task<ChargeModel> GetAsync(string name)
+        public static ChargeModel Get(string name)
         {
             try
             {
                 ChargeModel model = null;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
+                    command.CommandText = "SELECT * FROM Charge WHERE Name = @Name";
+                    command.Parameters.AddWithValue("@Name", name);
+                    var table = App.SqlClient.ExecuteQuery(command);
+                    foreach (DataRow row in table.Rows)
                     {
-                        command.CommandText = "SELECT * FROM Charge WHERE Name = @Name";
-                        command.Parameters.AddWithValue("@Name", name);
-                        var table= App.SqlClient.ExecuteQuery(command);
-                        foreach (DataRow row in table.Rows)
-                        {
-                            model = new ChargeModel();
-                            Fill(model, row);
-                        }
+                        model = new ChargeModel();
+                        Fill(model, row);
                     }
-                });
+                }
                 return model;
             }
             catch (Exception)

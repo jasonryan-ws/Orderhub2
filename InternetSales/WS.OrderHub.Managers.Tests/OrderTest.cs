@@ -25,8 +25,8 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void GetByIdAndNameTest()
         {
-            var model = OrderManager.GetAsync("1345756", true).Result;
-            var result = OrderManager.GetAsync(model.Id).Result;
+            var model = OrderManager.Get("1345756", true);
+            var result = OrderManager.Get(model.Id);
             Assert.AreEqual(result.Id, model.Id);
         }
 
@@ -34,7 +34,7 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void GetWithItems()
         {
-            var model = OrderManager.GetAsync("1345756", true, true).Result;
+            var model = OrderManager.Get("1345756", true, true);
             Assert.AreEqual(3, model.Items.Count);
         }
 

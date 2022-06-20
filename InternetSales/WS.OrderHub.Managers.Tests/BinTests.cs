@@ -38,7 +38,7 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void UpdateTest()
         {
-            var model = BinManager.GetAsync("TestBin-T").Result;
+            var model = BinManager.Get("TestBin-T");
             model.IsReserved = true;
             model.IsDefault = true;
             //model.ModifiedByNodeId = NodeManager.GetAsync("IS-SERVER").Result.Id;
@@ -49,7 +49,7 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void RenameTest()
         {
-            var model = BinManager.GetAsync("TestBin-T").Result;
+            var model = BinManager.Get("TestBin-T");
             model.Name = "TestBin-T_Renamed";
             model.IsReserved = true;
             model.IsDefault = true;
@@ -61,8 +61,8 @@ namespace WS.OrderHub.Managers.Tests
         [TestMethod]
         public void GetByIdTest()
         {
-            var model = BinManager.GetAsync("TestBin-T").Result;
-            var result = BinManager.GetAsync(model.Id).Result;
+            var model = BinManager.Get("TestBin-T");
+            var result = BinManager.Get(model.Id);
             Assert.AreEqual(model.Name, result.Name);
         }
 

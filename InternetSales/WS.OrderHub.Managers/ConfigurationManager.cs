@@ -18,11 +18,11 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static async Task<ConfigurationModel> GetAsync(Guid id)
+        public static ConfigurationModel Get(Guid id)
         {
-            ConfigurationModel model = null;
-            await Task.Run(() =>
+            try
             {
+                ConfigurationModel model = null;
                 using (var command = new SqlCommand())
                 {
                     command.CommandText = "SELECT * FROM Configuration WHERE Id = @Id";
@@ -34,8 +34,13 @@ namespace WS.OrderHub.Managers
                         Fill(model, row);
                     }
                 }
-            });
-            return model;
+                return model;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         /// <summary>
@@ -43,11 +48,11 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static async Task<ConfigurationModel> GetAsync(string name)
+        public static ConfigurationModel Get(string name)
         {
-            ConfigurationModel model = null;
-            await Task.Run(() =>
+            try
             {
+                ConfigurationModel model = null;
                 using (var command = new SqlCommand())
                 {
                     command.CommandText = "SELECT * FROM Configuration WHERE Name = @Name";
@@ -59,8 +64,13 @@ namespace WS.OrderHub.Managers
                         Fill(model, row);
                     }
                 }
-            });
-            return model;
+                return model;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         /// <summary>
@@ -69,37 +79,50 @@ namespace WS.OrderHub.Managers
         /// <returns></returns>
         public static async Task<List<ConfigurationModel>> GetAsync()
         {
-            var models = new List<ConfigurationModel>();
-            await Task.Run(() =>
+            try
             {
-                using (var command = new SqlCommand())
+                var models = new List<ConfigurationModel>();
+                await Task.Run(() =>
                 {
-                    command.CommandText = "SELECT * FROM Configuration";
-                    var table = App.SqlClient.ExecuteQuery(command);
-                    foreach (DataRow row in table.Rows)
+                    using (var command = new SqlCommand())
                     {
-                        var model = new ConfigurationModel();
-                        Fill(model, row);
-                        models.Add(model);
+                        command.CommandText = "SELECT * FROM Configuration";
+                        var table = App.SqlClient.ExecuteQuery(command);
+                        foreach (DataRow row in table.Rows)
+                        {
+                            var model = new ConfigurationModel();
+                            Fill(model, row);
+                            models.Add(model);
+                        }
                     }
-                }
-            });
-            return models;
+                });
+                return models;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         /// <summary>
         /// Get value by name
         /// </summary>
         /// <returns></returns>
-        public static async Task<object> GetValue(string name)
+        public static object GetValue(string name)
         {
-            object value = null;
-            await Task.Run(async () =>
+            try
             {
-                var model = await GetAsync(name);
+                object value = null;
+                var model = Get(name);
                 value = model.Value;
-            });
-            return value;
+                return value;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         /// <summary>
@@ -112,7 +135,7 @@ namespace WS.OrderHub.Managers
             {
                 var result = 0;
                 if (model.Id == Guid.Empty && !string.IsNullOrEmpty(model.Name))
-                    model.Id = (GetAsync(model.Name).Result).Id;
+                    model.Id = (Get(model.Name)).Id;
 
                 using (var command = new SqlCommand())
                 {
@@ -164,17 +187,17 @@ namespace WS.OrderHub.Managers
             }
         }
 
-        public static async Task<SQL> GetShipWorksSQLClient()
+        public static SQL GetShipWorksSQLClient()
         {
             try
             {
                 SQL client = null;
-                var server = (string)(await GetAsync("SWServer")).Value;
-                var userId = (string)(await GetAsync("SWUserId")).Value;
-                var password = (string)(string)(await GetAsync("SVPassword")).Value;
-                var database = (string)(await GetAsync("SWDatabase")).Value;
-                var isIntegrated = (await GetAsync("SWIntegrated")).Value.ToString().ToUpper() == "TRUE";
-                var storeId = (string)(await GetAsync("SWStoreId")).Value;
+                var server = (string)(Get("SWServer")).Value;
+                var userId = (string)(Get("SWUserId")).Value;
+                var password = (string)(string)(Get("SVPassword")).Value;
+                var database = (string)(Get("SWDatabase")).Value;
+                var isIntegrated = (Get("SWIntegrated")).Value.ToString().ToUpper() == "TRUE";
+                var storeId = (string)(Get("SWStoreId")).Value;
 
                 if (isIntegrated)
                     client = new SQL(server, database);

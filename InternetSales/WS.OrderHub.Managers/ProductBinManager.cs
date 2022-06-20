@@ -18,16 +18,14 @@ namespace WS.OrderHub.Managers
         /// <param name="productId"></param>
         /// <param name="binId"></param>
         /// <returns>ProductModel</returns>
-        public static async Task<ProductModel> GetAsync(Guid productId, Guid binId)
+        public static ProductModel Get(Guid productId, Guid binId)
         {
             try
             {
                 ProductModel model = null;
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText = @"
+                    command.CommandText = @"
                         SELECT
 	                        p.Id,
 	                        p.SKU,
@@ -44,16 +42,15 @@ namespace WS.OrderHub.Managers
                         WHERE
                             pb.ProductId = @ProductId AND
                             pb.BinId = @BinId";
-                        command.Parameters.AddWithValue("@ProductId", productId);
-                        command.Parameters.AddWithValue("@BinId", binId);
-                        var table = App.SqlClient.ExecuteQuery(command);
-                        foreach (DataRow row in table.Rows)
-                        {
-                            model = new ProductModel();
-                            Fill(model, row);
-                        }
+                    command.Parameters.AddWithValue("@ProductId", productId);
+                    command.Parameters.AddWithValue("@BinId", binId);
+                    var table = App.SqlClient.ExecuteQuery(command);
+                    foreach (DataRow row in table.Rows)
+                    {
+                        model = new ProductModel();
+                        Fill(model, row);
                     }
-                });
+                }
 
                 return model;
             }
