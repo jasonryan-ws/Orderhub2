@@ -17,17 +17,15 @@ namespace WS.OrderHub.Managers
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        public static async Task<List<ProductModel>> GetByOrderIdAsync(Guid orderId)
+        public static List<ProductModel> GetByOrderId(Guid orderId)
         {
             try
             {
                 var models = new List<ProductModel>();
-                await Task.Run(() =>
+                using (var command = new SqlCommand())
                 {
-                    using (var command = new SqlCommand())
-                    {
-                        command.CommandText =
-                        @"SELECT
+                    command.CommandText =
+                    @"SELECT
 	                        p.*,
 	                        i.Quantity,
 	                        i.UnitPrice
@@ -35,16 +33,15 @@ namespace WS.OrderHub.Managers
                         JOIN [Order] o ON o.Id = i.OrderId
                         JOIN Product p ON p.Id = i.ProductId
                         WHERE o.Id = @OrderId";
-                        command.Parameters.AddWithValue("@OrderId", orderId);
-                        var table= App.SqlClient.ExecuteQuery(command);
-                        foreach (DataRow row in table.Rows)
-                        {
-                            var model = new ProductModel();
-                            Fill(model, row);
-                            models.Add(model);
-                        }
+                    command.Parameters.AddWithValue("@OrderId", orderId);
+                    var table = App.SqlClient.ExecuteQuery(command);
+                    foreach (DataRow row in table.Rows)
+                    {
+                        var model = new ProductModel();
+                        Fill(model, row);
+                        models.Add(model);
                     }
-                });
+                }
                 return models;
             }
             catch (Exception)

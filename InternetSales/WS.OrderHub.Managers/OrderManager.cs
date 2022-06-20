@@ -368,7 +368,7 @@ namespace WS.OrderHub.Managers
 
             if (includeItems)
             {
-                model.Items = OrderItemManager.GetByOrderIdAsync(model.Id).Result;
+                model.Items = OrderItemManager.GetByOrderId(model.Id);
             }
         }
     }

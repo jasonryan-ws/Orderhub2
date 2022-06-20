@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WS.OrderHub.Managers;
 using WS.OrderHub.Models;
+using WS.OrderHub.ViewModels.Collections;
 
 namespace WS.OrderHub.ViewModels
 {
@@ -18,6 +19,15 @@ namespace WS.OrderHub.ViewModels
         public OrderViewModel(OrderModel model)
         {
             this.model = model;
+        }
+
+        public OrderViewModel()
+        {
+            this.model = new OrderModel();
+            var order = OrderManager.Get("13413375", true, true);
+            if (order != null)
+                this.model = order;
+
         }
         public Guid Id
         {
@@ -176,11 +186,28 @@ namespace WS.OrderHub.ViewModels
             set => SetProperty(model.DeletedByNodeId, value, model, (m, p) => m.DeletedByNodeId = p);
         }
 
+
+        public AddressViewModel Address
+        {
+            get
+            {
+                var address = new AddressViewModel(model.ShipAddress);
+                return address;
+            }
+        }
+
+        public ProductCollection Items
+        {
+
+            get => new ProductCollection(model.Items);
+        }
+
         public ICommand DeleteCommand => new AsyncRelayCommand(DeleteAsync);
         private async Task DeleteAsync()
         {
             //var results = await OrderManager.DeleteAsync(Id);
         }
+
 
     }
 }

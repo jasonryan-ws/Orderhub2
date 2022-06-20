@@ -5,6 +5,7 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:vm="clr-namespace:WS.OrderHub.ViewModels;assembly=WS.OrderHub.ViewModels"
                  xmlns:control="clr-namespace:WS.OrderHub.Views.UserControls"
+                 xmlns:page="clr-namespace:WS.OrderHub.Views.Pages"
                  xmlns:uix="clr-namespace:UIComponents.Views.UserControls;assembly=UIComponents.Views"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -114,6 +115,9 @@
                     <materialDesign:DrawerHost.LeftDrawerContent>
                         <control:MenuControl Width="300" />
                     </materialDesign:DrawerHost.LeftDrawerContent>
+                    <Frame Grid.Row="1"
+                           x:Name="PageViewerFrame"
+                           NavigationUIVisibility="Hidden" />
                 </materialDesign:DrawerHost>
 
 
@@ -121,11 +125,10 @@
 
 
             </materialDesign:DialogHost>
-
         </materialDesign:DialogHost>
 
 
         <!--Control Dialog - Custom Dialog Window-->
-
+        
     </Grid>
 </mah:MetroWindow>

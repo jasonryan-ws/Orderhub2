@@ -1,5 +1,4 @@
-﻿using MahApps.Metro.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,23 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WS.OrderHub.Views
+namespace WS.OrderHub.Views.Pages
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for AuthorizeOrderViewModel.xaml
     /// </summary>
-    public partial class MainWindow : MetroWindow
+    public partial class AuthorizeOrderViewModel : Page
     {
-        public MainWindow()
+        public AuthorizeOrderViewModel()
         {
             InitializeComponent();
-            LoadPage(new Pages.AuthorizeOrderViewModel());
         }
-
-        public void LoadPage(Page page)
-        {
-            PageViewerFrame.Content = page;
-        }
-
     }
 }
