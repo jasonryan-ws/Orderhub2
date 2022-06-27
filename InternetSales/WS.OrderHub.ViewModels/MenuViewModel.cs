@@ -11,6 +11,9 @@ namespace WS.OrderHub.ViewModels
 {
     public class MenuViewModel : ObservableObject
     {
+
+        public Action SwitchPage;
+
         private ObservableCollection<MenuGroup> menuGroups;
         public ObservableCollection<MenuGroup> MenuGroups
         {
@@ -23,11 +26,6 @@ namespace WS.OrderHub.ViewModels
             MenuGroups = new ObservableCollection<MenuGroup>(DefaultData.MenuGroups.Load());
         }
 
-        private MenuGroupItem selectedItem;
-        public MenuGroupItem SelectedItem
-        {
-            get => selectedItem;
-            set => SetProperty(ref selectedItem, value);
-        }
+
     }
 }

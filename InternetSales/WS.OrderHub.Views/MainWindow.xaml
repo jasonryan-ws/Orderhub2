@@ -24,8 +24,8 @@
                  WindowStartupLocation="CenterScreen"
                  mc:Ignorable="d"
                  Title="{Binding App.Title}"
-                 Height="768"
-                 Width="1024">
+                 MinHeight="768"
+                 MinWidth="1024">
     <mah:MetroWindow.DataContext>
         <vm:MainViewModel />
     </mah:MetroWindow.DataContext>
@@ -115,13 +115,14 @@
                     <materialDesign:DrawerHost.LeftDrawerContent>
                         <control:MenuControl Width="300" />
                     </materialDesign:DrawerHost.LeftDrawerContent>
+
+                    <!--Page-->
                     <Frame Grid.Row="1"
                            x:Name="PageViewerFrame"
                            NavigationUIVisibility="Hidden" />
                 </materialDesign:DrawerHost>
 
 
-                <!--Page-->
 
 
             </materialDesign:DialogHost>

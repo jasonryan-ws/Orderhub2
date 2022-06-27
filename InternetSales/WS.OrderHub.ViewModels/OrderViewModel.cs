@@ -6,12 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using UIComponents.ViewModels;
+using UIComponents.ViewModels.Visuals;
 using WS.OrderHub.Managers;
 using WS.OrderHub.Models;
 using WS.OrderHub.ViewModels.Collections;
 
 namespace WS.OrderHub.ViewModels
 {
+
     public class OrderViewModel : ObservableObject
     {
         // Base Order Model
@@ -19,15 +22,48 @@ namespace WS.OrderHub.ViewModels
         public OrderViewModel(OrderModel model)
         {
             this.model = model;
+            if (model != null)
+                SetTags();
+            ShipAddressIsSelected = true;
+        }
+
+        private void SetTags()
+        {
+            var tags = new List<TagViewModel>();
+            if (model.IsLocked)
+                tags.Add(new TagViewModel { IconName = "Lock", IconColor = Colors.Alert, Name = "Locked", ToolTip = "Prevent other clients to load up this order by product code while it's being verified by this computer", IsDeletable = true, DeleteToolTip = "Unlock and unverify all items" });
+            //tags.Add(new TagViewModel { IconName = "Store", IconColor = Colors.Alert, Name = Channel.Name });
+
+            if (model.IsCancelled)
+                tags.Add(new TagViewModel { IconName = "Close", IconColor = Colors.Danger, Name = "Cancelled" });
+            if (model.IsVerified)
+                tags.Add(new TagViewModel { IconName = "Check", IconColor = Colors.Info, Name = "Verified", IsDeletable = true, DeleteToolTip = "Unverify" });
+            if (model.IsShipped)
+                tags.Add(new TagViewModel { IconName = "Package", IconColor = Colors.Success, Name = "Shipped" });
+            if (model.IsSkipped)
+                tags.Add(new TagViewModel { IconName = "SkipForward", IconColor = Colors.Warning, Name = "Skipped", IsDeletable = true, DeleteToolTip = "Unskip" });
+
+            Tags = tags;
+        }
+
+
+        private SearchBarViewModel searchBar = new SearchBarViewModel { Hint = "Scan Product Code or Order Number" };
+        public SearchBarViewModel SearchBarViewModel
+        {
+            get => searchBar;
+            set => SetProperty(ref searchBar, value);
         }
 
         public OrderViewModel()
         {
             this.model = new OrderModel();
-            var order = OrderManager.Get("13413375", true, true);
+            var order = OrderManager.Get("13223873", true, true);
             if (order != null)
+            {
                 this.model = order;
-
+                ShipAddressIsSelected = true;
+                SetTags();
+            }
         }
         public Guid Id
         {
@@ -92,7 +128,7 @@ namespace WS.OrderHub.ViewModels
         }
         public string ShipMethod
         {
-            get => model.ShipMethod;
+            get => !string.IsNullOrWhiteSpace(model.ShipMethod) ? model.ShipMethod : "N/A";
             set => SetProperty(model.ShipMethod, value, model, (m, p) => m.ShipMethod = p);
         }
         public bool IsShipped
@@ -186,22 +222,68 @@ namespace WS.OrderHub.ViewModels
             set => SetProperty(model.DeletedByNodeId, value, model, (m, p) => m.DeletedByNodeId = p);
         }
 
-
-        public AddressViewModel Address
+        private IEnumerable<TagViewModel> tags;
+        public IEnumerable<TagViewModel> Tags
         {
-            get
+            get => tags;
+            set => SetProperty(ref tags, value);
+        }
+
+
+        private bool shipAddressIsSelected;
+        public bool ShipAddressIsSelected
+        {
+            get => shipAddressIsSelected;
+            set
             {
-                var address = new AddressViewModel(model.ShipAddress);
-                return address;
+                if (SetProperty(ref shipAddressIsSelected, value) && value)
+                    Address = new AddressViewModel(model.ShipAddress);
             }
         }
 
+        private bool billAddressIsSelected;
+        public bool BillAddressIsSelected
+        {
+            get => billAddressIsSelected;
+            set
+            {
+                if (SetProperty(ref billAddressIsSelected, value) && value)
+                    Address = new AddressViewModel(model.BillAddress);
+            }
+        }
+
+
+        private AddressViewModel address;
+        public AddressViewModel Address
+        {
+            get => address;
+            set => SetProperty(ref address, value);
+        }
+
+
+        public ChannelViewModel Channel
+        {
+            get
+            {
+                return new ChannelViewModel(model.Channel);
+            }
+        }
+
+
         public ProductCollection Items
         {
-
             get => new ProductCollection(model.Items);
         }
 
+        public ChargeCollection Charges
+        {
+            get => new ChargeCollection(model.Charges);
+        }
+
+        public int Units { get => Items != null ? Items.Sum(i => i.Quantity) : 0; }
+        public decimal SubTotal { get => Items != null ? Items.Sum(i => i.Quantity * i.UnitPrice) : 0; }
+        public decimal ChargeTotal { get => Charges != null ? Charges.Sum(c => c.Amount) : 0; }
+        public decimal TotalAmount { get => SubTotal + ChargeTotal; }
         public ICommand DeleteCommand => new AsyncRelayCommand(DeleteAsync);
         private async Task DeleteAsync()
         {

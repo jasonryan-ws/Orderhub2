@@ -14,7 +14,7 @@ namespace WS.OrderHub.Managers.Tests
         public void GetByOrderIdTest()
         {
             var order = OrderManager.Get("1345756");
-            var result = OrderItemManager.GetByOrderIdAsync(order.Id).Result;
+            var result = OrderItemManager.GetByOrderId(order.Id);
             Assert.AreEqual(3, result.Count);
         }
 

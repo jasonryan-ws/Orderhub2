@@ -30,5 +30,11 @@ namespace WS.OrderHub.Models
         // Many-to-Many
         public List<OrderModel> Orders { get; set; }
         public List<BinModel> Bins { get; set; }
+        
+        /// <summary>
+        /// Order item or PO item receiving sessions
+        /// </summary>
+        public List<LineSessionModel> LineSessions { get; set; }
+
     }
 }

@@ -8,14 +8,17 @@ using System.Windows.Input;
 using UIComponents.ViewModels;
 using UIComponents.ViewModels.Modules;
 using WS.OrderHub.Managers;
+using WS.OrderHub.ViewModels.Collections;
+using WS.OrderHub.ViewModels.Objects;
 
 namespace WS.OrderHub.ViewModels
 {
     public class MainViewModel : ObservableObject
     {
-
+        public static MainViewModel Instance { get; set; }
         public MainViewModel()
         {
+            Instance = this;
             MonitorJobs();
         }
         public static AppViewModel App { get => AppViewModel.Instance; }
@@ -25,6 +28,12 @@ namespace WS.OrderHub.ViewModels
         public BannerViewModel MainBanner { get => BannerViewModel.Instance; }
         public UpdateOrdersViewModel UpdateOrders { get => UpdateOrdersViewModel.Instance; }
 
+        private string pageTitle;
+        public string PageTitle
+        {
+            get => pageTitle;
+            set => SetProperty(ref pageTitle, value);
+        }
 
         private async void MonitorJobs()
         {
@@ -37,18 +46,22 @@ namespace WS.OrderHub.ViewModels
                     try
                     {
                         var job = JobManager.GetActive();
+                        var bannerWasOpenedByThis = false; // So it doesn't auto close the banner that was called outside from this method
                         if (job != null && job.StartedByNodeId != NodeManager.ActiveNode.Id)
                         {
                             MainProgressBar.SetValue(job.Progress);
                             if (MainBanner.IsOpen == null && job.Progress > 0)
+                            {
                                 MainBanner.Show(job.Message, 5);
+                                bannerWasOpenedByThis = true;
+                            }
                         }
-                        else
-                        {
+                        else if (bannerWasOpenedByThis)
                             MainBanner.IsOpen = null;
+                        else
                             MainProgressBar.Value = 100;
-                        }
                         anErrorHasOccured = false;
+                        bannerWasOpenedByThis = false;
                     }
                     catch (Exception ex)
                     {

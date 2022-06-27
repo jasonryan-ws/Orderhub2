@@ -41,7 +41,7 @@ namespace WS.OrderHub.ViewModels
             {
                 MainProgressBar.Wait(enableControl: false);
                 var maxRowVersion = OrderManager.LoadMaxRowVersion();
-                var swOrders = await ShipWorks.OrderManager.GetAsync(true, maxRowVersion, 1);
+                var swOrders = await ShipWorks.OrderManager.GetAsync(true, maxRowVersion, 0);
 
                 if (swOrders.Count > 0)
                 {

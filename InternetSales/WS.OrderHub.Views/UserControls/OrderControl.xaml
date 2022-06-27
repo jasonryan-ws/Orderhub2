@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:WS.OrderHub.Views.UserControls"
+             xmlns:uic="clr-namespace:UIComponents.Views.UserControls;assembly=UIComponents.Views"
              mc:Ignorable="d"
              xmlns:vm="clr-namespace:WS.OrderHub.ViewModels;assembly=WS.OrderHub.ViewModels"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -12,7 +13,7 @@
              TextElement.FontSize="13"
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
-             Background="{DynamicResource MaterialDesignPaper}"
+             Background="Transparent"
              FontFamily="{DynamicResource MaterialDesignFont}"
              d:DesignHeight="600"
              d:DesignWidth="800"
@@ -20,136 +21,259 @@
     <UserControl.DataContext>
         <vm:OrderViewModel />
     </UserControl.DataContext>
-    <ScrollViewer>
-        <Grid Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <!--Order Number-->
-            <Grid Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center"
-                               FontWeight="Bold"
-                               FontSize="25">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <!--Order Number-->
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           FontSize="25">
                     <Run Text="Order ID:" />
                     <Run Text="{Binding ChannelOrderNumber}" />
-                    </TextBlock>
-                    <Button VerticalAlignment="Center"
-                            Width="25"
-                            Height="25"
-                            Margin="10 0 0 0"
-                            ToolTip="Copy order id to clipboard"
-                            Style="{StaticResource MaterialDesignIconButton}"
-                            Content="{materialDesign:PackIcon Kind=ContentCopy, Size=20}" />
-                </StackPanel>
+                </TextBlock>
+                <Button VerticalAlignment="Center"
+                        Margin="10 0 0 0"
+                        ToolTip="Copy order ID to clipboard"
+                        Style="{StaticResource MaterialDesignIconButton}"
+                        Content="{materialDesign:PackIcon Kind=ContentCopy}" />
+                <materialDesign:PopupBox>
+                    <StackPanel>
+                        <Button>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Receipt"
+                                                         Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                                         Margin="0 0 10 0" />
+                                <TextBlock Text="PRINT RECEIPT" />
+                            </StackPanel>
+                        </Button>
+                        <Button>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Tag"
+                                                         Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                                         Margin="0 0 10 0" />
+                                <TextBlock Text="PRINT TAG" />
+                            </StackPanel>
+                        </Button>
+                        <Button>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Contact"
+                                                         Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                                         Margin="0 0 10 0" />
+                                <TextBlock Text="PRINT CONTACT INFO" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </materialDesign:PopupBox>
+            </StackPanel>
+            <StackPanel Grid.Column="2"
+                        Orientation="Horizontal">
+                <uic:SearchBarControl VerticalAlignment="Center"
+                                      DataContext="{Binding SearchBarViewModel}"
+                                      Width="300"
+                                      Margin="0 0 0 0" />
+                <!--<materialDesign:PopupBox>
+                    <materialDesign:PopupBox.ToggleContent>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="PrinterView"
+                                                     Width="25"
+                                                     Height="25"
+                                                     Foreground="{DynamicResource PrimaryHueDarkBrush}" />
+                        </StackPanel>
+                    </materialDesign:PopupBox.ToggleContent>
+                    <StackPanel>
+                        <Button>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Printer"
+                                                         Margin="0 0 10 0" />
+                                <TextBlock Text="PRINT RECEIPT" />
+                            </StackPanel>
+                        </Button>
+                        <Button Content="PRINT TAG" />
+                    </StackPanel>
+                </materialDesign:PopupBox>-->
+            </StackPanel>
 
-            </Grid>
+        </Grid>
 
-            <!--Order date-->
-            <Grid Grid.Row="1"
-                  Margin="10 0 10 0">
+        <!--Order date-->
+        <Grid Grid.Row="1"
+              Margin="10 -10 10 0">
+            <StackPanel Orientation="Horizontal">
                 <TextBlock VerticalAlignment="Center">
-                    <Run Text="Order date:"
-                         Foreground="Gray" />
-                    <Run Text="{Binding DateOrdered, StringFormat=yyyy MMM-dd}"
-                         Foreground="SlateGray"
+                    <Run Text="Order date:" />
+                    <Run Text="{Binding DateOrdered, StringFormat='{}{0:MMM dd, yyyy}'}"
                          FontWeight="Bold" />
                 </TextBlock>
-            </Grid>
-            <Separator Grid.Row="2"
-                       Margin="10" />
-            <DataGrid Grid.Row="2"
-                      AutoGenerateColumns="False"
-                      ItemsSource="{Binding Items}">
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="150">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Border BorderThickness="3"
-                                        Background="White"
-                                        BorderBrush="LightGray"
-                                        CornerRadius="10">
-                                    <Image Source="{Binding Image}"
-                                           Margin="5"
-                                           Stretch="UniformToFill"
-                                           Width="75"
-                                           Height="75" />
-                                </Border>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="Auto">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <TextBlock Text="{Binding SKU}"
-                                               FontWeight="Bold"
-                                               FontSize="18" />
-                                    <TextBlock Text="{Binding Name}"
-                                               TextWrapping="Wrap"
-                                               FontSize="15" />
+                <TextBlock VerticalAlignment="Center"
+                           Margin="10 0 0 0">
+                    <Run Text="Channel:" />
+                    <Run Text="{Binding Channel.Name}"
+                         FontWeight="Bold" />
+                </TextBlock>
+                <!--<TextBlock VerticalAlignment="Center"
+                           Margin="10 0 0 0">
+                    <Run Text="Current Status:" />
+                    <Run Text="{Binding Status}"
+                         FontWeight="Bold" />
+                </TextBlock>
+                <TextBlock VerticalAlignment="Center"
+                           Margin="10 0 0 0">
+                    <Run Text="Modified:" />
+                    <Run Text="{Binding DateModified, StringFormat='{}{0:MMM dd, yyyy}'}"
+                         FontWeight="Bold" />
+                </TextBlock>-->
+            </StackPanel>
+        </Grid>
+        <!--TAGS-->
+        <Grid Grid.Row="2">
+            <!--<StackPanel Orientation="Horizontal">
+                <materialDesign:Chip FontWeight="Bold"
+                                     Icon="{materialDesign:PackIcon Kind=Check}"
+                                     IconBackground="Wheat"
+                                     Content="{Binding Channel.Name}" />
+                <materialDesign:Chip FontWeight="Bold"
+                                     Icon="{materialDesign:PackIcon Kind=Package}"
+                                     IconBackground="Green"
+                                     Content="Shipped" />
+                <materialDesign:Chip FontWeight="Bold"
+                                     Icon="{materialDesign:PackIcon Kind=Close}"
+                                     IconBackground="LightCoral"
+                                     Content="Cancelled" />
+                <materialDesign:Chip FontWeight="Bold"
+                                     Icon="{materialDesign:PackIcon Kind=Check}"
+                                     IconBackground="SkyBlue"
+                                     IsDeletable="True"
+                                     DeleteToolTip="Unverify"
+                                     Content="Verified" />
+            </StackPanel>-->
+            <ItemsControl ItemsSource="{Binding Tags, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <materialDesign:Chip FontWeight="Bold"
+                                             ToolTip="{Binding ToolTip}"
+                                             IconBackground="{Binding IconColor}"
+                                             IsDeletable="{Binding IsDeletable}"
+                                             DeleteToolTip="{Binding DeleteToolTip}"
+                                             Content="{Binding Name}">
+                            <materialDesign:Chip.Icon>
+                                <materialDesign:PackIcon Kind="{Binding IconName}" />
+                            </materialDesign:Chip.Icon>
+                        </materialDesign:Chip>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+        <DataGrid Grid.Row="3"
+                  Background="Transparent"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding Items}">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="3"
+                                    Background="White"
+                                    BorderBrush="LightGray"
+                                    CornerRadius="10">
+                                <Image Source="{Binding Image}"
+                                       Margin="5"
+                                       Stretch="UniformToFill"
+                                       Width="50"
+                                       Height="50" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding SKU}"
+                                           FontWeight="Bold"
+                                           FontSize="14" />
+                                <TextBlock Text="{Binding Name}"
+                                           TextWrapping="Wrap"
+                                           FontSize="15" />
 
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <TextBlock Text="{Binding UnitPrice, StringFormat=c}"
-                                               HorizontalAlignment="Right"
-                                               FontSize="18" />
-                                    <TextBlock HorizontalAlignment="Right"
-                                               Margin="0 5 0 0"
-                                               FontSize="18">
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding UnitPrice, StringFormat=c}"
+                                           HorizontalAlignment="Right"
+                                           FontSize="15" />
+                                <TextBlock HorizontalAlignment="Right"
+                                           Margin="0 5 0 0"
+                                           FontSize="15">
                                     <Run Text="Qty:" />
                                     <Run Text="{Binding Quantity}" />
-                                    </TextBlock>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="Green"
+                                    CornerRadius="100"
+                                    Width="30"
+                                    Height="30">
+                                <materialDesign:PackIcon Kind="Check"
+                                                         Height="48"
+                                                         Width="18"
+                                                         Foreground="White"
+                                                         VerticalAlignment="Center"
+                                                         HorizontalAlignment="Center" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!--SEPARATOR-->
+        <Separator Grid.Row="4"
+                   Margin="10 0 10 0"
+                   Background="#E6E6E6">
+            <Separator.RenderTransform>
+                <ScaleTransform ScaleY="2" />
+            </Separator.RenderTransform>
+        </Separator>
+        <Grid Grid.Row="5"
+              Margin="30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <Grid Grid.Row="3"
-                  Margin="30">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Grid Grid.Column="0">
-                    <StackPanel>
-                        <TextBlock Text="Ship Method"
-                                   FontSize="15" />
-                        <TextBlock Text="{Binding ShipMethod}"
-                                   FontWeight="Bold"
-                                   TextWrapping="Wrap"
-                                   FontSize="18" />
-                    </StackPanel>
-                </Grid>
-
-                <Grid Grid.Column="2"
-                      HorizontalAlignment="Right">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                    </Grid.RowDefinitions>
+            <Grid Grid.Column="0">
+                <StackPanel>
 
                     <!--Address-->
-                    <Grid Grid.Column="1">
+                    <Grid>
                         <StackPanel>
                             <TextBlock Text="Address"
                                        FontSize="18" />
@@ -157,9 +281,11 @@
                                         Margin="0 10 0 0">
                                 <RadioButton GroupName="AddressGroup"
                                              Content="Shipping"
+                                             IsChecked="{Binding ShipAddressIsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                              VerticalAlignment="Center"
                                              Margin="0 0 10 0" />
                                 <RadioButton GroupName="AddressGroup"
+                                             IsChecked="{Binding BillAddressIsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                              Content="Billing"
                                              VerticalAlignment="Center" />
                             </StackPanel>
@@ -172,50 +298,83 @@
                                        FontSize="15" />
                             <TextBlock  Text="{Binding Address.Phone}" />
                             <TextBlock  Text="{Binding Address.Email}" />
+
+                            <TextBlock Text="Ship Method"
+                                       Margin="0 10 0 0"
+                                       FontSize="18" />
+                            <TextBlock Text="{Binding ShipMethod}"
+                                       FontWeight="Bold"
+                                       Margin="0 10 0 0"
+                                       TextWrapping="Wrap"
+                                       FontSize="18" />
                         </StackPanel>
                     </Grid>
-
-                    <!--Order Summary-->
-                    <StackPanel Grid.Row="1">
-                        <TextBlock Text="Order Summary"
-                                   FontSize="18" />
-                        <UniformGrid Columns="2"
-                                     Margin="0 10 0 0">
-                            <TextBlock Text="Subtotal"
-                                       FontSize="15" />
-                            <TextBlock Text="{Binding Items.Count, StringFormat=c}"
-                                       FontSize="15"
-                                       HorizontalAlignment="Right" />
-
-                            <TextBlock Text="Discount" />
-                            <TextBlock Text="{Binding Items.Count, StringFormat= c}"
-                                       HorizontalAlignment="Right" />
-
-                            <TextBlock Text="Tax" />
-                            <TextBlock Text="{Binding Items.Count, StringFormat= c}"
-                                       HorizontalAlignment="Right" />
-
-
-                            <TextBlock Text="Ship Charge" />
-                            <TextBlock Text="{Binding Items.Count, StringFormat=c}"
-                                       HorizontalAlignment="Right" />
-
-                            <TextBlock Text="Total"
-                                       FontSize="18" />
-                            <TextBlock Text="{Binding Items.Count, StringFormat=c}"
-                                       FontSize="18"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Right" />
-                        </UniformGrid>
-                    </StackPanel>
-
-
-                </Grid>
+                </StackPanel>
             </Grid>
 
+            <Grid Grid.Column="2"
+                  HorizontalAlignment="Right">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
 
+
+
+                <!--Order Summary-->
+                <StackPanel Grid.Row="1">
+                    <TextBlock Text="Order Summary"
+                               FontSize="18" />
+                    <UniformGrid Columns="2"
+                                 Margin="0 10 0 0">
+                        <TextBlock Text="Lines" />
+                        <TextBlock Text="{Binding Items.Count, StringFormat=n0}"
+                                   HorizontalAlignment="Right" />
+                        <TextBlock Text="Units"
+                                   Margin="0 3 0 0" />
+                        <TextBlock Text="{Binding Units, StringFormat=n0}"
+                                   Margin="0 3 0 0"
+                                   HorizontalAlignment="Right" />
+                    </UniformGrid>
+                    <Separator Margin="0 10 0 0" />
+                    <UniformGrid Columns="2"
+                                 Margin="0 10 0 0">
+
+
+                        <TextBlock Text="Subtotal"
+                                   FontSize="15" />
+                        <TextBlock Text="{Binding SubTotal, StringFormat=c}"
+                                   FontSize="15"
+                                   HorizontalAlignment="Right" />
+                    </UniformGrid>
+                    <ItemsControl ItemsSource="{Binding Charges}"
+                                  Margin="0 0 0 5">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <UniformGrid  Columns="2"
+                                              Margin="0 5 0 0">
+                                    <TextBlock Text="{Binding Name}" />
+
+                                    <TextBlock Text="{Binding Amount, StringFormat= c}"
+                                               HorizontalAlignment="Right" />
+                                </UniformGrid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <UniformGrid  Columns="2">
+                        <TextBlock Text="Total"
+                                   FontSize="18" />
+                        <TextBlock Text="{Binding TotalAmount, StringFormat=c}"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Right" />
+                    </UniformGrid>
+                </StackPanel>
+            </Grid>
         </Grid>
-    </ScrollViewer>
+
+
+    </Grid>
 </UserControl>
 
     

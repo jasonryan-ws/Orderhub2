@@ -29,5 +29,6 @@ namespace WS.OrderHub.ViewModels.Objects
         /// Menu selections
         /// </summary>
         public List<MenuGroupItem> Items { get; set; }
+
     }
 }

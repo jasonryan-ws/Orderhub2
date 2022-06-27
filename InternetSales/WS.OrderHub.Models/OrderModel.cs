@@ -48,5 +48,6 @@ namespace WS.OrderHub.Models
 
         // Many-to-Many
         public List<ProductModel> Items { get; set; }
+        public List<ChargeModel> Charges { get; set; }
     }
 }

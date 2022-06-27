@@ -13,6 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UIComponents.ViewModels;
+using WS.OrderHub.ViewModels;
+using WS.OrderHub.ViewModels.Objects;
 
 namespace WS.OrderHub.Views
 {
@@ -21,10 +24,11 @@ namespace WS.OrderHub.Views
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+        public static MainWindow Instance { get; set; }
         public MainWindow()
         {
             InitializeComponent();
-            LoadPage(new Pages.AuthorizeOrderViewModel());
+            Instance = this;
         }
 
         public void LoadPage(Page page)

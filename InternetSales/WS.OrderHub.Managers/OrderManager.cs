@@ -114,7 +114,6 @@ namespace WS.OrderHub.Managers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -199,6 +198,7 @@ namespace WS.OrderHub.Managers
                         @Comments,  
                         @ModifiedByNodeId,
                         @ExternalRowVersion";
+
                     command.Parameters.AddWithValue("@Id", model.Id);
                     command.Parameters.AddWithValue("@Status", model.Status);
                     command.Parameters.AddWithValue("@ShipMethod", model.ShipMethod);
@@ -218,12 +218,9 @@ namespace WS.OrderHub.Managers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
-
-
 
         // Get Pending - Unverified, Unshipped, Not Cancelled
         // Get Unpicked - No pick history, unverified, unshipped, not cancelled
@@ -235,7 +232,6 @@ namespace WS.OrderHub.Managers
         // Unverify
         // Cancel
         // Verify
-
 
         /// <summary>
         /// Load maximum row version
@@ -261,7 +257,6 @@ namespace WS.OrderHub.Managers
             }
         }
 
-
         /// <summary>
         /// Fill order model
         /// </summary>
@@ -269,7 +264,7 @@ namespace WS.OrderHub.Managers
         /// <param name="row"></param>
         /// <param name="row"></param>
         /// <param name="extended">Set to true if you want to fill billing address, shipping address and channel</param>
-        /// /// <param name="includeItems">Set to true if you want include order items</param>
+        /// /// <param name="includeItems">Set to true if you want include order items and charges</param>
         private static void Fill(OrderModel model, DataRow row, bool extended = false, bool includeItems = false)
         {
             model.Id = Guid.Parse(Convert.ToString(row["Id"]));
@@ -326,7 +321,6 @@ namespace WS.OrderHub.Managers
                 model.Channel.Code = Convert.ToString(row["ChannelCode"]);
                 model.Channel.ColorCode = row["ChannelColorCode"] != DBNull.Value ? Convert.ToInt32(row["ChannelColorCode"]) : null;
 
-
                 model.BillAddress = new AddressModel();
                 model.BillAddress.Id = model.BillAddressId;
                 model.BillAddress.FirstName = Convert.ToString(row["BillFirstName"]);
@@ -369,6 +363,7 @@ namespace WS.OrderHub.Managers
             if (includeItems)
             {
                 model.Items = OrderItemManager.GetByOrderId(model.Id);
+                model.Charges = OrderChargeManager.GetByOrderId(model.Id, false);
             }
         }
     }

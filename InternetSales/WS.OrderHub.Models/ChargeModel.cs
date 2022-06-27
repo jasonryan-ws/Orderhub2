@@ -15,5 +15,6 @@ namespace WS.OrderHub.Models
         public Guid CreatedByNodeId { get; set; }
         public DateTime? DateModified { get; set; }
         public Guid? ModifiedByNodeId { get; set; }
+        public decimal Amount { get; set; }
     }
 }

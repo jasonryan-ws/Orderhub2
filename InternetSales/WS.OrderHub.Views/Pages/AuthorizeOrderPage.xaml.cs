@@ -18,9 +18,20 @@ namespace WS.OrderHub.Views.Pages
     /// <summary>
     /// Interaction logic for AuthorizeOrderViewModel.xaml
     /// </summary>
-    public partial class AuthorizeOrderViewModel : Page
+    public partial class AuthorizeOrderPage : Page
     {
-        public AuthorizeOrderViewModel()
+
+        private static AuthorizeOrderPage instance;
+        public static AuthorizeOrderPage Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new AuthorizeOrderPage();
+                return instance;
+            }
+        }
+        public AuthorizeOrderPage()
         {
             InitializeComponent();
         }

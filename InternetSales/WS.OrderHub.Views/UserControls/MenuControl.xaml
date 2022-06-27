@@ -23,7 +23,10 @@
                                        Typography.Capitals="AllSmallCaps"
                                        FontWeight="Bold" />
                         </Expander.Header>
-                        <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
+                        <ListBox ItemsSource="{Binding Items}"
+                                 GotFocus="MenuItemListBox_GotFocus"
+                                 LostFocus="MenuItemListBox_LostFocus"
+                                 SelectionChanged="MenuItemListBox_SelectionChanged">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">

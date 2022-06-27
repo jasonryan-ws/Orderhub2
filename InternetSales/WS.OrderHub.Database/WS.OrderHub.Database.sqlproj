@@ -116,6 +116,8 @@
     <Build Include="StoredProcedures\spOrderCharge_Update.sql" />
     <Build Include="StoredProcedures\spOrder_Create.sql" />
     <Build Include="StoredProcedures\spOrder_Update.sql" />
+    <Build Include="Tables\LineSession.sql" />
+    <Build Include="StoredProcedures\spLIneSession_CheckInOrderItem.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PostDeployment\DefaultData\Configurations.sql" />
